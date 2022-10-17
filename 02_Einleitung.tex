@@ -1,0 +1,31 @@
+\cleardoublepage
+\chapter{Kapitel}\label{ch:Kapitel}
+Der Befehl \verb+\chapter{Kapitelname}+ beginnt ein neues Kapitel mit dem Namen \textit{Kapitelname}. Möchte man später auf dieses Kapitel verweisen muss man den Befehl mit einem Label erweitern: \smallskip
+ 
+\verb+\chapter{Kapitelname}\label{Kapitellabel}+\smallskip
+
+ Im Text wird der Verweis auf das Kapitel dann mit dem Befehl\smallskip
+ 
+  \verb+\pageref{Kapitellabel}+ oder \verb+\nameref{Kapitellabel}+ erzeugt, wobei der erste Befehl die Seite auf der sich das Kapitel befindet zeigt und der zweite den Namen des Kapitels.
+\bigskip
+
+\section{Abschnitt}\label{Abschnitt}
+
+Einen Abschnitt in einem Kapitel leitet man mit folgendem Befehl ein:\smallskip
+
+\verb+\section{Abschnittsname}+ \smallskip
+
+Verweise werden genau wie beim Kapitel gehandhabt.
+
+\subsection{subsection}
+
+\verb+\subsection{subsection}+
+
+\subsubsection{subsubsection}
+
+
+\verb+\subsubsection{subsubsection}+
+
+\section{Blindtext}
+\Blindtext
+

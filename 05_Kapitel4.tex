@@ -1,0 +1,24 @@
+\chapter{Programmcode}
+Programmcode lässt sich in der \verb+lstlisting+ Umgebung direkt schreiben oder über \verb+\lstinputlisting{PFAD/m_file.m}+ aus einer Datei einfügen. 
+
+\begin{lstlisting}
+i = 1; 
+if ( i == 1){
+	i--;
+}
+\end{lstlisting}
+
+
+Verwendet man die definierten Styles \texttt{numbers} und \texttt{nonumbers}, lassen sich auch Zeilennummerierungen hinzufügen. Dazu setzt man \verb+\lstset{style = numbers}+.
+\lstset{style = numbers}
+\begin{lstlisting}
+i = 1; 
+if (i == 1){
+	i--;
+}
+\end{lstlisting}
+
+Code-Schnipsel, wie \lstinline!if(i == 1)! lassen sich auch direkt im Fließtext einbauen. Dazu wird \verb+\lstinline!CODE!+ verwendet.
+Für Matlab-Code kann hier auch \verb+\mcode{CODE}+ genutzt werden. 
+
+Außerdem kann mit \verb+\lstinputlisting{PFAD/DATEI}+ Code auch direkt aus Matlab-Dateien importiert werden. 

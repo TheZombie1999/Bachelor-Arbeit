@@ -1,0 +1,59 @@
+%   Version 2.0 | Lehrstuhl Regelungstechnik & Mechatronik  |  15.05.2020
+%%%%%%%%%%%Zusätzlich benötigte Pakete in den header einfügen%%%%%%%%%%%%
+\input{src/header.tex}                                                  %
+%%%%%%%%%%%%%%%%%   Diesen Abschnitt anpassen!    %%%%%%%%%%%%%%%%%%%%%%%
+% Arbeit
+\newcommand{\artderausarbeitung}{Abschlussarbeit}
+\newcommand{\titelderarbeit}{Anfertigung einer Ausarbeitung mit \LaTeX}
+\newcommand{\eingereicht}{20.\,02.\,2020}
+% Autor
+\newcommand{\namedesautors}{Max Mustermann}
+% Lehrstuhl und Betreuer
+\newcommand{\studiengang}{Ingenieurinformatik}
+\newcommand{\lehrstuhl}{Regelungstechnik}
+\newcommand{\fakultaet}{Fakultät für Angewandte Informatik}
+\newcommand{\erstgutachter}{Prof.~Dr.-Ing.~habil.~Christoph Ament}
+\newcommand{\zweitgutachter}{Prof.~Dr.-Ing.~Lars Mikelsons}
+\newcommand{\betreuer}{Vorname Nachname}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{src/pagestyle.tex}   % Pagestyles nicht verändern!               %
+\addbibresource{src/references.bib}                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Hier können eigene Befehle angelegt werden:
+%\newcommand{\Name}{Definition}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
+\begin{document}                                                        %
+\onehalfspacing                                                         %    
+\input{src/titlepage.tex}                                               %
+\pagestyle{scrheadings}                                                 %
+\pagenumbering{Roman}                                                   %
+%%%%%%%%%%       Nicht benötigte Teile auskommentieren    %%%%%%%%%%%%%%%
+\input{001_Vorwort.tex}
+\input{002_Kurzfassung.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents{\thispagestyle{pagenumberstyle}}                       %
+\input{003_Abkuerzungsverzeichnis.tex}                                  %
+\cleardoublepage                                                        %
+\pagenumbering{arabic}                                                  %
+%%%%%%%%%%%%%%     Eigene Kapitel hier einfügen    %%%%%%%%%%%%%%%%%%%%%%
+\input{Data/01_Theoretischer Rahmen/main}
+\input{Data/02_Versuch/main}
+
+\input{01_Wissenschaftliche_Arbeiten.tex}
+\input{02_Einleitung.tex}
+\input{03_Kapitel2.tex}
+\input{04_Kapitel3.tex}
+\input{05_Kapitel4.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\cleardoublepage                                                        %
+\listoffigures{\thispagestyle{pagenumberstyle}}                         %
+\listoftables{\thispagestyle{pagenumberstyle}}                          %
+\printbibliography{\thispagestyle{pagenumberstyle}}                     %
+%\addchap{Anhang}                                                       %
+\appendix                                                               %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{98_Anhang.tex}                                                   
+\input{99_Abschlusserklaerung.tex}                                      
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}                                                          %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
