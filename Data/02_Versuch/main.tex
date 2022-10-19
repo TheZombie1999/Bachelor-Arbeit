@@ -3,29 +3,32 @@
 
 \section{Ziel der Arbeit}
 
-Das ziel der Arbeit ist es implizite löser für Neural odes zu verwenden 
+Das Ziel der Arbeit ist es, implizite Löser für Neuralodes zu verwenden 
 und deren Performance anhand von Meshgraphnetzen zu evaluieren. 
-Diese verwendet Neural odes zur simulation von Flüssikeiten um Verschiedene körper in 2D.
-Die simultion basiert auf den Differential gleichungen die das verhalten von Flüssigkeit beschreiben.
-Diese Gleichungen wurden nun verwendet um das Neuronale Netz der Neural ode zu trainieren.
-Nun können verschiedene numerischen Verfahren verwendet werden um die Neural ode auszuwerten.
-Die Qualität des Ergebnisses kann dann mit dem klassisch durchgeführten differentialgleichungen verglichen werden.
-Da diese Berechungen sehr lange dauern, ist es erstrebenswert, diese auf der GPU auszuführen.
-Implizit und Explicit Löser von Anfangswerte problem laufen auf der CPU problemlos.
-Das verwenden Implizit lösern auf der gpu führt allerdings zuproblem, da das Lösen von Implizit Methoden 
-verlangt das automatic diffrentiation durchgeführt wird.
-Automatic differentiation verwendt Dual zahlen um, die Ableitung zu berechenen.
-Das problem dabei ist das, die Operation scatter inerhalb der Neural ode dual zahlen nicht auf der GPU 
+Diese verwendet Neuralodes zur Simulation von Flüssigkeiten um verschiedene Körper in 2D.
+Die Simulation basiert auf den Differenzialgleichungen, die das verhalten von Flüssigkeiten beschreiben.
+Diese Gleichungen wurden nun verwendet, um das neuronale Netz der Neuralode zu trainieren.
+
+% Nun können verschiedene numerischen Verfahren verwendet werden, um die Neuralode auszuwerten.
+Anschließend können verschiedene numerische Verfahren verwdent werden, um das Netz auszuwerten.
+
+Die Qualität des Ergebnisses kann dann mit den klassisch durchgeführten Differenzialgleichungen verglichen werden.
+Da diese Berechnungen sehr lange dauern, ist es erstrebenswert, diese auf der GPU auszuführen.
+Implizit und Explicit Löser von Anfangswerteproblemen laufen auf der CPU problemlos.
+Das verwenden von impliziten Lösern auf der GPU führt allerdings zu Problemen, da für diese Automatik Differenziation durchgeführt werden muss.
+Um die Ableitung verschachtelter Funktionen berechnen zu können, verwenden
+Programme die AutomaticDifferentiation durchführen, Dualzahlen, welche von unserer Neuralode nicht unterstützt werden.
+Das Problem dabei ist das, die Operation scatter innerhalb der Neuralode dual zahlen nicht auf der GPU 
 berechnen kann.
-Die scatter funtion um schnell die Änderungen einers zeitschrittes auf alle nodes im netz anzuwenden.
+Die scatter-Funktion um schnell die Änderungen eines Zeitschrittes auf alle Knoten im Netz anzuwenden.
+
+
 
 \section{Implementierung der Scatter funktion}
 
-Um unsere NeuralODE auswerten zukönnen müssen alle teile der Differentialgleichung Dual zahlen unterstützen.
-
-In diesem Fall unterstützt die scatter-function von Flux nicht die addition von Dual zahlen.
-
-Die scatter function ist wie folgt definiert:
+Um unsere Neuralode auswerten zu können, müssen alle Teile der Differenzialgleichung Dual zahlen unterstützen.
+In diesem Fall unterstützt die scatter-function von Flux nicht die Addition von Dual zahlen.
+Die scatter Funktion ist wie folgt definiert:
 
 \begin{listing}{language=Julia}
 	scatter(op, src, idx; [init, dstsize])
@@ -41,9 +44,8 @@ Die scatter function ist wie folgt definiert:
 	dstsize gibt die größe des zurück gegebenen arrays an.
 \end{verbatim}
 
-Aus der Definition wird nicht ganz klar, was mit dem ziel array gemeint ist.
-
-Um dies besser verstehen zukönnen wird eine vereifachte version der implementierung der scatter function betrachtet.
+Aus der Definition wird nicht ganz klar, was mit dem Ziel Array gemeint ist.
+Um dies besser verstehen zu können, wird eine vereinfachte Version der Implementierung der scatter Funktion betrachtet.
 
 \begin{listing}{language=Julia}
 	function scatter(op, src, idx; [init, dstsize])
@@ -55,70 +57,48 @@ Um dies besser verstehen zukönnen wird eine vereifachte version der implementie
 	end
 \end{listing}
 
-Die scatter function erstellt zuerst ein array vom selben datentype und der benötigten größe. 
-Wie die größe berechnet wird, wurde hier weggelassen da dies für unsere zwecke nicht relevant ist. 
-
-Anschließend wird das dst array mit den günschten initial werten gefüllt.
-
-Als letztes wird nun die scatter! function aufgerufen.
-
-Das Ausrufe Zeichen im funktions namen symolisiert das die funktion die werte der übergebenen argumente überschreibt.
-
-Die scatter! function wird in diesem Fall von der NNlibCUDA bibliothek überschrieben und sorgt dafür das die berechung auf der graphik karte ausgeführt wird.
-
-Die Graphic karte führt dabei in mehrer threads die Operation op aus. Im unserem fall ist op die + function.
-
-Dabei kann es passieren das mehrere threads zum gleichen zeitpunkt in das selbe feld schreiben.
-
-Normaler weiße kommt es dabei zu einer viel zahl von fehler, wenn keine sicherheits maß nahmen getroffen werden die diese verhindern.
-
-Da dies ein sehr häufiges problem bei berechungen ist bietet die CUDA-libarary, 
-welche verwendet wird um die berechungen auf der Graphik karte auszuführen atomic operationen an, 
-welche genau diese fehler umgehen soll.
-
+Die scatter Funktion erstellt zuerst ein Array vom selben Datentype und der benötigten Größe. 
+Wie die Größe berechnet wird, wurde hier weggelassen, da dies für unsere Zwecke nicht relevant ist. 
+Anschließend wird das dst Array mit den gewünschten Initial werten gefüllt.
+Als Letztes wird nun die scatter! Funktion aufgerufen.
+Das Ausrufezeichen im Funktionsnamen symbolisiert, das die Funktion, die Werte der übergebenen Argumente überschreibt.
+Die scatter! Funktion wird in diesem Fall von der NNlibCUDA Bibliothek überschrieben und sorgt dafür, 
+dass die Berechnung auf der Grafikkarte ausgeführt wird.
+Die Grafikkarte führt dabei in mehrer Threads die Operation op aus. In unserem Fall ist op die + Funktion.
+Dabei kann es passieren, dass mehrere Threads zum gleichen Zeitpunkt in dasselbe Feld schreiben.
+Normaler weiße kommt es dabei zu einer viel zahl von Fehler, wenn keine Sicherheit maßnahmen getroffen werden. 
+Da dies ein sehr häufiges Problem bei Berechnungen ist, bietet die CUDA-libarary, 
+welche verwendet wird, um die Berechnungen auf der Grafikkarte auszuführen atomic-operationen an
+welche genau diese Fehler umgehen.
 % https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#atomic-functions
-
-Das problem da bei ist das diese Atomic operationen nur auf 32-Bit oder 64-Bit zahlen ausgeführt werden können.
-
-Ausserdem werden nur bestimmten daten typen unterstützt.
-
-Es ist zwar prizipel möglich diese operation auf weiter daten typen zu erweitern, diese müssen aber kleiner als 64-Bit sein. 
-
-Dies macht es für unsere zwecke unmöglich dual zahlen mit dieser operation direkt zu berechnen.
-
-Da die Atomic opertion von cuda nicht direkt verwenden kann muss eine anderer weg gefunden werden.
-
-Um Dual-Zahlen auf eine andere Weiße zu implementieren, wird des dessen definition betrachtet.
-
+Das Problem dabei ist, dass diese Atomic-operationen nur auf 32-Bit oder 64-Bit Zahlen ausgeführt werden können.
+Außerdem werden nur bestimmten Datentypen unterstützt.
+Es ist zwar möglich, diese Operation auf weitere Datentypen zu erweitern, diese müssen aber kleiner als 64-Bit sein. 
+Dies macht es für unsere Zwecke unmöglich, Dual zahlen mit dieser Operation direkt zu berechnen.
+Da die Atomic-opertion von Cuda nicht direkt verwenden kann, muss eine anderer weg gefunden werden.
+Um Dual Zahlen zu implementieren, wird dessen mathematisch definition betrachtet.
 
 $$
 d = a + b \espilon \text{ wobei gilt } \epsilon^2 = 0
 $$
 
-Für die Definition von Dual-Zahlen ist ebfals ihr verhalten auf scalare operationen wichting:
+Für die Definition von Dual-Zahlen ist ebenfalls ihr verhalten auf scalare Operationen wichtig:
 
 $$
  f( a + b \epsilon ) = f(a) + b f'(x) \epsilon
 $$
 
-
-Für unsere Zwecke ist vorallem intressant wie dual zahlen addiert werden, da dies die einzige operation ist 
-die wir für unsers Zweck brauchen.
-
+Um die scatter-function umzusetzen, wird die Definition der Addition benötigt.
 
 $$
-(a + b \epsilon) + ( c + d \epsion ) = (a + c) + (b + d) \epsilon
+(a + b \epsilon) + ( c + d \epsilon ) = (a + c) + (b + d) \epsilon
 $$
 
-Die Definition von Dual zahlen kommt von der Addition von Complexen Zahlen, 
-da die Dual zahlen eine variante von Generalisierten komplexen zahl ist.
-
-Die folge dieser Definition ist dass Dual zahlen addiert werden können indem die einzelnen Komponenten addiert werden.
-
-Da die einzelnenn komponent  alle relle zahlem sind lässt sich die auf der GPU durch führen.
-
-Es wird also der @atmic call in der scatter! function durch folgende implementierung ersetzt: 
-
+Die Definition von Dual zahlen kommt von der Addition komplexer Zahlen, 
+da die Dual zahlen eine variante von generalisierten komplexen zahlen sind.
+Zwei Dual zahlen werden addiert, indem die einzelnen Komponentern addiert werden.
+Da die einzelnen Komponenten  alle Rellezahlen sind, lässt sich die auf der GPU durchführen.
+Es kann also der @atmic call in der scatter! function durch folgende Implementierung ersetzt werden:
 
 \begin{listing}
 
@@ -132,71 +112,72 @@ end
 
 \end{listing}
 
-
-Wird die scatter function nun wie beschrieben implementiert kommt es zu einem weiteren problem.
-
-Der macro @atomic verbietet die functions aufrufe value und partial.
-Der partial aufruf führt ausdem scalare indexierung durch welche auf der Graphik karte nicht erlaubt ist.
-
-Im allgemeinen macht, aber vorallem das erstellen und zurück schreiben des Dual-structs große probleme,
-da um dies durchzuführen scalare indezierung benötigt wird.
-
-Prinzipiell ist es wahrscheinlich möglich dieses problem zu lösen, 
-allerdings führt es zu sehr unübersichtlichen code der sehr fehler anfällig ist, 
-da große teil der scatter function reimplementiert werden müssen.
-
-Ausserdem muss inerhalb des Kernels speicher reserviert werden, was zu problemen bei großen problem instanzen führt.
-
+Wird die scatter Funktion nun wie beschrieben implementiert, kommt es zu einem weiteren Problem.
+Der Macro @atomic verbietet die Funktions aufrufe value und partial.
+Der Aufruf der partial-Funktion führt außerdem skalare Indexierung durch, welche auf der Grafikkarte nicht erlaubt ist.
+Im Allgemeinen macht aber vor allem das Erstellen und zurück schreiben des Dual-structs große Probleme
+da um dies durchzuführen, ebenfalls skalare Indizierung benötigt wird.
+Prinzipiell ist es möglich, dieses Problem zu lösen, 
+allerdings führt es zu sehr unübersichtlichen code, der sehr fehleranfällig ist, 
+da große Teil der scatter Funktion mit minimalen Veränderungen wieder implementiert werden müssen.
+Außerdem muss innerhalb des Kernels speicher reserviert werden, was zu Problemen bei großen Probleminstanzen führt.
 
 \subsection{Eine Funktionierende Implementierung}
 
 Bis her haben wir nun ansätze gesehen die aus unterschiedlichen gründen nicht funktionieren.
-
 Eine elegante Lösung ergibt sich wenn, 
-die scatter! function zur berechung der Scatter! function verwendet.
-
-Dies funktioniert indem die fähichkeit der scatter function höher dimensinale daten auszuwerten,ausgenutzt wird. 
-
+die scatter! function zur berechung der scatter! function verwendet wird.
+Dies funktioniert indem die Fähigkeit der scatter function höher dimensinale daten auszuwerten, ausgenutzt wird. 
 Es wird ein array mit dimension N das dual werte speichert in ein array von z.B Float mit der Dimension N+1 umgewandelt. 
-
 In der Zusätzlichen Dimension werden die einzelnen Komponenten der Dual zahl abgespeichert.
-
 Die größe der hinzugefügten dimension hängt, davon ab wie groß die partial componete der Dual zahl ist.
-
 Um nun die addition um zusetzten, muss noch das index array der scatter function angepasst werden.
-
 Dieses wird ebenfalls um eine dimension erweitert, und mit dem ziel index im src array erweitert.
-
 Es werden also die zahlen von 1 bis n+1 in die zusätzliche dimension eingefügt.
+Die folgende Graphik illustriert diesen vorgang in mit $N = 1$, der vorgang ist aber für höhere dimensionen analog
 
-Diese modificationen führen nun dazu das die dual addition nun korrekt durchgeführt wird.
+\includegraphics{cropted.png}
 
-Zuguter letzt, muss nur noch das dual struct wieder konstruiert und in das ziel array zurück geschrieben werden. Dabei tritt nun das zuvor beschriebene problem der skalaren indezierung wieder auf.
-
+Werden die veränderten arrays nun an die NNlibCUDA.scatter! function übergeben,
+wird die scatter! operation auf dual-zahlen korrekt ausgeführt.
+Zuguter letzt, muss nur noch das dual struct wieder konstruiert und in das ziel array zurück geschrieben werden. 
+Dabei tritt nun das zuvor beschriebene problem der skalaren indezierung wieder auf.
 Dieses Problem wirde gelößt indem, dem Kernel befor er gestartet wird nicht das array direkt, übergeben wird
 sondern eine View auf dieses.
-
 Eine view sorgt dafür das auf ein bestehndes array, anders zugeriffen werden kann.
-
 Dies führt dazu das es nicht notwendig ist eine scalare operation auf das ziel array durch zuführen.
+Der gesamte Process wird im folgendem nochmal genauer in pseudocode dargestellt.
+
+\begin{verbatim}
+	1. Allocate CUDA Memory 
+		...		
+		
+	2. Copy the modified values into the allocated Memory
+		...
+		
+	3. Call NNlib.scatter
+		...
+		
+	4. Copy the result into the dst array
+		...
+\end{verbatim}
 
 
 \section{ Fehler behebung in den Impliziten Lösern }
 
-
-Da nun die scatter function mit dual zahlen auf der GPU durchgeführt werden kann, sollte die verwendung der Impliziten löser nichts mehr im weg stehen.
-Allerdings, hatt sich Julia im laufe der zeit weiter entwickelt und einig api änderungen vorgenommen.
-Dies hat auf der Seite der Löser dazu geführt das diese zum teil functionalität von Julia 1.8 wollten und zum teil functionalität von den Früheren versionen.
-Das problem war das sich die implementierung der lu-factorisierung geändert hatt.
-In den älteren versionen hatt CUDA diese implementierung selbst bereit gestellt.
-Mit der Version 1.8 wurde dies alerdings in die standart bibliothet so aufgenommen das die Faktorisierung 
-auch auf der Graphik karte durchgeführt werden kann.
-Die ordenary differential equations packet von von Julia verwendet, 
-eine Array Interface welches , operationen auf arrays, 
-von ihrern umsetztung abstrahiert um sie zum beispiel auf einer graphic-karte durchführen zu können.
-Dank der hilfe von Christopher Rackauckas ist es dann nach vielen versuchen gelungen die lu\_instance funktion richtig umsusetzen, 
-und es damit möglich zu machen zumindest die im nächsten kapitel vorgestellten impliziten löser zum laufen zubringen.
-
+Da nun die scatter Funktion mit dual zahlen auf der GPU durchgeführt werden kann, 
+sollte die Verwendung der Impliziten Löser nichts mehr im weg stehen.
+Allerdings hat sich Julia im laufe der zeit weiter entwickelt und einig API Änderungen vorgenommen.
+Dies hat auf der Seite der Löser dazu geführt, dass diese zum Teil Funktionalität von Julia 1.8 wollten und zum Teil Funktionalität von den früheren Versionen.
+Das Problem war das sich die Implementierung der lu-factorisierung geändert hat.
+In den älteren Versionen hat CUDA diese Implementierung selbst bereitgestellt.
+Mit der Version 1.8 wurde dies allerdings in die Standard Bibliothek so aufgenommen, das die Faktorisierung 
+auch auf der Grafik karte durchgeführt werden kann.
+Das OrdenaryDifferentialEquations packet von Julia verwendet 
+ein Array-Interface, welches operationen auf Arrays, 
+von der Umsetzung abstrahiert, um diese auf einer Grafikkarte durchführen zu können.
+Dank der Hilfe von Christopher Rackauckas ist es, dann nach vielen versuchen gelungen, die lu\_instance Funktion richtig umzusetzen 
+und es damit möglich zu machen zumindest die im nächsten Kapitel vorgestellten impliziten Löser zum Laufen zubringen.
 
 
 
