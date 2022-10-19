@@ -78,8 +78,13 @@ Dies macht es für unsere Zwecke unmöglich, Dual zahlen mit dieser Operation di
 Da die Atomic-opertion von Cuda nicht direkt verwenden kann, muss eine anderer weg gefunden werden.
 Um Dual Zahlen zu implementieren, wird dessen mathematisch definition betrachtet.
 
+% $$
+% d = a + b \epsilon \text{ wobei gilt } \epsilon^2 = 0
+% $$
+
 $$
-d = a + b \epsilon \text{ wobei gilt } \epsilon^2 = 0
+ d = x + \sum_{i = 1}^{k} y_i \epsilon_i \text{ d ist eine Multidimensionale Dual Zahl ; x ist
+die relle componente und $y_i$ die imaginären komponenten}
 $$
 
 Für die Definition von Dual-Zahlen ist ebenfalls ihr verhalten auf scalare Operationen wichtig:
