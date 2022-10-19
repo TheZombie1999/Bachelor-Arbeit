@@ -30,9 +30,9 @@ Um unsere Neuralode auswerten zu können, müssen alle Teile der Differenzialgle
 In diesem Fall unterstützt die scatter-function von Flux nicht die Addition von Dual zahlen.
 Die scatter Funktion ist wie folgt definiert:
 
-\begin{listing}{language=Julia}
+\begin{lstlisting}{language=Julia}
 	scatter(op, src, idx; [init, dstsize])
-\end{listing}
+\end{lstlisting}
 
 \begin{verbatim}
 	op ist die operation die auf alle werte die in die selbe zelle geschrieben werden angewendet wird.
@@ -47,7 +47,7 @@ Die scatter Funktion ist wie folgt definiert:
 Aus der Definition wird nicht ganz klar, was mit dem Ziel Array gemeint ist.
 Um dies besser verstehen zu können, wird eine vereinfachte Version der Implementierung der scatter Funktion betrachtet.
 
-\begin{listing}{language=Julia}
+\begin{lstlisting}{language=Julia}
 	function scatter(op, src, idx; [init, dstsize])
 		dst = similar(src)
 		
@@ -55,7 +55,7 @@ Um dies besser verstehen zu können, wird eine vereinfachte Version der Implemen
 		
 		scatter!(op, dst, src, idx)
 	end
-\end{listing}
+\end{lstlisting}
 
 Die scatter Funktion erstellt zuerst ein Array vom selben Datentype und der benötigten Größe. 
 Wie die Größe berechnet wird, wurde hier weggelassen, da dies für unsere Zwecke nicht relevant ist. 
@@ -79,7 +79,7 @@ Da die Atomic-opertion von Cuda nicht direkt verwenden kann, muss eine anderer w
 Um Dual Zahlen zu implementieren, wird dessen mathematisch definition betrachtet.
 
 $$
-d = a + b \espilon \text{ wobei gilt } \epsilon^2 = 0
+d = a + b \epsilon \text{ wobei gilt } \epsilon^2 = 0
 $$
 
 Für die Definition von Dual-Zahlen ist ebenfalls ihr verhalten auf scalare Operationen wichtig:
@@ -100,7 +100,7 @@ Zwei Dual zahlen werden addiert, indem die einzelnen Komponentern addiert werden
 Da die einzelnen Komponenten  alle Rellezahlen sind, lässt sich die auf der GPU durchführen.
 Es kann also der @atmic call in der scatter! function durch folgende Implementierung ersetzt werden:
 
-\begin{listing}
+\begin{lstlisting}{language=Julia}
 
 function gpu_add!(d0::Dual, d1::Dual, d2::Dual)
 	@atomic value(d0) = value(d1) + value(d2)
@@ -110,7 +110,7 @@ function gpu_add!(d0::Dual, d1::Dual, d2::Dual)
 	end
 end
 
-\end{listing}
+\end{lstlisting}
 
 Wird die scatter Funktion nun wie beschrieben implementiert, kommt es zu einem weiteren Problem.
 Der Macro @atomic verbietet die Funktions aufrufe value und partial.
@@ -136,7 +136,7 @@ Dieses wird ebenfalls um eine dimension erweitert, und mit dem ziel index im src
 Es werden also die zahlen von 1 bis n+1 in die zusätzliche dimension eingefügt.
 Die folgende Graphik illustriert diesen vorgang in mit $N = 1$, der vorgang ist aber für höhere dimensionen analog
 
-\includegraphics{cropted.png}
+\includegraphics[width=\textwidth]{Data/02_Versuch/cropted.png}
 
 Werden die veränderten arrays nun an die NNlibCUDA.scatter! function übergeben,
 wird die scatter! operation auf dual-zahlen korrekt ausgeführt.
