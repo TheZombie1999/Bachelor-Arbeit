@@ -1,40 +1,73 @@
 
+% NeuralODE mit zitat
+% MeshGraphNets
+% Englische worte zitieren und kursiv
+
+
+
 \chapter{Versuch}
 
 \section{Ziel der Arbeit}
 
+%= Version 1=
+
 Das Ziel der Arbeit ist es, implizite Löser für Neuralodes zu verwenden 
-und deren Performance anhand von Meshgraphnetzen zu evaluieren. 
+und deren Performance anhand von \textit{MeshgraphNets} zu evaluieren. 
 Diese verwendet Neuralodes zur Simulation von Flüssigkeiten um verschiedene Körper in 2D.
 Die Simulation basiert auf den Differenzialgleichungen, die das verhalten von Flüssigkeiten beschreiben.
-Diese Gleichungen wurden nun verwendet, um das neuronale Netz der Neuralode zu trainieren.
-
+Diese Gleichungen wurden nun verwendet, um das neuronale Netz der \textit{NeuralODE} zu trainieren.
 % Nun können verschiedene numerischen Verfahren verwendet werden, um die Neuralode auszuwerten.
-Anschließend können verschiedene numerische Verfahren verwdent werden, um das Netz auszuwerten.
-
-Die Qualität des Ergebnisses kann dann mit den klassisch durchgeführten Differenzialgleichungen verglichen werden.
+Anschließend können verschiedene numerische Verfahren verwendet werden, um das Netz auszuwerten.
+% Die Qualität des Ergebnisses kann dann mit den klassisch durchgeführten Differenzialgleichungen verglichen werden. % Simulator nen aus dem Meschgraphnet paper.
+Die Qualität des Ergebnisses, kann dann anhand der vom \textit{COMSOl} \cite{} Simulator generierten daten,
+verglichen werden.
 Da diese Berechnungen sehr lange dauern, ist es erstrebenswert, diese auf der GPU auszuführen.
-Implizit und Explicit Löser von Anfangswerteproblemen laufen auf der CPU problemlos.
+% Implizit und Explicit Löser von Anfangswerteproblemen laufen auf der CPU problemlos.
 Das verwenden von impliziten Lösern auf der GPU führt allerdings zu Problemen, da für diese Automatik Differenziation durchgeführt werden muss.
 Um die Ableitung verschachtelter Funktionen berechnen zu können, verwenden
 Programme die AutomaticDifferentiation durchführen, Dualzahlen, welche von unserer Neuralode nicht unterstützt werden.
 Das Problem dabei ist das, die Operation scatter innerhalb der Neuralode dual zahlen nicht auf der GPU 
 berechnen kann.
-Die scatter-Funktion um schnell die Änderungen eines Zeitschrittes auf alle Knoten im Netz anzuwenden.
+Die scatter-Funktion um schnell die Änderungen eines Zeitschrittes auf alle Knoten im Netz anzuwenden. % functions name cursiv
+
+%= Version 2 =
+% = TODO =  
+% Rechtschreibung
+% Englische Worte kursiv
+% Quellen
+
+Der Zweck dieser Arbeit ist es, Nutzern von \textit{NeuralODEs} es zu ermöglichen, verschiedene Klassen von Lösern für differenzialgleichungen zu nutzen.
+Da explizite Löser bereits nutztbar, sind konzentiert diese Arbeit sich auf Implizite Löser. 
+Die größte Herausforderung ist dabei, diese auf der Graphikkarte und nicht auf der CPU durch zuführen.
+Der Grund dafür ist vorallem die lange berechnungs dauer der impliziten Methoden.
+Das Hauptproblem beim berechnen von \textit{NeuralODEs} ist, dass die impliziten Methoden als zeit eingabe nicht immer relle Zahlen verwenden,
+sondern \textit{Dual} Zahlen, welche eine abwandlung von imaginären Zahlen sind.
+
+Das Verwenden von Dual Zahlen ist voraussetzung dafür, um automatische Differenzierungs algorithmen berechenen zu können.
+
+Das Problem ist, das die \textit{scatter} operationen innerhalb der \textit{NeuralODE Dual} Zahlen nicht verarbeiten kann.
+Im folgendem wird beschrieben, warum die \textit{scatter} function \textit{Dual} Zahlen nicht verarbeiten kann und wie das Problem behoben wird.
 
 
 
 \section{Implementierung der Scatter funktion}
 
-Um unsere Neuralode auswerten zu können, müssen alle Teile der Differenzialgleichung Dual zahlen unterstützen.
-In diesem Fall unterstützt die scatter-function von Flux nicht die Addition von Dual zahlen.
+\subsection{Vorstellung der Scatter funktion}
+
+% = TODO =  
+% Rechtschreibung
+% Englische Worte kursiv
+% Quellen
+
+Die \textit{scatter} funktion von \textit{NNlibCUDA.jl} muss so erweitert werden, dass dual zahlen als eingabe unterstüzt werden.
 Die scatter Funktion ist wie folgt definiert:
 
-\begin{lstlisting}{language=Julia}
-	scatter(op, src, idx; [init, dstsize])
-\end{lstlisting}
+% Um unsere Neuralode auswerten zu können, müssen alle Teile der Differenzialgleichung Dual zahlen unterstützen. % Dual kursiv
+% In diesem Fall unterstützt die scatter-function von Flux nicht die Addition von Dual zahlen. % Flux.jl und kursiv
+% Die scatter Funktion ist wie folgt definiert:
 
-\begin{verbatim}
+\begin{lstlisting}{language=Julia}
+	"""
 	op ist die operation die auf alle werte die in die selbe zelle geschrieben werden angewendet wird.
 		mögliche werte sind +, -, *, /, min, max, mean
 	src ist eine beliebige matrix aus der wert gelesen und wieder an anderer stelle zurück geschrieben werden.
@@ -42,12 +75,8 @@ Die scatter Funktion ist wie folgt definiert:
 	init beschreibt wie das ziel array initialisiert wird.
 			dies kann zum beispiel genutzt werden, um den inhalt des arrays in das geschrieben wird initial auf null zu setzten.
 	dstsize gibt die größe des zurück gegebenen arrays an.
-\end{verbatim}
+	"""
 
-Aus der Definition wird nicht ganz klar, was mit dem Ziel Array gemeint ist.
-Um dies besser verstehen zu können, wird eine vereinfachte Version der Implementierung der scatter Funktion betrachtet.
-
-\begin{lstlisting}{language=Julia}
 	function scatter(op, src, idx; [init, dstsize])
 		dst = similar(src)
 		
@@ -57,13 +86,24 @@ Um dies besser verstehen zu können, wird eine vereinfachte Version der Implemen
 	end
 \end{lstlisting}
 
-Die scatter Funktion erstellt zuerst ein Array vom selben Datentype und der benötigten Größe. 
+
+% Wegglassen von code mit refereze auf github repo mit zitat.
+% NNlibCUDA.jl cursiv
+% atomic operations in kursiv
+
+Die scatter Funktion erstellt zuerst ein Array vom selben Datentype und der benötigten Größe wie das src Array. 
+
+Dies hat den Großen vorteil das sicher gestellt wird, dass die beiden Arguemnte der op Operation von Gleichen Datentyp sind. 
+Dies verhindert, dass viele spezialfälle der addition von Dualzahlen, nicht implementiert werden müssen.
+
 Wie die Größe berechnet wird, wurde hier weggelassen, da dies für unsere Zwecke nicht relevant ist. 
 Anschließend wird das dst Array mit den gewünschten Initial werten gefüllt.
 Als Letztes wird nun die scatter! Funktion aufgerufen.
 Das Ausrufezeichen im Funktionsnamen symbolisiert, das die Funktion, die Werte der übergebenen Argumente überschreibt.
+
 Die scatter! Funktion wird in diesem Fall von der NNlibCUDA Bibliothek überschrieben und sorgt dafür, 
 dass die Berechnung auf der Grafikkarte ausgeführt wird.
+
 Die Grafikkarte führt dabei in mehrer Threads die Operation op aus. In unserem Fall ist op die + Funktion.
 Dabei kann es passieren, dass mehrere Threads zum gleichen Zeitpunkt in dasselbe Feld schreiben.
 Normaler weiße kommt es dabei zu einer viel zahl von Fehler, wenn keine Sicherheit maßnahmen getroffen werden. 
@@ -78,25 +118,42 @@ Dies macht es für unsere Zwecke unmöglich, Dual zahlen mit dieser Operation di
 Da die Atomic-opertion von Cuda nicht direkt verwenden kann, muss eine anderer weg gefunden werden.
 Um Dual Zahlen zu implementieren, wird dessen mathematisch definition betrachtet.
 
-% $$
-% d = a + b \epsilon \text{ wobei gilt } \epsilon^2 = 0
-% $$
+\subsection{Dual Zahlen}
+
+Wenn von Dual-Zahlen gesprochen wird, dann gibt es verschiedenen dinge über die gesprochen werden kann.
+Als erstes gibt es die Mathematische definition und eine mal die konkrete implementierung von Dual zahlen in der Julia programmier sprache.
+
+Um den Unterschied zwischen diesen Zwei konzepten hervor zuheben,
+wird die Mathematische Definition von Dual Zahlen im foglenden mit Multidimensionalen Dual Zahlen bezeichnet
+und die implementierung als Dual-Zahl.
+
+Eine Dual-Zahl implementiert, eine Multidimensinale Dual-Zahl, welche wie folgt definiert ist.
+
+\begin{gather*}
+ d = x + \sum_{i = 1}^{k} y_i \epsilon_i \\
+	\text{ d ist eine Multidimensionale Dual Zahl } \\
+	\text{ x ist die relle componente } \\
+	y_i \text{ sind die imaginären komponenten mit } i \in \{1, ..., k\}
+\end{gather*}
+
+Bei Multidimensinalen Dual zahlen git:
+$$
+ \epsilon_i \cdot \epsilon_j = 0
+$$
+
+Für die Definition von MultidimensinalenDual-Zahlen ist ebenfalls ihr verhalten auf scalare Operationen wichtig:
 
 $$
- d = x + \sum_{i = 1}^{k} y_i \epsilon_i \text{ d ist eine Multidimensionale Dual Zahl ; x ist
-die relle componente und $y_i$ die imaginären komponenten}
+ f( x + \sum_{i = 1}^{k} y_i \epsilon_i  ) = f(x) +  f'(x) \sum_{i = 1}^{k} y_i \epsilon_i
 $$
+\cite{juliaForwardDiffPackage}
 
-Für die Definition von Dual-Zahlen ist ebenfalls ihr verhalten auf scalare Operationen wichtig:
+Das verhalten auf scalare operationen ist entscheidet für die Berechnung von durch Autodifferentiation Algorithemen.
 
-$$
- f( a + b \epsilon ) = f(a) + b f'(x) \epsilon
-$$
-
-Um die scatter-function umzusetzen, wird die Definition der Addition benötigt.
+Um die scatter-function umzusetzen, wird die Definition der Addition von MultidimensionalenDualZahlen \cite{RecentAdvances} benötigt.
 
 $$
-(a + b \epsilon) + ( c + d \epsilon ) = (a + c) + (b + d) \epsilon
+(x_1 + \sum_{i = 1}^{k} y_{1,k} \epsilon_i) + ( x_2 + \sum_{i = 2}^{k} y_{2,k} \epsilon_i) = (x_1 + x_2) + \sum_{i = 1}^{k} (y_{1, i}) \epsilon_i
 $$
 
 Die Definition von Dual zahlen kommt von der Addition komplexer Zahlen, 
@@ -129,9 +186,13 @@ Außerdem muss innerhalb des Kernels speicher reserviert werden, was zu Probleme
 
 \subsection{Eine Funktionierende Implementierung}
 
-Bis her haben wir nun ansätze gesehen die aus unterschiedlichen gründen nicht funktionieren.
-Eine elegante Lösung ergibt sich wenn, 
-die scatter! function zur berechung der scatter! function verwendet wird.
+% Bis her haben wir nun ansätze gesehen die aus unterschiedlichen gründen nicht funktionieren.
+Bisher wurden nur A
+
+% Nich Verwirren !!!!
+% Eine elegante Lösung ergibt sich wenn, 
+% die scatter! function zur berechung der scatter! function verwendet wird.
+
 Dies funktioniert indem die Fähigkeit der scatter function höher dimensinale daten auszuwerten, ausgenutzt wird. 
 Es wird ein array mit dimension N das dual werte speichert in ein array von z.B Float mit der Dimension N+1 umgewandelt. 
 In der Zusätzlichen Dimension werden die einzelnen Komponenten der Dual zahl abgespeichert.
@@ -145,7 +206,7 @@ Die folgende Graphik illustriert diesen vorgang in mit $N = 1$, der vorgang ist 
 
 Werden die veränderten arrays nun an die NNlibCUDA.scatter! function übergeben,
 wird die scatter! operation auf dual-zahlen korrekt ausgeführt.
-Zuguter letzt, muss nur noch das dual struct wieder konstruiert und in das ziel array zurück geschrieben werden. 
+% Zuguter letzt, muss nur noch das dual struct wieder konstruiert und in das ziel array zurück geschrieben werden. Zuguter letzt nicht so gut 
 Dabei tritt nun das zuvor beschriebene problem der skalaren indezierung wieder auf.
 Dieses Problem wirde gelößt indem, dem Kernel befor er gestartet wird nicht das array direkt, übergeben wird
 sondern eine View auf dieses.
@@ -171,10 +232,10 @@ Der gesamte Process wird im folgendem nochmal genauer in pseudocode dargestellt.
 \section{ Fehler behebung in den Impliziten Lösern }
 
 Da nun die scatter Funktion mit dual zahlen auf der GPU durchgeführt werden kann, 
-sollte die Verwendung der Impliziten Löser nichts mehr im weg stehen.
+sollte die Veckrwendung der Impliziten Löser nichts mehr im weg stehen. % Konkreter 
 Allerdings hat sich Julia im laufe der zeit weiter entwickelt und einig API Änderungen vorgenommen.
 Dies hat auf der Seite der Löser dazu geführt, dass diese zum Teil Funktionalität von Julia 1.8 wollten und zum Teil Funktionalität von den früheren Versionen.
-Das Problem war das sich die Implementierung der lu-factorisierung geändert hat.
+Das Problem war das sich die Implementierung der lu-factorisierung geändert hat. % lu-zerlegung
 In den älteren Versionen hat CUDA diese Implementierung selbst bereitgestellt.
 Mit der Version 1.8 wurde dies allerdings in die Standard Bibliothek so aufgenommen, das die Faktorisierung 
 auch auf der Grafik karte durchgeführt werden kann.

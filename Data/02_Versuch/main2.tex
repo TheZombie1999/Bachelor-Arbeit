@@ -1,0 +1,251 @@
+
+% Inhalt
+
+% \chapter{Versuch}
+% \section{Ziel der Arbeit}
+% \section{Implementierung der Scatter funktion}
+% \subsection{Vorstellung der Scatter funktion}
+% \subsection{Dual Zahlen}
+% \subsection{atomic}
+% \subsection{Defekte Implementierungs Versuche}
+% \subsection{Eine Funktionierende Implementierung}
+% \section{ Fehler behebung in den Impliziten Lösern }
+
+
+
+\chapter{Versuch}
+
+\section{Ziel der Arbeit}
+
+Der Zweck dieser Arbeit ist es, Nutzern von \textit{NeuralODEs} es zu ermöglichen, 
+verschiedene Klassen von Lösern für differenzialgleichungen zu nutzen.
+Da explizite Löser bereits nutztbar, 
+sind konzentiert diese Arbeit sich auf Implizite Löser. 
+Die größte Herausforderung ist dabei, 
+diese auf der Graphikkarte und nicht auf der CPU zu berechnen.
+Der Grund dafür ist die lange berechnungs dauer der impliziten Methoden.
+Das Hauptproblem beim berechnen von \textit{NeuralODEs} ist, 
+dass die impliziten Methoden als zeit eingabe nicht immer relle Zahlen verwenden,
+sondern \textit{Dual} Zahlen, welche eine abwandlung von imaginären Zahlen sind.
+Das Verwenden von Dual Zahlen ist voraussetzung dafür, 
+um automatische Differenzierungs algorithmen berechenen zu können.
+Dies setzt vorraus dass alle komponenten der \textit{NeuralODE} diese verarbeiten können.
+Die Meisten komponenten sind dazu bereits in der lage, 
+da die implementierung der \textit{Dual} Zahlen
+die standart operationen überlädt.
+Auf der Grafikkarte tritt das Problem auf das die standart operationen, 
+zusätzlichen beschränkungen unterliegen, 
+und deshalb \textit{Dual} Zahlen nicht verarbeiten können.
+In diesem Kaptiel werden die hintergründe erläutert und ein Lösungsansatz vorgestellt.
+
+
+\section{Implementierung der Scatter funktion}
+\subsection{Vorstellung der Scatter funktion}
+
+Um die Probleme der \textit{scatter} funktion lösen zukönnen, 
+wird dessen funktionsweiße vorgestellt.
+Die Aufgabe der \textit{scatter} function ist es werte aus einem N-Dimensinalen Array in ein anders 
+Array zuschreiben und dabei auf alle in eine zelle geschriebenen werte eine Operation anzuwenden.
+Es können zum beispiel mehrere eingaben in einen Knoten eines Graphen, 
+welcher in Matrix form aufgestellt wurde,
+zusammen gerechnet werden.
+Die besonderheit der scatter function ist dabei, 
+das dies nicht nur für eine Zelle geschieht, 
+sonder für alle.
+Die \textit{scatter} function ist wie folgt definiert:
+
+\begin{lstlisting}{language=Julia}
+	"""
+	op ist die operation die auf alle werte die in die selbe zelle geschrieben werden angewendet wird.
+		mögliche werte sind +, -, *, /, min, max, mean
+	src ist eine beliebige matrix aus der wert gelesen und wieder an anderer stelle zurück geschrieben werden.
+	idx ist ebenfalls eine beliebige matrix aus der entnommen wird an welche position, der wert einer zelle geschrieben werden soll.
+	init beschreibt wie das ziel array initialisiert wird.
+			dies kann zum beispiel genutzt werden, um den inhalt des arrays in das geschrieben wird initial auf null zu setzten.
+	dstsize gibt die größe des zurück gegebenen arrays an.
+	"""
+
+	function scatter(op, src, idx; [init, dstsize])
+		dst = similar(src)
+		
+		fill!(dst, init)
+		
+		scatter!(op, dst, src, idx)
+	end
+\end{lstlisting}
+
+Die implementierung der \textit{scatter} funktion ist eine vereinfachte darstellung, 
+welche details zur berechnung der größe des dst array weg lässt.
+
+Wichtig an der Implementierung ist, dass die \textit{similar} funktion verwendet wird um, das
+\textit{dst} Array zu erstellen.
+
+Dieser Aufruf stellt sicher das \textit{dst} und \textit{src} den selben datentyp haben.
+
+Dies hat den Großen vorteil, 
+dass die beiden Arguemnte der \textit{op} Operation von Gleichen Datentyp sind. 
+Dies verhindert, 
+dass viele spezialfälle der addition von Dualzahlen, nicht implementiert werden müssen.
+
+Es fällt ausserdem auf das die Implementierung der berechung innheralb der \textit{scatter!}
+durchgeführt wird.
+
+
+Das Ausrufe zeichen im Funktions namen, bedeutet das die argumente der Funktion überschrieben werden können.
+
+
+Die \textit{NNlibCuda.jl} Bibliothek überlädt diese Funktion für \textit{CUDA}-Arrays,
+implementiert die berechnung auf der Graphikkarte.
+
+Innerhalb dieser implementierung tritt der Fehler auf der die Verwendung von \textit{Dual}-Zahlen,
+verhindert.
+	
+\subsection{Dual Zahlen}
+
+Um zu verstehen, was auf der Graphikkarte zu Problemen führt, wird zunächst die Definition von \textit{Dual}-Zahlen betrachtet.
+
+Da sich hinter diesem Begriff zwei sehr ähnliche Konzepte verbergen führen wir folgende zwei begriffe ein.
+
+Mit einer \textit{Dual}-Zahl wird, die konkrete implementierung in der \textit{ForwardDiff.jl} Bibliothek bezeichnet.
+
+Eine Multidimensionale Dual zahl bezeichnet die Mathmatische Definition welche von Imaginären Zahlen abgeleitet ist.
+
+\begin{gather*}
+ d = x + \sum_{i = 1}^{k} y_i \epsilon_i \\
+	\text{ d ist eine Multidimensionale Dual Zahl } \\
+	\text{ x ist die relle componente } \\
+	y_i \text{ sind die imaginären komponenten mit } i \in \{1, ..., k\}
+\end{gather*}
+
+Bei Multidimensinalen Dual zahlen git:
+$$
+ \epsilon_i \cdot \epsilon_j = 0
+$$
+
+Für die Definition von MultidimensinalenDual-Zahlen ist ebenfalls ihr verhalten auf scalare Operationen wichtig:
+
+$$
+ f( x + \sum_{i = 1}^{k} y_i \epsilon_i  ) = f(x) +  f'(x) \sum_{i = 1}^{k} y_i \epsilon_i
+$$
+\cite{juliaForwardDiffPackage}
+
+
+Das verhalten auf scalare operationen ist entscheidet für die Berechnung von durch Autodifferentiation Algorithemen.
+Um die scatter-function umzusetzen, wird die Definition der Addition von MultidimensionalenDualZahlen \cite{RecentAdvances} benötigt.
+
+$$
+(x_1 + \sum_{i = 1}^{k} y_{1,k} \epsilon_i) + ( x_2 + \sum_{i = 2}^{k} y_{2,k} \epsilon_i) = (x_1 + x_2) + \sum_{i = 1}^{k} (y_{1, i}) \epsilon_i
+$$
+
+Alle weitern operation lassen sich ebenfalls von den von den Komplexen Zahlen ableiten, 
+sind aber nicht relevant um die Differentialgleichungs löser zu unterstützen.
+
+
+\subsection{Atomic Operationen}
+
+Da nun bekannt ist, was eine Dual Zahl ist, 
+kann das eigentliche Problem betrachtet werden.
+
+Die Implementierung der \textit{scatter!} function, benutzt folgenden Programmcode um die 
+Addition umzusetzen. 
+
+\begin{lstlisting}{language=Julia}
+	CUDA.@atomic dst[idx[index]...] = op(dst[idx[index]...], src[index])
+\end{lstlisting}
+
+
+Dabei ist der Macro \textit{@atomic} ein Wrapper um die C-Implementierung von CUDA.
+
+Das Probelem das auftritt ist, dass der Macro nur die Datentypen \{Float16, Float32, Float64, BFloat16 \}
+unterstützt.
+
+Es ist möglich die unterstützten datentypen zu erweitern, da die maximale größe der Datentypen auf 64Bit
+begrenzt ist, kann benötigte operation nicht direkt von dem \textit{@atomic} macro unterstützt werden.
+
+Es auch nicht möglich den aufruf von \textit{@atomic} weg zulassen, da dieser viele vorteile bietet
+die für die umsetztung benötigt werden.
+
+Dieser stellt sicher das \textit{Read-Modify-Write} Operation von meheren Threads, in die selbe
+speicher Zelle serialisiert werden.
+
+Dadruch werden \textit{Race-Conditions} die bei der Parallelen Programmierung zwangsläufig auftreten 
+verhindert.
+
+Aus der Definition der Multidimensinalen Dual Zahlen, ist bekannt das dual zahlen addiert werden 
+indem ihre komponentne addiert werden.
+
+Da die einzelnen komponenten Rellen zahlen, 
+bzw. in der Praxis Floats sind, liegt folgende implementierung nahe:
+
+\begin{lstlisting}{language=Julia}
+
+function gpu_add!(d0::Dual, d1::Dual, d2::Dual)
+	@atomic value(d0) = value(d1) + value(d2)
+	
+	for i in 1:length(partials(d0)) # length(partials( ... )) ist für alle Argumente Gleich
+		@atomic partials(d0, i) = partials(d1, i) + partials(d2, i)
+	end
+end
+
+\end{lstlisting}
+
+Wird die scatter Funktion nun wie beschrieben implementiert, kommt es zu einem weiteren Problem.
+Der Macro @atomic verbietet die Funktions aufrufe value und partial.
+Der Aufruf der partial-Funktion führt außerdem skalare Indexierung durch, welche auf der Grafikkarte nicht erlaubt ist.
+Im Allgemeinen macht aber vor allem das Erstellen und zurück schreiben des Dual-structs große Probleme
+da um dies durchzuführen, ebenfalls skalare Indizierung benötigt wird.
+Prinzipiell ist es möglich, dieses Problem zu lösen, 
+allerdings führt es zu sehr unübersichtlichen code, der sehr fehleranfällig ist, 
+da große Teil der scatter Funktion mit minimalen Veränderungen wieder implementiert werden müssen.
+
+% Genauer auf das speicher reservieren eingehen ...
+Außerdem muss innerhalb des Kernels speicher reserviert werden, was zu Problemen bei großen Probleminstanzen führt.
+
+% \subsection{Defekte Implementierungs Versuche}
+\subsection{Eine Funktionierende Implementierung}
+
+In diesem Kaptipel geht es darum, wie die \textit{scatter} function nun umgesetzt werden kann.
+
+Dazu werde die argumente so umgeformt, 
+dass sie die \textit{scatter!} function richtig verarbeiten kann.
+
+Es wird dafür zurerst CUDA-speicher reserviert und dann werden Kernels verwenden um 
+die entsprechenede werte in diesen zu kopieren.
+
+Ein kernel ist eine Function die Auf der Graphikkarte ausgeführt wird.
+
+Wichtig ist dabei das der CUDA-speicher die richtige Dimension haben. 
+
+Das ursprünglichen Arrays \textit{src} und \textit{dst} haben die Dimension N.
+
+Das Array \textit{idx} entweder dimension N und enthält tupel von gleicher Größe,
+oder dimension 1 und und enthält \textit{Interger} Zahlen.
+
+Falls die Dimension von \textit{idx} Eins ist, und die Dimension von \textit{src}
+und \textit{dst} größer dann wird \textit{idx} zeilen weiße angewendet.
+
+Es wird nun eine Kopie dieser Drei Arrays erstellt mit Dimension N+1.
+
+In der Extra Dimension werden die einzelnen Komponenten der Dual Zahl gespeichert.
+
+
+$$
+\begin{matrix}
+Dual & Dual & Dual
+\end{matrix}
+
+\rightarrow
+
+\begin{matrix}
+Value & Value & Value
+Partial & Partial & Partial
+Partial & Partial & Partial
+Partial & Partial & Partial
+\end{matrix}
+
+$$
+
+
+
+
+\section{ Fehler behebung in den Impliziten Lösern }
