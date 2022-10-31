@@ -7,8 +7,8 @@
 % \subsection{Vorstellung der Scatter funktion}
 % \subsection{Dual Zahlen}
 % \subsection{atomic}
-% \subsection{Defekte Implementierungs Versuche}
 % \subsection{Eine Funktionierende Implementierung}
+% \subsection{Test}
 % \section{ Fehler behebung in den Impliziten Lösern }
 
 
@@ -18,12 +18,12 @@
 \section{Ziel der Arbeit}
 
 Der Zweck dieser Arbeit ist es, Nutzern von \textit{NeuralODEs} es zu ermöglichen, 
-verschiedene Klassen von Lösern für differenzialgleichungen zu nutzen.
+verschiedene Klassen von DifferentzialGleichungs-Lösern zu nutzen.
 Da explizite Löser bereits nutztbar, 
 sind konzentiert diese Arbeit sich auf Implizite Löser. 
 Die größte Herausforderung ist dabei, 
 diese auf der Graphikkarte und nicht auf der CPU zu berechnen.
-Der Grund dafür ist die lange berechnungs dauer der impliziten Methoden.
+Der Grund ist die lange berechnungs dauer der impliziten Methoden.
 Das Hauptproblem beim berechnen von \textit{NeuralODEs} ist, 
 dass die impliziten Methoden als zeit eingabe nicht immer relle Zahlen verwenden,
 sondern \textit{Dual} Zahlen, welche eine abwandlung von imaginären Zahlen sind.
@@ -45,7 +45,7 @@ In diesem Kaptiel werden die hintergründe erläutert und ein Lösungsansatz vor
 Um die Probleme der \textit{scatter} funktion lösen zukönnen, 
 wird dessen funktionsweiße vorgestellt.
 Die Aufgabe der \textit{scatter} function ist es werte aus einem N-Dimensinalen Array in ein anders 
-Array zuschreiben und dabei auf alle in eine zelle geschriebenen werte eine Operation anzuwenden.
+ähnlicher Größe Array zuschreiben und dabei auf alle in eine zelle geschriebenen werte eine Operation anzuwenden.
 Es können zum beispiel mehrere eingaben in einen Knoten eines Graphen, 
 welcher in Matrix form aufgestellt wurde,
 zusammen gerechnet werden.
@@ -76,6 +76,7 @@ Die \textit{scatter} function ist wie folgt definiert:
 
 Die implementierung der \textit{scatter} funktion ist eine vereinfachte darstellung, 
 welche details zur berechnung der größe des dst array weg lässt.
+Die gesamte implementierung kann in \scatter{NNlib.jl} \cite{} geschlagen werden.
 
 Wichtig an der Implementierung ist, dass die \textit{similar} funktion verwendet wird um, das
 \textit{dst} Array zu erstellen.
@@ -83,7 +84,7 @@ Wichtig an der Implementierung ist, dass die \textit{similar} funktion verwendet
 Dieser Aufruf stellt sicher das \textit{dst} und \textit{src} den selben datentyp haben.
 
 Dies hat den Großen vorteil, 
-dass die beiden Arguemnte der \textit{op} Operation von Gleichen Datentyp sind. 
+dass die beiden Arguemente der \textit{op} Operation von Gleichen Datentyp sind. 
 Dies verhindert, 
 dass viele spezialfälle der addition von Dualzahlen, nicht implementiert werden müssen.
 
@@ -141,7 +142,7 @@ Alle weitern operation lassen sich ebenfalls von den von den Komplexen Zahlen ab
 sind aber nicht relevant um die Differentialgleichungs löser zu unterstützen.
 
 
-\subsection{Atomic Operationen}
+\subsection{Atomic Operationen} \label{atomic}
 
 Da nun bekannt ist, was eine Dual Zahl ist, 
 kann das eigentliche Problem betrachtet werden.
@@ -159,20 +160,18 @@ Dabei ist der Macro \textit{@atomic} ein Wrapper um die C-Implementierung von CU
 Das Probelem das auftritt ist, dass der Macro nur die Datentypen \{Float16, Float32, Float64, BFloat16 \}
 unterstützt.
 
-Es ist möglich die unterstützten datentypen zu erweitern, da die maximale größe der Datentypen auf 64Bit
-begrenzt ist, kann benötigte operation nicht direkt von dem \textit{@atomic} macro unterstützt werden.
+Es ist möglich die unterstützten datentypen zu erweitern. 
+Vorraussetzung dafür ist, das der neue datentype kleiner gleich 64-Bit ist.
+Da eine Dual Zahl nur für $k = 1$ und Datentype \textit{Float32} genau 64-Bit groß ist,
+kann nur in besondren fällen \textit{@atomic} direkt verwendet werden.
+Da dieser Sonderfall, meistens nicht auftritt ist dieser ansatzt unbrauchbar.
 
-Es auch nicht möglich den aufruf von \textit{@atomic} weg zulassen, da dieser viele vorteile bietet
-die für die umsetztung benötigt werden.
+Der \textit{@atomic} Aufruf wird benötigt, 
+um \textit{Read-Modify-Write} operationen zu Serialisieren, 
+und \textit{Race-Conditions} zuvermeiden und kann deshalb auch nicht weggelassen werden.
 
-Dieser stellt sicher das \textit{Read-Modify-Write} Operation von meheren Threads, in die selbe
-speicher Zelle serialisiert werden.
-
-Dadruch werden \textit{Race-Conditions} die bei der Parallelen Programmierung zwangsläufig auftreten 
-verhindert.
-
-Aus der Definition der Multidimensinalen Dual Zahlen, ist bekannt das dual zahlen addiert werden 
-indem ihre komponentne addiert werden.
+Aus der Definition der Multidimensinalen Dual Zahlen, ist bekannt das \textit{dual}-Zahlen addiert werden 
+indem die komponenten addiert werden.
 
 Da die einzelnen komponenten Rellen zahlen, 
 bzw. in der Praxis Floats sind, liegt folgende implementierung nahe:
@@ -190,8 +189,19 @@ end
 \end{lstlisting}
 
 Wird die scatter Funktion nun wie beschrieben implementiert, kommt es zu einem weiteren Problem.
-Der Macro @atomic verbietet die Funktions aufrufe value und partial.
+Der Macro @atomic verbietet die Funktions aufrufe \textit{value}und \textit{partial}.
+Dies liegt daran, das ein Macro in der Julia sprache zugang auf den \textit{Abstract Syntax Tree} des Complieler hat
+und einen direkten zugriff auf ein \textit{Array} erwarted.
 Der Aufruf der partial-Funktion führt außerdem skalare Indexierung durch, welche auf der Grafikkarte nicht erlaubt ist.
+
+
+
+\subsection{Memory Allocation}
+
+Wie bereits im Kaptiel \ref{atomic} beschrieben, 
+
+
+
 Im Allgemeinen macht aber vor allem das Erstellen und zurück schreiben des Dual-structs große Probleme
 da um dies durchzuführen, ebenfalls skalare Indizierung benötigt wird.
 Prinzipiell ist es möglich, dieses Problem zu lösen, 
@@ -228,24 +238,111 @@ Es wird nun eine Kopie dieser Drei Arrays erstellt mit Dimension N+1.
 
 In der Extra Dimension werden die einzelnen Komponenten der Dual Zahl gespeichert.
 
+Ein Beispiel für $N = 1$, sieht für \textit{src} und \textit{dst} sieht wie folgt aus:
 
 $$
+
+\text{src oder dst} = 
+
 \begin{matrix}
 Dual & Dual & Dual
 \end{matrix}
 
 \rightarrow
 
+\text{src_m oder dst_m} = 
+
 \begin{matrix}
-Value & Value & Value
-Partial & Partial & Partial
-Partial & Partial & Partial
-Partial & Partial & Partial
+Value   & Value   & Value   \\
+Partial & Partial & Partial \\
+Partial & Partial & Partial \\
+Partial & Partial & Partial \\
 \end{matrix}
+$$
+
+Das \textit{idx} Array ist in dieser hinsicht besonders.
+Da die einzelnen \textit{Integer}-Zahlen zu Tupel um gewandelt werden müssen. 
 
 $$
 
+\text{idx}= 
+
+\begin{matrix}
+ 2 & 1 & 3
+\end{matrix}
+
+\rightarrow
+
+idx_m = 
+
+\begin{matrix}
+ (2, 1) & (1, 1) & (3, 1) \\ 
+ (2, 2) & (1, 2) & (3, 2) \\
+ (2, 3) & (1, 3) & (3, 3) \\
+ (2, 4) & (1, 4) & (3, 4) \\
+\end{matrix}
+$$
+
+Die Anzahl der Zeilen in beiden Beispielen, ist abhänig von der anzahl der Freien variablen  
+der Multidimensionalen Dual Zahlen.
+
+Wird nun \textit{dst_m}, \textit{src_m} und \textit{idx_m} an die \textit{scatter!} function über
+geben, wird das erwünschte ergebnis berechnet. 
+
+Es muss nur noch in das korekte format zurück kopiert werden. 
+
+Für diesen Letzten schritt müssen mehrere \textit{views} auf
+\textit{dst_m} erstellt werden.
+
+Das verwenden von \textit{views} Löst das Problem von scalarer indezierung innerhalb der Graphikkarten Kernel. 
+
+Eine \textit{view} erlaubt es die art und weiße wie auf einen speicher bereich zugegriffen wird zu verändern.
+
+Diese werden auf der CPU erstellt und dann dem Kernel als argument übergeben.
+
+Um zum Beispiel ein Array von Tupeln, mit den Partials als inhalt zuerhalten, wird folgender Code ausgeführt:
+
+\begin{lstlisting}{language=Julia}
+	function f(x...)
+		return x
+	end
+	
+	tuples = f.([view(dst_i, repeat([:], ndims(dst_i) - 1)..., i) for i in 2:(N+1)]...)
+\end{lstlisting}
 
 
+Für mehre details zur genauen umsetzung, kann der Code im anhang eingesehen werden.
+
+
+\subsection{Testen}
+
+Der letzt schritt ist nun die zuvor beschriebene implementierung zu testen.
+
+Um die Implementierung der \textit{scatter} funktion zu testen, wird ausgenutzt,
+das es eine funktionierende CPU implementierung von der \textit{nnlib.jl} Bibliothek gibt.
+
+Es wird also ein CPU und CUDA-Array erstellt und dann das ergebnis verglichen.
+
+Dies hilft ausserdem im Nächsten Kapitel die Performance der Grafikkarten berechnung zu evaluieren hilft im Nächsten Kapitel die Performance der Grafikkarten berechnung zu evaluieren.
 
 \section{ Fehler behebung in den Impliziten Lösern }
+
+Da nun die scatter Funktion mit \textit{dual} zahlen auf der GPU durchgeführt werden kann, 
+können prinzipiel implizite Differentialgleichungs löser für 
+NeuralODEs auf der Graphikkarte verwendet werden.
+
+Julia hat sich im laufe der zeit weiter entwickelt und einig API Änderungen vorgenommen.
+
+Dies hat auf der Seite der Löser dazu geführt, dass diese zum Teil Funktionalität von Julia 1.8 wollten 
+und zum Teil Funktionalität von den früheren Versionen.
+Das Problem war das sich die Implementierung der lu-zerlegung geändert hat. % lu-zerlegung
+In den älteren Versionen hat CUDA diese Implementierung selbst bereitgestellt.
+Mit der Version 1.8 wurde dies allerdings in die Standard Bibliothek mit aufgenommen, das die Faktorisierung 
+auch auf der Grafik karte durchgeführt werden kann.
+Das OrdenaryDifferentialEquations packet von Julia verwendet 
+ein Array-Interface, welches operationen auf Arrays, 
+von der Umsetzung abstrahiert, um diese auf einer Grafikkarte durchführen zu können.
+Dank der Hilfe von Christopher Rackauckas ist es, dann nach vielen versuchen gelungen, die lu\_instance Funktion, von \textit{ArrayInterface.jl} richtig umzusetzen 
+und es damit möglich zu machen zumindest die im nächsten Kapitel vorgestellten impliziten Löser zu verwenden.
+
+
