@@ -1,45 +1,7 @@
 
-% Inhalt
-
-% \chapter{Versuch}
-% \section{Ziel der Arbeit}
-% \section{Implementierung der Scatter funktion}
-% \subsection{Vorstellung der Scatter funktion}
-% \subsection{Dual Zahlen}
-% \subsection{atomic}
-% \subsection{Eine Funktionierende Implementierung}
-% \subsection{Test}
-% \section{ Fehler behebung in den Impliziten Lösern }
+\section{Implementierung der Scatter function}
 
 
-
-\chapter{Versuch}
-
-% \section{Ziel der Arbeit}
-
-% Der Zweck dieser Arbeit ist es, Nutzern von \textit{NeuralODEs} es zu ermöglichen, 
-% verschiedene Klassen von DifferentzialGleichungs-Lösern zu nutzen.
-% Da explizite Löser bereits nutztbar, 
-% sind konzentiert diese Arbeit sich auf Implizite Löser. 
-% Die größte Herausforderung ist dabei, 
-% diese auf der Graphikkarte und nicht auf der CPU zu berechnen.
-% Der Grund ist die lange berechnungs dauer der impliziten Methoden.
-% Das Hauptproblem beim berechnen von \textit{NeuralODEs} ist, 
-% dass die impliziten Methoden als zeit eingabe nicht immer relle Zahlen verwenden,
-% sondern \textit{Dual} Zahlen, welche eine abwandlung von imaginären Zahlen sind.
-% Das Verwenden von Dual Zahlen ist voraussetzung dafür, 
-% um automatische Differenzierungs algorithmen berechenen zu können.
-% Dies setzt vorraus dass alle komponenten der \textit{NeuralODE} diese verarbeiten können.
-% Die Meisten komponenten sind dazu bereits in der lage, 
-% da die implementierung der \textit{Dual} Zahlen
-% die standart operationen überlädt.
-% Auf der Grafikkarte tritt das Problem auf das die standart operationen, 
-% zusätzlichen beschränkungen unterliegen, 
-% und deshalb \textit{Dual} Zahlen nicht verarbeiten können.
-% In diesem Kaptiel werden die hintergründe erläutert und ein Lösungsansatz vorgestellt.
-
-
-\section{Implementierung der Scatter funktion}
 % \subsection{Vorstellung der Scatter funktion}
 
 % Um die Probleme der \textit{scatter} funktion lösen zukönnen, 
@@ -326,25 +288,4 @@
 % Es wird also ein CPU und CUDA-Array erstellt und dann das ergebnis verglichen.
 
 % Dies hilft ausserdem im Nächsten Kapitel die Performance der Grafikkarten berechnung zu evaluieren hilft im Nächsten Kapitel die Performance der Grafikkarten berechnung zu evaluieren.
-
-% \section{ Fehler behebung in den Impliziten Lösern }
-
-% Da nun die scatter Funktion mit \textit{dual} zahlen auf der GPU durchgeführt werden kann, 
-% können prinzipiel implizite Differentialgleichungs löser für 
-% NeuralODEs auf der Graphikkarte verwendet werden.
-
-% Julia hat sich im laufe der zeit weiter entwickelt und einig API Änderungen vorgenommen.
-
-% Dies hat auf der Seite der Löser dazu geführt, dass diese zum Teil Funktionalität von Julia 1.8 wollten 
-% und zum Teil Funktionalität von den früheren Versionen.
-% Das Problem war das sich die Implementierung der lu-zerlegung geändert hat. % lu-zerlegung
-% In den älteren Versionen hat CUDA diese Implementierung selbst bereitgestellt.
-% Mit der Version 1.8 wurde dies allerdings in die Standard Bibliothek mit aufgenommen, das die Faktorisierung 
-% auch auf der Grafik karte durchgeführt werden kann.
-% Das OrdenaryDifferentialEquations packet von Julia verwendet 
-% ein Array-Interface, welches operationen auf Arrays, 
-% von der Umsetzung abstrahiert, um diese auf einer Grafikkarte durchführen zu können.
-% Dank der Hilfe von Christopher Rackauckas ist es, dann nach vielen versuchen gelungen, die lu\_instance Funktion, von \textit{ArrayInterface.jl} richtig umzusetzen 
-% und es damit möglich zu machen zumindest die im nächsten Kapitel vorgestellten impliziten Löser zu verwenden.
-
 

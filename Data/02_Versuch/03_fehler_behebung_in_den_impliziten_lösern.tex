@@ -1,0 +1,19 @@
+\section{ Fehler behebung in den Impliziten Lösern }
+
+Da nun die scatter Funktion mit \textit{dual} zahlen auf der GPU durchgeführt werden kann, 
+können prinzipiel implizite Differentialgleichungs löser für 
+NeuralODEs auf der Graphikkarte verwendet werden.
+
+Julia hat sich im laufe der zeit weiter entwickelt und einig API Änderungen vorgenommen.
+
+Dies hat auf der Seite der Löser dazu geführt, dass diese zum Teil Funktionalität von Julia 1.8 wollten 
+und zum Teil Funktionalität von den früheren Versionen.
+Das Problem war das sich die Implementierung der lu-zerlegung geändert hat. % lu-zerlegung
+In den älteren Versionen hat CUDA diese Implementierung selbst bereitgestellt.
+Mit der Version 1.8 wurde dies allerdings in die Standard Bibliothek mit aufgenommen, das die Faktorisierung 
+auch auf der Grafik karte durchgeführt werden kann.
+Das OrdenaryDifferentialEquations packet von Julia verwendet 
+ein Array-Interface, welches operationen auf Arrays, 
+von der Umsetzung abstrahiert, um diese auf einer Grafikkarte durchführen zu können.
+Dank der Hilfe von Christopher Rackauckas ist es, dann nach vielen versuchen gelungen, die lu\_instance Funktion, von \textit{ArrayInterface.jl} richtig umzusetzen 
+und es damit möglich zu machen zumindest die im nächsten Kapitel vorgestellten impliziten Löser zu verwenden.

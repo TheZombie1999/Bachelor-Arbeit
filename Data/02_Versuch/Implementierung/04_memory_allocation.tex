@@ -1,0 +1,17 @@
+\subsection{Memory Allocation}
+
+Wie bereits im Kaptiel \ref{atomic} beschrieben, muss die addition von Dual zahlen komponenten weiße durchgeführt werden.
+Da es aber nicht möglich ist auf die einezelen komponentn direkt zuzugreifen müssen diese zwischen gespeichert werden um direkten zugriff zu erlauben.
+Der erste ansatzt, dazu ist speicher direkt im kernel zu reservieren.
+Dies scheitert daran, dass andere Threads auf diesen speicher nicht zugreifen können.
+Um speicher zu erstellen der von allen threads verwendet werden kann, kann shared memory verwendent werden.
+Das problem dabei ist das shared memory nur von threads im gleichen thread block sind zugegriffen werden kann.
+Es kann global speicher reserviert werden, indem dieser Ausserhalb des Kernels allociert und dann beim start diesem als arguemnt übergeben wird.
+Dieser Ansatz führt zu erfolg, indem ein eigenenr speicher bereich für jede komponente einer dual zahl reserviert wird, den entsperechenden wert in diesen hinein copiert
+und dann die addition analog zu \ref{} innerhalb der \textit{scatter!} function implementiert.
+Dieser Ansatz hat zwei probleme.
+Das erste Problem ist, dass große teil der bereits vorhandenen implementierungen der \textit{scatter!} function mit minimalen änderungen reimplementiert werden müssen, was 
+gegen das dry-Prizip verstößt.
+Zweitens ist es aktuell zwar möglich die berechnung korrekt durchzuführen, dass ergebniss kann aber noch nicht in das ziel array zurück geschrieben werden.
+Das nächste Kaptiel bespricht wie genau diese zwei Probleme gelößt werden können.
+

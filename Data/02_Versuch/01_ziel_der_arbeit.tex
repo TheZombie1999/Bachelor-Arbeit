@@ -1,0 +1,24 @@
+\section{Ziel der Arbeit}
+
+Der Zweck dieser Arbeit ist es, Nutzern von \textit{NeuralODEs} es zu ermöglichen, 
+verschiedene Klassen von DifferentzialGleichungs-Lösern zu nutzen.
+Da explizite Löser bereits nutztbar, 
+sind konzentiert diese Arbeit sich auf Implizite Löser. 
+Die größte Herausforderung ist dabei, 
+diese auf der Graphikkarte und nicht auf der CPU zu berechnen.
+Der Grund ist die lange berechnungs dauer der impliziten Methoden.
+Das Hauptproblem beim berechnen von \textit{NeuralODEs} ist, 
+dass die impliziten Methoden als zeit eingabe nicht immer relle Zahlen verwenden,
+sondern \textit{Dual} Zahlen, welche eine abwandlung von imaginären Zahlen sind.
+Das Verwenden von Dual Zahlen ist voraussetzung dafür, 
+um automatische Differenzierungs algorithmen berechenen zu können.
+Dies setzt vorraus dass alle komponenten der \textit{NeuralODE} diese verarbeiten können.
+Die Meisten komponenten sind dazu bereits in der lage, 
+da die implementierung der \textit{Dual} Zahlen
+die standart operationen überlädt.
+Auf der Grafikkarte tritt das Problem auf das die standart operationen, 
+zusätzlichen beschränkungen unterliegen, 
+und deshalb \textit{Dual} Zahlen nicht verarbeiten können.
+In diesem Kaptiel werden die hintergründe erläutert und ein Lösungsansatz vorgestellt.
+
+
