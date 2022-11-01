@@ -1,32 +1,28 @@
 % TODO
-% Machen sätzte sinn
 % Quellen
-% Englische Worte Kursiv
-% Rechtschreibung und Gramatik
+% Englische Worte Kursiv +
+% Rechtschreibung und Gramatik +
 
 \section{Ziel der Arbeit}
 
 Der Zweck dieser Arbeit ist es, Nutzern von \textit{NeuralODEs} es zu ermöglichen, 
-verschiedene Klassen von DifferentzialGleichungs-Lösern zu nutzen.
-
-
-Da explizite Löser ohne zusätzliche arbeit nutztbar, 
-sind konzentiert sich diese Arbeit sich auf Implizite Löser. 
-Die größte Herausforderung dabei ist , 
-diese auf der Graphikkarte und nicht auf der CPU zu berechnen.
-Der Grund ist die lange berechnungs dauer der impliziten Methoden.
-Das Hauptproblem beim berechnen von \textit{NeuralODEs} ist, 
-dass die impliziten Methoden als zeit eingabe nicht immer relle Zahlen verwenden,
-sondern \textit{Dual}-Zahlen, welche eine abwandlung von imaginären Zahlen sind.
-Das Verwenden von Dual Zahlen ist voraussetzung dafür, 
-um automatische Differenzierungs algorithmen berechenen zu können.
-Dies setzt vorraus dass alle komponenten der \textit{NeuralODE} diese verarbeiten können.
-Die Meisten komponenten sind dazu bereits in der lage, 
-da die implementierung der \textit{Dual}-Zahlen
-die standart operationen überlädt.
-Auf der Grafikkarte tritt das Problem auf das die standart operationen, 
-zusätzlichen beschränkungen unterliegen, 
-und deshalb \textit{Dual} Zahlen nicht verarbeiten können.
-In diesem Kaptiel werden die hintergründe erläutert und ein Lösungsansatz vorgestellt.
-
+verschiedene numerische Lösungsverfahren von Differenzialgleichungen zu nutzen.
+Da explizite Lösungsverfahren ohne zusätzliche Arbeit nutzbar sind,
+konzentriert sich diese Arbeit auf implizite Methoden.
+Die größte Herausforderung dabei ist, 
+diese auf der Grafikkarte und nicht auf der CPU zu berechnen.
+Der Grund ist die lange Berechnungsdauer der impliziten Methoden.
+Das Hauptproblem beim Berechnen von \textit{NeuralODEs} ist, 
+dass die impliziten Methoden als zeit Eingabe nicht immer reelle Zahlen verwenden,
+sondern \textit{Dual}-Zahlen, welche eine Abwandlung von imaginären Zahlen sind.
+Diese sind Vorraussetzung dafür, 
+automatische Differenzierungsalgorithmen berechnen zu können.
+Dies setzt voraus, dass alle Komponenten der \textit{NeuralODE} diese verarbeiten können.
+Die meisten Komponenten sind dazu bereits in der Lage, 
+da die Implementierung der \textit{Dual}-Zahlen
+die Standard Operationen überlädt.
+Auf der Grafikkarte tritt das Problem auf das die Standard Operationen 
+zusätzlichen Beschränkungen unterliegen 
+und deshalb \textit{Dual}-Zahlen nicht verarbeiten können.
+In diesem Kapitel werden die Hintergründe erläutert und ein Lösungsansatz vorgestellt.
 
