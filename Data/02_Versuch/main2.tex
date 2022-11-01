@@ -40,6 +40,7 @@
 
 
 \section{Implementierung der Scatter funktion}
+
 % \subsection{Vorstellung der Scatter funktion}
 
 % Um die Probleme der \textit{scatter} funktion lösen zukönnen, 
@@ -67,6 +68,7 @@
 
 % 	function scatter(op, src, idx; [init, dstsize])
 % 		dst = similar(src)
+
 		
 % 		fill!(dst, init)
 		
@@ -74,9 +76,11 @@
 % 	end
 % \end{lstlisting}
 
+
 % Die implementierung der \textit{scatter} funktion ist eine vereinfachte darstellung, 
 % welche details zur berechnung der größe des dst array weg lässt.
 % Die gesamte implementierung kann in \scatter{NNlib.jl} \cite{} geschlagen werden.
+
 
 % Wichtig an der Implementierung ist, dass die \textit{similar} funktion verwendet wird um, das
 % \textit{dst} Array zu erstellen.
@@ -134,9 +138,11 @@
 % Das verhalten auf scalare operationen ist entscheidet für die Berechnung von durch Autodifferentiation Algorithemen.
 % Um die scatter-function umzusetzen, wird die Definition der Addition von MultidimensionalenDualZahlen \cite{RecentAdvances} benötigt.
 
-% $$
-% (x_1 + \sum_{i = 1}^{k} y_{1,k} \epsilon_i) + ( x_2 + \sum_{i = 2}^{k} y_{2,k} \epsilon_i) = (x_1 + x_2) + \sum_{i = 1}^{k} (y_{1, i}) \epsilon_i
-% $$
+
+$$
+(x_1 + \sum_{i = 1}^{k} y_{1,k} \epsilon_i) + ( x_2 + \sum_{i = 2}^{k} y_{2,k} \epsilon_i) = (x_1 + x_2) + \sum_{i = 1}^{k} (y_{1, i} + y_{2, i}) \epsilon_i
+$$
+
 
 % Alle weitern operation lassen sich ebenfalls von den von den Komplexen Zahlen ableiten, 
 % sind aber nicht relevant um die Differentialgleichungs löser zu unterstützen.
@@ -150,9 +156,11 @@
 % Die Implementierung der \textit{scatter!} function, benutzt folgenden Programmcode um die 
 % Addition umzusetzen. 
 
+
 % \begin{lstlisting}{language=Julia}
 % 	CUDA.@atomic dst[idx[index]...] = op(dst[idx[index]...], src[index])
 % \end{lstlisting}
+
 
 
 % Dabei ist der Macro \textit{@atomic} ein Wrapper um die C-Implementierung von CUDA.
@@ -187,6 +195,7 @@
 % end
 
 % \end{lstlisting}
+
 
 % Wird die scatter Funktion nun wie beschrieben implementiert, kommt es zu einem weiteren Problem.
 % Der Macro @atomic verbietet die Funktions aufrufe \textit{value}und \textit{partial}.
@@ -242,54 +251,48 @@
 
 % Ein Beispiel für $N = 1$, sieht für \textit{src} und \textit{dst} sieht wie folgt aus:
 
-% $$
 
-% \text{src oder dst} = 
-
-% \begin{matrix}
-% Dual & Dual & Dual
-% \end{matrix}
-
-% \rightarrow
-
-% \text{src_m oder dst_m} = 
-
-% \begin{matrix}
-% Value   & Value   & Value   \\
-% Partial & Partial & Partial \\
-% Partial & Partial & Partial \\
-% Partial & Partial & Partial \\
-% \end{matrix}
-% $$
+$$
+\text{src oder dst} = 
+\begin{matrix}
+Dual & Dual & Dual
+\end{matrix} \\
+\rightarrow\\
+\text{src\_m oder dst\_m} = 
+\begin{matrix}
+Value   & Value   & Value   \\
+Partial & Partial & Partial \\
+Partial & Partial & Partial \\
+Partial & Partial & Partial \\
+\end{matrix}
+$$
 
 % Das \textit{idx} Array ist in dieser hinsicht besonders.
 % Da die einzelnen \textit{Integer}-Zahlen zu Tupel um gewandelt werden müssen. 
 
-% $$
 
-% \text{idx}= 
+$$
+\text{idx}= 
+\begin{matrix}
+ 2 & 1 & 3
+\end{matrix}
+\rightarrow
+idx\_m = 
+\begin{matrix}
+ (2, 1) & (1, 1) & (3, 1) \\ 
+ (2, 2) & (1, 2) & (3, 2) \\
+ (2, 3) & (1, 3) & (3, 3) \\
+ (2, 4) & (1, 4) & (3, 4) \\
+\end{matrix}
+$$
 
-% \begin{matrix}
-%  2 & 1 & 3
-% \end{matrix}
-
-% \rightarrow
-
-% idx_m = 
-
-% \begin{matrix}
-%  (2, 1) & (1, 1) & (3, 1) \\ 
-%  (2, 2) & (1, 2) & (3, 2) \\
-%  (2, 3) & (1, 3) & (3, 3) \\
-%  (2, 4) & (1, 4) & (3, 4) \\
-% \end{matrix}
-% $$
 
 % Die Anzahl der Zeilen in beiden Beispielen, ist abhänig von der anzahl der Freien variablen  
 % der Multidimensionalen Dual Zahlen.
 
-% Wird nun \textit{dst_m}, \textit{src_m} und \textit{idx_m} an die \textit{scatter!} function über
-% geben, wird das erwünschte ergebnis berechnet. 
+Wird nun \textit{dst\_m}, \textit{src\_m} und \textit{idx\_m} an die \textit{scatter!} function über
+geben, wird das erwünschte ergebnis berechnet. 
+
 
 % Es muss nur noch in das korekte format zurück kopiert werden. 
 
@@ -304,13 +307,15 @@
 
 % Um zum Beispiel ein Array von Tupeln, mit den Partials als inhalt zuerhalten, wird folgender Code ausgeführt:
 
-% \begin{lstlisting}{language=Julia}
-% 	function f(x...)
-% 		return x
-% 	end
+\begin{lstlisting}
+	function f(x...)
+		return x
+	end
 	
-% 	tuples = f.([view(dst_i, repeat([:], ndims(dst_i) - 1)..., i) for i in 2:(N+1)]...)
-% \end{lstlisting}
+	tuples = f.([view(dst_i, repeat([:], 
+	ndims(dst_i) - 1)..., i) for i in 2:(N+1)]...)
+\end{lstlisting}
+
 
 
 % Für mehre details zur genauen umsetzung, kann der Code im anhang eingesehen werden.
@@ -323,7 +328,11 @@
 % Um die Implementierung der \textit{scatter} funktion zu testen, wird ausgenutzt,
 % das es eine funktionierende CPU implementierung von der \textit{nnlib.jl} Bibliothek gibt.
 
+
+Dies hilft ausserdem im Nächsten Kapitel die Performance der Grafikkarten berechnung zu evaluieren.
+
 % Es wird also ein CPU und CUDA-Array erstellt und dann das ergebnis verglichen.
+
 
 % Dies hilft ausserdem im Nächsten Kapitel die Performance der Grafikkarten berechnung zu evaluieren hilft im Nächsten Kapitel die Performance der Grafikkarten berechnung zu evaluieren.
 
