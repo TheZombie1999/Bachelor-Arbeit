@@ -1,45 +1,6 @@
 
-% Inhalt
+\section{Implementierung der Scatter function}
 
-% \chapter{Versuch}
-% \section{Ziel der Arbeit}
-% \section{Implementierung der Scatter funktion}
-% \subsection{Vorstellung der Scatter funktion}
-% \subsection{Dual Zahlen}
-% \subsection{atomic}
-% \subsection{Eine Funktionierende Implementierung}
-% \subsection{Test}
-% \section{ Fehler behebung in den Impliziten Lösern }
-
-
-
-\chapter{Versuch}
-
-% \section{Ziel der Arbeit}
-
-% Der Zweck dieser Arbeit ist es, Nutzern von \textit{NeuralODEs} es zu ermöglichen, 
-% verschiedene Klassen von DifferentzialGleichungs-Lösern zu nutzen.
-% Da explizite Löser bereits nutztbar, 
-% sind konzentiert diese Arbeit sich auf Implizite Löser. 
-% Die größte Herausforderung ist dabei, 
-% diese auf der Graphikkarte und nicht auf der CPU zu berechnen.
-% Der Grund ist die lange berechnungs dauer der impliziten Methoden.
-% Das Hauptproblem beim berechnen von \textit{NeuralODEs} ist, 
-% dass die impliziten Methoden als zeit eingabe nicht immer relle Zahlen verwenden,
-% sondern \textit{Dual} Zahlen, welche eine abwandlung von imaginären Zahlen sind.
-% Das Verwenden von Dual Zahlen ist voraussetzung dafür, 
-% um automatische Differenzierungs algorithmen berechenen zu können.
-% Dies setzt vorraus dass alle komponenten der \textit{NeuralODE} diese verarbeiten können.
-% Die Meisten komponenten sind dazu bereits in der lage, 
-% da die implementierung der \textit{Dual} Zahlen
-% die standart operationen überlädt.
-% Auf der Grafikkarte tritt das Problem auf das die standart operationen, 
-% zusätzlichen beschränkungen unterliegen, 
-% und deshalb \textit{Dual} Zahlen nicht verarbeiten können.
-% In diesem Kaptiel werden die hintergründe erläutert und ein Lösungsansatz vorgestellt.
-
-
-\section{Implementierung der Scatter funktion}
 
 % \subsection{Vorstellung der Scatter funktion}
 
@@ -68,7 +29,6 @@
 
 % 	function scatter(op, src, idx; [init, dstsize])
 % 		dst = similar(src)
-
 		
 % 		fill!(dst, init)
 		
@@ -76,11 +36,9 @@
 % 	end
 % \end{lstlisting}
 
-
 % Die implementierung der \textit{scatter} funktion ist eine vereinfachte darstellung, 
 % welche details zur berechnung der größe des dst array weg lässt.
 % Die gesamte implementierung kann in \scatter{NNlib.jl} \cite{} geschlagen werden.
-
 
 % Wichtig an der Implementierung ist, dass die \textit{similar} funktion verwendet wird um, das
 % \textit{dst} Array zu erstellen.
@@ -138,11 +96,9 @@
 % Das verhalten auf scalare operationen ist entscheidet für die Berechnung von durch Autodifferentiation Algorithemen.
 % Um die scatter-function umzusetzen, wird die Definition der Addition von MultidimensionalenDualZahlen \cite{RecentAdvances} benötigt.
 
-
-$$
-(x_1 + \sum_{i = 1}^{k} y_{1,k} \epsilon_i) + ( x_2 + \sum_{i = 2}^{k} y_{2,k} \epsilon_i) = (x_1 + x_2) + \sum_{i = 1}^{k} (y_{1, i} + y_{2, i}) \epsilon_i
-$$
-
+% $$
+% (x_1 + \sum_{i = 1}^{k} y_{1,k} \epsilon_i) + ( x_2 + \sum_{i = 2}^{k} y_{2,k} \epsilon_i) = (x_1 + x_2) + \sum_{i = 1}^{k} (y_{1, i}) \epsilon_i
+% $$
 
 % Alle weitern operation lassen sich ebenfalls von den von den Komplexen Zahlen ableiten, 
 % sind aber nicht relevant um die Differentialgleichungs löser zu unterstützen.
@@ -156,11 +112,9 @@ $$
 % Die Implementierung der \textit{scatter!} function, benutzt folgenden Programmcode um die 
 % Addition umzusetzen. 
 
-
 % \begin{lstlisting}{language=Julia}
 % 	CUDA.@atomic dst[idx[index]...] = op(dst[idx[index]...], src[index])
 % \end{lstlisting}
-
 
 
 % Dabei ist der Macro \textit{@atomic} ein Wrapper um die C-Implementierung von CUDA.
@@ -195,7 +149,6 @@ $$
 % end
 
 % \end{lstlisting}
-
 
 % Wird die scatter Funktion nun wie beschrieben implementiert, kommt es zu einem weiteren Problem.
 % Der Macro @atomic verbietet die Funktions aufrufe \textit{value}und \textit{partial}.
@@ -251,48 +204,54 @@ $$
 
 % Ein Beispiel für $N = 1$, sieht für \textit{src} und \textit{dst} sieht wie folgt aus:
 
+% $$
 
-$$
-\text{src oder dst} = 
-\begin{matrix}
-Dual & Dual & Dual
-\end{matrix} \\
-\rightarrow\\
-\text{src\_m oder dst\_m} = 
-\begin{matrix}
-Value   & Value   & Value   \\
-Partial & Partial & Partial \\
-Partial & Partial & Partial \\
-Partial & Partial & Partial \\
-\end{matrix}
-$$
+% \text{src oder dst} = 
+
+% \begin{matrix}
+% Dual & Dual & Dual
+% \end{matrix}
+
+% \rightarrow
+
+% \text{src_m oder dst_m} = 
+
+% \begin{matrix}
+% Value   & Value   & Value   \\
+% Partial & Partial & Partial \\
+% Partial & Partial & Partial \\
+% Partial & Partial & Partial \\
+% \end{matrix}
+% $$
 
 % Das \textit{idx} Array ist in dieser hinsicht besonders.
 % Da die einzelnen \textit{Integer}-Zahlen zu Tupel um gewandelt werden müssen. 
 
+% $$
 
-$$
-\text{idx}= 
-\begin{matrix}
- 2 & 1 & 3
-\end{matrix}
-\rightarrow
-idx\_m = 
-\begin{matrix}
- (2, 1) & (1, 1) & (3, 1) \\ 
- (2, 2) & (1, 2) & (3, 2) \\
- (2, 3) & (1, 3) & (3, 3) \\
- (2, 4) & (1, 4) & (3, 4) \\
-\end{matrix}
-$$
+% \text{idx}= 
 
+% \begin{matrix}
+%  2 & 1 & 3
+% \end{matrix}
+
+% \rightarrow
+
+% idx_m = 
+
+% \begin{matrix}
+%  (2, 1) & (1, 1) & (3, 1) \\ 
+%  (2, 2) & (1, 2) & (3, 2) \\
+%  (2, 3) & (1, 3) & (3, 3) \\
+%  (2, 4) & (1, 4) & (3, 4) \\
+% \end{matrix}
+% $$
 
 % Die Anzahl der Zeilen in beiden Beispielen, ist abhänig von der anzahl der Freien variablen  
 % der Multidimensionalen Dual Zahlen.
 
-Wird nun \textit{dst\_m}, \textit{src\_m} und \textit{idx\_m} an die \textit{scatter!} function über
-geben, wird das erwünschte ergebnis berechnet. 
-
+% Wird nun \textit{dst_m}, \textit{src_m} und \textit{idx_m} an die \textit{scatter!} function über
+% geben, wird das erwünschte ergebnis berechnet. 
 
 % Es muss nur noch in das korekte format zurück kopiert werden. 
 
@@ -307,15 +266,13 @@ geben, wird das erwünschte ergebnis berechnet.
 
 % Um zum Beispiel ein Array von Tupeln, mit den Partials als inhalt zuerhalten, wird folgender Code ausgeführt:
 
-\begin{lstlisting}
-	function f(x...)
-		return x
-	end
+% \begin{lstlisting}{language=Julia}
+% 	function f(x...)
+% 		return x
+% 	end
 	
-	tuples = f.([view(dst_i, repeat([:], 
-	ndims(dst_i) - 1)..., i) for i in 2:(N+1)]...)
-\end{lstlisting}
-
+% 	tuples = f.([view(dst_i, repeat([:], ndims(dst_i) - 1)..., i) for i in 2:(N+1)]...)
+% \end{lstlisting}
 
 
 % Für mehre details zur genauen umsetzung, kann der Code im anhang eingesehen werden.
@@ -328,32 +285,7 @@ geben, wird das erwünschte ergebnis berechnet.
 % Um die Implementierung der \textit{scatter} funktion zu testen, wird ausgenutzt,
 % das es eine funktionierende CPU implementierung von der \textit{nnlib.jl} Bibliothek gibt.
 
-
-Dies hilft ausserdem im Nächsten Kapitel die Performance der Grafikkarten berechnung zu evaluieren.
-
 % Es wird also ein CPU und CUDA-Array erstellt und dann das ergebnis verglichen.
 
-
 % Dies hilft ausserdem im Nächsten Kapitel die Performance der Grafikkarten berechnung zu evaluieren hilft im Nächsten Kapitel die Performance der Grafikkarten berechnung zu evaluieren.
-
-% \section{ Fehler behebung in den Impliziten Lösern }
-
-% Da nun die scatter Funktion mit \textit{dual} zahlen auf der GPU durchgeführt werden kann, 
-% können prinzipiel implizite Differentialgleichungs löser für 
-% NeuralODEs auf der Graphikkarte verwendet werden.
-
-% Julia hat sich im laufe der zeit weiter entwickelt und einig API Änderungen vorgenommen.
-
-% Dies hat auf der Seite der Löser dazu geführt, dass diese zum Teil Funktionalität von Julia 1.8 wollten 
-% und zum Teil Funktionalität von den früheren Versionen.
-% Das Problem war das sich die Implementierung der lu-zerlegung geändert hat. % lu-zerlegung
-% In den älteren Versionen hat CUDA diese Implementierung selbst bereitgestellt.
-% Mit der Version 1.8 wurde dies allerdings in die Standard Bibliothek mit aufgenommen, das die Faktorisierung 
-% auch auf der Grafik karte durchgeführt werden kann.
-% Das OrdenaryDifferentialEquations packet von Julia verwendet 
-% ein Array-Interface, welches operationen auf Arrays, 
-% von der Umsetzung abstrahiert, um diese auf einer Grafikkarte durchführen zu können.
-% Dank der Hilfe von Christopher Rackauckas ist es, dann nach vielen versuchen gelungen, die lu\_instance Funktion, von \textit{ArrayInterface.jl} richtig umzusetzen 
-% und es damit möglich zu machen zumindest die im nächsten Kapitel vorgestellten impliziten Löser zu verwenden.
-
 

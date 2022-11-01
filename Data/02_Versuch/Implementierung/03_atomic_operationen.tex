@@ -1,0 +1,52 @@
+\subsection{Atomic Operationen} \label{atomic}
+
+Da nun bekannt ist, was eine Dual Zahl ist, 
+kann das eigentliche Problem betrachtet werden.
+
+Die Implementierung der \textit{scatter!} function, benutzt folgenden Programmcode um die 
+Addition umzusetzen. 
+
+\begin{lstlisting}{language=Julia}
+	CUDA.@atomic dst[idx[index]...] = op(dst[idx[index]...], src[index])
+\end{lstlisting}
+
+
+Dabei ist der Macro \textit{@atomic} ein Wrapper um die C-Implementierung von CUDA.
+
+Das Probelem das auftritt ist, dass der Macro nur die Datentypen \{Float16, Float32, Float64, BFloat16 \}
+unterstützt.
+
+Es ist möglich die unterstützten datentypen zu erweitern. 
+Vorraussetzung dafür ist, das der neue datentype kleiner gleich 64-Bit ist.
+Da eine Dual Zahl nur für $k = 1$ und Datentype \textit{Float32} genau 64-Bit groß ist,
+kann nur in besondren fällen \textit{@atomic} direkt verwendet werden.
+Da dieser Sonderfall, meistens nicht auftritt ist dieser ansatzt unbrauchbar.
+
+Der \textit{@atomic} Aufruf wird benötigt, 
+um \textit{Read-Modify-Write} operationen zu Serialisieren, 
+und \textit{Race-Conditions} zuvermeiden und kann deshalb auch nicht weggelassen werden.
+
+Aus der Definition der Multidimensinalen Dual Zahlen, ist bekannt das \textit{dual}-Zahlen addiert werden 
+indem die komponenten addiert werden.
+
+Da die einzelnen komponenten Rellen zahlen, 
+bzw. in der Praxis Floats sind, liegt folgende implementierung nahe:
+
+\begin{lstlisting}{language=Julia}
+
+function gpu_add!(d0::Dual, d1::Dual, d2::Dual)
+	@atomic value(d0) = value(d1) + value(d2)
+	
+	for i in 1:length(partials(d0)) # length(partials( ... )) ist für alle Argumente Gleich
+		@atomic partials(d0, i) = partials(d1, i) + partials(d2, i)
+	end
+end
+
+\end{lstlisting}
+
+Wird die scatter Funktion nun wie beschrieben implementiert, kommt es zu einem weiteren Problem.
+Der Macro @atomic verbietet die Funktions aufrufe \textit{value}und \textit{partial}.
+Dies liegt daran, das ein Macro in der Julia sprache zugang auf den \textit{Abstract Syntax Tree} des Complieler hat
+und einen direkten zugriff auf ein \textit{Array} erwarted.
+Der Aufruf der partial-Funktion führt außerdem skalare Indexierung durch, welche auf der Grafikkarte nicht erlaubt ist.
+
