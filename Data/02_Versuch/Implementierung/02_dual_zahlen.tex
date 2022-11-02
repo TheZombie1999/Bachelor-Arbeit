@@ -1,12 +1,12 @@
 \subsection{Dual Zahlen}
 
-Um zu verstehen, was auf der Graphikkarte zu Problemen führt, wird zunächst die Definition von \textit{Dual}-Zahlen betrachtet.
-
-Da sich hinter diesem Begriff zwei sehr ähnliche Konzepte verbergen führen wir folgende zwei begriffe ein.
-
-Mit einer \textit{Dual}-Zahl wird, die konkrete implementierung in der \textit{ForwardDiff.jl} Bibliothek bezeichnet.
-
-Eine Multidimensionale Dual zahl bezeichnet die Mathmatische Definition welche von Imaginären Zahlen abgeleitet ist.
+Um zu verstehen, was auf der Grafikkarte zu Problemen führt, 
+wird zunächst die Definition von \textit{Dual}-Zahlen betrachtet.
+Da sich hinter diesem Begriff zwei sehr ähnliche Konzepte verbergen, 
+führen wir folgende zwei Begriffe ein.
+Mit einer \textit{Dual}-Zahl wird die konkrete Implementierung in der \textit{ForwardDiff.jl} Bibliothek bezeichnet.
+Eine Multidimensionale \textit{Dual}-Zahl bezeichnet die mathematische Definition, 
+welche von imaginären Zahlen abgeleitet ist.
 
 \begin{gather*}
  d = x + \sum_{i = 1}^{k} y_i \epsilon_i \\
@@ -15,26 +15,26 @@ Eine Multidimensionale Dual zahl bezeichnet die Mathmatische Definition welche v
 	y_i \text{ sind die imaginären komponenten mit } i \in \{1, ..., k\}
 \end{gather*}
 
-Bei Multidimensinalen Dual zahlen git:
-$$
+Bei Multidimensinalen \textit{Dual}-Zahlen git:
+\begin{equation}
  \epsilon_i \cdot \epsilon_j = 0
-$$
+\end{equation}
 
-Für die Definition von MultidimensinalenDual-Zahlen ist ebenfalls ihr verhalten auf scalare Operationen wichtig:
+Für die Definition von Multidimensinalen \textit{Dual}-Zahlen \cite{juliaForwardDiffPackage}
+ist ebenfalls ihr verhalten auf scalare Operationen wichtig:
 
-$$
+\begin{equation}
  f( x + \sum_{i = 1}^{k} y_i \epsilon_i  ) = f(x) +  f'(x) \sum_{i = 1}^{k} y_i \epsilon_i
-$$
-\cite{juliaForwardDiffPackage}
+\end{equation}
 
+Das verhalten auf skalare Operationen ist entscheidet 
+für die Berechnung von automatischen Differenzierungs Algorithmen.
 
-Das verhalten auf scalare operationen ist entscheidet für die Berechnung von durch Autodifferentiation Algorithemen.
-Um die scatter-function umzusetzen, wird die Definition der Addition von MultidimensionalenDualZahlen \cite{RecentAdvances} benötigt.
+Um die \textit{scatter}-Funktion umzusetzen, 
+wird die Definition der Addition von Multidimensionalen \textit{Dual}-Zahlen \cite{RecentAdvances} benötigt.
 
-$$
+\begin{equation}
 (x_1 + \sum_{i = 1}^{k} y_{1,k} \epsilon_i) + ( x_2 + \sum_{i = 2}^{k} y_{2,k} \epsilon_i) = (x_1 + x_2) + \sum_{i = 1}^{k} (y_{1, i}) \epsilon_i
-$$
-
-Alle weitern operation lassen sich ebenfalls von den von den Komplexen Zahlen ableiten, 
-sind aber nicht relevant um die Differentialgleichungs löser zu unterstützen.
-
+\end{equation}
+Alle weiteren Operationen lassen sich ebenfalls von den von den komplexen Zahlen ableiten, 
+sind aber nicht relevant, um die Differenzialgleichungslöser zu unterstützen.

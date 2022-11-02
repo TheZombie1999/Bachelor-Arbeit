@@ -1,16 +1,21 @@
 \subsection{Vorstellung der Scatter funktion}
 
-Um die Probleme der \textit{scatter} funktion lösen zukönnen, 
-wird dessen funktionsweiße vorgestellt.
-Die Aufgabe der \textit{scatter} function ist es werte aus einem N-Dimensinalen Array in ein anders 
-ähnlicher Größe Array zuschreiben und dabei auf alle in eine zelle geschriebenen werte eine Operation anzuwenden.
-Es können zum beispiel mehrere eingaben in einen Knoten eines Graphen, 
+Um die Probleme der \textit{scatter} Funktion lösen zu können, 
+wird dessen Funktionsweise vorgestellt.
+
+Dessen Aufgabe ist es, werte aus einem mehr dimensionalen Array 
+in ein anders Array ähnlicher Größe zuschreiben 
+und dabei auf alle in eine Zelle geschriebenen werte eine Operation anzuwenden.
+
+
+Es können zum Beispiel mehrere eingaben in einen Knoten eines Graphen, 
 welcher in Matrix form aufgestellt wurde,
 zusammen gerechnet werden.
-Die besonderheit der scatter function ist dabei, 
-das dies nicht nur für eine Zelle geschieht, 
-sonder für alle.
-Die \textit{scatter} function ist wie folgt definiert:
+
+Die Besonderheit der \textit{scatter}-Funktion ist dabei, 
+dass dies nicht nur für eine Zelle geschieht, sonder für alle.
+
+Diese ist wie folgt definiert:
 
 \begin{lstlisting}{language=Julia}
 	"""
@@ -32,29 +37,20 @@ Die \textit{scatter} function ist wie folgt definiert:
 	end
 \end{lstlisting}
 
-Die implementierung der \textit{scatter} funktion ist eine vereinfachte darstellung, 
-welche details zur berechnung der größe des dst array weg lässt.
-Die gesamte implementierung kann in \scatter{NNlib.jl} \cite{} geschlagen werden.
-
-Wichtig an der Implementierung ist, dass die \textit{similar} funktion verwendet wird um, das
+Die Implementierung der \textit{scatter} Funktion ist eine vereinfachte Darstellung, 
+welche Details zur Berechnung der Größe des \textit{dst} Array weglässt.
+Die gesamte Implementierung kann in der \scatter{NNlib.jl} Bibliothek \cite{} nach geschlagen werden.
+Wichtig an der Implementierung ist, dass die \textit{similar} Funktion verwendet wird, um das
 \textit{dst} Array zu erstellen.
-
-Dieser Aufruf stellt sicher das \textit{dst} und \textit{src} den selben datentyp haben.
-
-Dies hat den Großen vorteil, 
-dass die beiden Arguemente der \textit{op} Operation von Gleichen Datentyp sind. 
+Dieser Aufruf stellt sicher das \textit{dst} und \textit{src} denselben Datentyp haben.
+Dies hat den großen Vorteil, 
+dass die beiden Argumente der \textit{op} Operation von Gleichen Datentyp sind.
 Dies verhindert, 
-dass viele spezialfälle der addition von Dualzahlen, nicht implementiert werden müssen.
-
-Es fällt ausserdem auf das die Implementierung der berechung innheralb der \textit{scatter!}
+dass viele Spezialfälle der Addition von Dualzahlen nicht implementiert werden müssen.
+Es fällt außerdem auf das die Implementierung der Berechnung innerhalb der \textit{scatter!} Funktion
 durchgeführt wird.
-
-
-Das Ausrufe zeichen im Funktions namen, bedeutet das die argumente der Funktion überschrieben werden können.
-
-
-Die \textit{NNlibCuda.jl} Bibliothek überlädt diese Funktion für \textit{CUDA}-Arrays,
-implementiert die berechnung auf der Graphikkarte.
-
-Innerhalb dieser implementierung tritt der Fehler auf der die Verwendung von \textit{Dual}-Zahlen,
+Das Ausrufezeichen im Funktionsnamen bedeutet, das die Argumente der Funktion überschrieben werden können.
+Die \textit{NNlibCuda.jl} Bibliothek überlädt diese Funktion für \textit{CUDA}-Arrays und
+implementiert die Berechnung auf der Grafikkarte.
+Innerhalb dieser Implementierung tritt der Fehler auf, der die Verwendung von \textit{Dual}-Zahlen
 verhindert.

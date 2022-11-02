@@ -1,36 +1,30 @@
 \subsection{Atomic Operationen} \label{atomic}
 
-Da nun bekannt ist, was eine Dual Zahl ist, 
+Da nun bekannt ist, was eine \textit{Dual}-Zahl ist, 
 kann das eigentliche Problem betrachtet werden.
-
-Die Implementierung der \textit{scatter!} function, benutzt folgenden Programmcode um die 
-Addition umzusetzen. 
+Die Implementierung der \textit{scatter!} Funktion benutzt folgenden Programmcode, um die 
+Addition umzusetzen.
 
 \begin{lstlisting}{language=Julia}
 	CUDA.@atomic dst[idx[index]...] = op(dst[idx[index]...], src[index])
 \end{lstlisting}
 
-
-Dabei ist der Macro \textit{@atomic} ein Wrapper um die C-Implementierung von CUDA.
-
+Dabei ist der Macro \textit{@atomic} ein Wrapper um die C-Implementierung von \textit{CUDA}.
 Das Probelem das auftritt ist, dass der Macro nur die Datentypen \{Float16, Float32, Float64, BFloat16 \}
 unterstützt.
-
-Es ist möglich die unterstützten datentypen zu erweitern. 
-Vorraussetzung dafür ist, das der neue datentype kleiner gleich 64-Bit ist.
-Da eine Dual Zahl nur für $k = 1$ und Datentype \textit{Float32} genau 64-Bit groß ist,
-kann nur in besondren fällen \textit{@atomic} direkt verwendet werden.
-Da dieser Sonderfall, meistens nicht auftritt ist dieser ansatzt unbrauchbar.
-
-Der \textit{@atomic} Aufruf wird benötigt, 
-um \textit{Read-Modify-Write} operationen zu Serialisieren, 
-und \textit{Race-Conditions} zuvermeiden und kann deshalb auch nicht weggelassen werden.
-
-Aus der Definition der Multidimensinalen Dual Zahlen, ist bekannt das \textit{dual}-Zahlen addiert werden 
-indem die komponenten addiert werden.
-
-Da die einzelnen komponenten Rellen zahlen, 
-bzw. in der Praxis Floats sind, liegt folgende implementierung nahe:
+Es ist möglich, die unterstützten Datentypen zu erweitern.
+Voraussetzung dafür ist, dass der neue Datentype kleiner gleich 64-Bit ist.
+Da eine \textit{Dual} Zahl nur für $k = 1$ und Datentype \textit{Float32} genau 64-Bit groß ist,
+kann nur in besonderen fällen \textit{@atomic} direkt verwendet werden.
+Da dieser Sonderfall meistens nicht auftritt, ist dieser Ansatz unbrauchbar.
+Der \textit{@atomic} Aufruf wird benötigt,
+um \textit{Read-Modify-Write} Operationen zu serialisieren, 
+und um \textit{Race-Conditions} zu vermeiden. 
+Deshalb kann dieser auch nicht weggelassen werden.
+Aus der Definition der Multidimensinalen \textit{Dual}-Zahlen, 
+ist bekannt das \textit{Dual}-Zahlen addiert werden indem die komponenten addiert werden.
+Da die einzelnen Komponenten reellen Zahlen 
+bzw. in der Praxis \textit{Floats} sind, liegt folgende Implementierung nahe:
 
 \begin{lstlisting}{language=Julia}
 
@@ -44,9 +38,8 @@ end
 
 \end{lstlisting}
 
-Wird die scatter Funktion nun wie beschrieben implementiert, kommt es zu einem weiteren Problem.
-Der Macro @atomic verbietet die Funktions aufrufe \textit{value}und \textit{partial}.
-Dies liegt daran, das ein Macro in der Julia sprache zugang auf den \textit{Abstract Syntax Tree} des Complieler hat
-und einen direkten zugriff auf ein \textit{Array} erwarted.
-Der Aufruf der partial-Funktion führt außerdem skalare Indexierung durch, welche auf der Grafikkarte nicht erlaubt ist.
-
+Wird die \textit{scatter} Funktion nun wie beschrieben implementiert, kommt es zu einem weiteren Problem.
+Der Macro \textit{@atomic} verbietet die Funktions aufrufe \textit{value}und \textit{partial}.
+Dies liegt daran, dass ein Macro in der Julia Sprache Zugang auf den \textit{Abstract Syntax Tree} des Compilers hat
+und einen direkten Zugriff auf ein \textit{Array} erwartet.
+Der Aufruf der \textit{partial} Funktion führt außerdem skalare Indexierung durch, welche auf der Grafikkarte nicht erlaubt ist.
