@@ -1,22 +1,24 @@
 \subsection{Eine Funktionierende Implementierung}
 
-In diesem Kapitel geht es darum, wie die \textit{scatter} function umgesetzt werden kann.
-
-Dazu werde die Argumente der \textit{scatter} Funktion aus Kaptiel \ref{vorstellung}, so
+In diesem Kapitel geht es darum, wie die \textit{scatter} Funktion umgesetzt werden kann.
+Dazu werden die Argumente der \textit{scatter} Funktion aus Kapitel \ref{Vorstellung} so
 umgeformt, 
-dass die bereits vorhandenen implementierungen der \textit{scatter!} funktion, der \textit{NNlibCUDA.jl} Bibliothek, 
+dass die bereits vorhandenen Implementierungen der \textit{scatter!} Funktion der \textit{NNlibCUDA.jl} Bibliothek 
 diese richtig verarbeiten kann.
-Dafür wird zu erst \textit{Global Memory} \ref{memory} reserviert.  Dann werden Kernels verwenden, 
-um die Werte schnell und im richtigen Format, in den neuen Speicherbereich zu kopieren.
-Als Kernel wird ein Funktion bezeichnet die auf mehrerern threads von der Graphikkarte ausgeführt wird.
+Dafür wird zuerst \textit{Global Memory} \ref{memory} reserviert. Dann werden Kernels verwenden, 
+um die Werte schnell und im richtigen Format in den neuen Speicherbereich zu kopieren.
+Als Kernel wird eine Funktion bezeichnet, die auf mehreren Threads von der Grafikkarte ausgeführt wird.
 Die ursprünglichen Arrays \textit{src} und \textit{dst} haben die Dimension N.
-Das Array \textit{idx} entweder dimension N und enthält tupel von gleicher Größe,
-oder dimension 1 und und enthält \textit{Interger} Zahlen.
-Falls die Dimension von \textit{idx} Eins ist, und die Dimension von \textit{src}
-und \textit{dst} größer dann wird \textit{idx} zeilen weiße angewendet.
-Es wird nun eine Kopie dieser Drei Arrays erstellt mit Dimension N+1.
-In der Extra Dimension werden die einzelnen Komponenten der Dual Zahl gespeichert.
+
+Das Array \textit{idx} hat entweder Dimension N und enthält Tupel von gleicher Größe
+oder Dimension eins und enthält \textit{Interger} Zahlen.
+
+Falls die Dimension von \textit{idx} eins ist und die Dimension von \textit{src}
+und \textit{dst} größer, dann wird \textit{idx} Zeilen weiße angewendet.
+Es wird nun eine Kopie dieser drei Arrays erstellt mit Dimension N+1.
+In der zusätzlichen Dimension werden die einzelnen Komponenten der Dual Zahl gespeichert.
 Ein Beispiel mit $N = 1$ für \textit{src} und \textit{dst} sieht wie folgt aus:
+
 
 \begin{gather}
 \text{src oder dst} = 
@@ -33,8 +35,9 @@ Partial & Partial & Partial \\
 \end{bmatrix}
 \end{gather}
 
-Das \textit{idx} Array ist in dieser hinsicht besonders.
-Da die einzelnen \textit{Integer}-Zahlen zu Tupel um gewandelt werden müssen. 
+
+Das \textit{idx} Array ist in dieser Hinsicht besonders.
+Da die Einzelnen \textit{Integer}-Zahlen zu Tupel um gewandelt werden müssen.
 
 \begin{equation}
 \text{idx}= 
@@ -51,34 +54,35 @@ Da die einzelnen \textit{Integer}-Zahlen zu Tupel um gewandelt werden müssen.
 \end{bmatrix}
 \end{equation}
 
-Das erweitern des \textit{idx} Arrays sorgt dafür das die richtigen komponenten mit einander verrechnet werden.
-Die Anzahl der Zeilen in beiden Beispielen, ist abhänig von der anzahl der Freien variablen  
+Das Erweitern des \textit{idx} Arrays sorgt dafür, das die richtigen Komponenten miteinander verrechnet werden.
+Die Anzahl der Zeilen in beiden Beispielen ist abhängig von der Anzahl der Freien Variablen  
 der Multidimensionalen \textit{Dual} Zahlen. In diesem Beispiel ist $k = 3$.
-Wird nun \textit{dst\_m}, \textit{src\_m} und \textit{idx\_m} an die \textit{scatter!} function über
-geben, wird das erwünschte ergebnis berechnet. 
-Im letzten schritt muss nun der inhalt von \textit{dst\_m} nach \textit{dst} zurück kopiert werden.
-Dabei tritt das problem auf das die Partiellen komponentne innerhalb der \textit{Dual}-Zahl
-als tupel gespeichert werden.
-Tuple in Julia sind unveränderlich (imutable), nachdem sie erstellt wurden.
-Das Problem dabei ist dass alle Partiellen koponenten der dual zahl gleichzeitig zugegriffen werden muss.
-Dazu muss jede einzelne komponete scalar indiziert werden.
-Dabei kommt es innerhalb der Julia implementierung zu inkonsitenten verhalten.
-Folgender speicherzugriff eines bestimmten kernels funktioniert problemlos:
+Wird nun \textit{dst\_m}, \textit{src\_m} und \textit{idx\_m} an die \textit{scatter!} Funktion über
+geben, wird das erwünschte Ergebnis berechnet. 
+Im letzten Schritt muss nun der Inhalt von \textit{dst\_m} nach \textit{dst} zurück kopiert werden.
+Dabei tritt das Problem auf das die partiellen Komponenten innerhalb der \textit{Dual}-Zahl
+als Tupel gespeichert werden.
+Tupel in Julia sind unveränderlich, nachdem sie erstellt wurden.
+Das Problem dabei ist, dass alle partiellen Komponenten der dual zahl gleichzeitig zugegriffen werden muss.
+Dazu muss jede einzelne Komponente Scalar indiziert werden.
+Dabei kommt es innerhalb der Julia Implementierung zu inkonsistenten verhalten.
+Folgender Speicherzugriff eines bestimmten Kernels funktioniert problemlos:
+
+
 \begin{verbatim}
     dst\_m[3, 4, 5, 1]
 \end{verbatim}
-Wird dieser Aufruf leicht modifiziert um all partiellen komponenten zu einem Tupel zusammen zufassen 
-kommt es zu einem kompiler fehler.
+Wird dieser Aufruf leicht modifiziert, um all partiellen Komponenten zu einem Tupel zusammen zu fassen, 
+kommt es zu einem Compiler Fehler.
 \begin{verbatim}
     ( [dst_m[3, 4, 5, i] for i in 2:k+1]... )
 \end{verbatim}
-Der Grund führ diesen Fehler ist nicht bekannt, kann aber umgangen werden indem mehrere \textit{views} auf
+Der Grund führ diesen Fehler ist nicht bekannt, kann aber umgangen werden, indem mehrere \textit{views} auf
 \textit{dst\_m} erstellt werden.
-Das verwenden von \textit{views} Löst das Problem von scalarer indezierung innerhalb der Graphikkarten Kernel. 
-Eine \textit{view} erlaubt es die art und weiße wie auf einen speicher bereich zugegriffen wird zu verändern.
-Diese werden auf der CPU erstellt und dann dem Kernel als argument übergeben.
-Um zum Beispiel ein Array von Tupeln, mit den Partials als inhalt zuerhalten, wird folgender Code ausgeführt:
-
+Das Verwenden von \textit{views} löst das Problem von skalarer Indizierung innerhalb der Grafikkarten Kernel. 
+Eine \textit{view} erlaubt es, die Art und weiße wie auf einen Speicher Bereich zugegriffen wird, zu verändern.
+Diese werden auf der CPU erstellt und dann dem Kernel als Argument übergeben.
+Um zum Beispiel ein Array von Tupeln mit den \textit{Partials} als Inhalt zu erhalten, wird folgender Code ausgeführt:
 \begin{verbatim}
 	function f(x...)
 		return x
@@ -87,8 +91,7 @@ Um zum Beispiel ein Array von Tupeln, mit den Partials als inhalt zuerhalten, wi
 	tuples = f.([view(dst_m, repeat([:], 
 	        ndims(dst_m) - 1)..., i) for i in 2:(N+1)]...)
 \end{verbatim}
-
-In diesem beispiel wird ein broadcast kernel mit der funktion f aufgerufen.
-Broadcasting bedeutet das die funktion f auf jeder speicher zelle der argumente angewandt wird.
-Diese operation läuft auf der Graphik karte.
-Für mehre details zur genauen umsetzung, kann der Code im anhang eingesehen werden.
+In diesem Beispiel wird ein Broadcast Kernel mit der Funktion f aufgerufen.
+Broadcasting bedeutet, das diese auf jeder Speicherzellen der Argumente angewandt wird.
+Diese Operation läuft auf der Grafikkarte.
+Für mehr Details zur genauen Umsetzung kann der Code im Anhang eingesehen werden.
