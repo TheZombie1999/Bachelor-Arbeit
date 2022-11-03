@@ -29,59 +29,49 @@ In der Extra Dimension werden die einzelnen Komponenten der Dual Zahl gespeicher
 
 Ein Beispiel für $N = 1$, sieht für \textit{src} und \textit{dst} sieht wie folgt aus:
 
-$$
-
+\begin{equation}
 \text{src oder dst} = 
-
 \begin{matrix}
-Dual & Dual & Dual
+Dual & Dual & Dual\\
 \end{matrix}
-
 \rightarrow
-
-\text{src_m oder dst_m} = 
-
+\text{src\_m oder dst\_m} = 
 \begin{matrix}
 Value   & Value   & Value   \\
 Partial & Partial & Partial \\
 Partial & Partial & Partial \\
 Partial & Partial & Partial \\
 \end{matrix}
-$$
+\end{equation}
 
 Das \textit{idx} Array ist in dieser hinsicht besonders.
 Da die einzelnen \textit{Integer}-Zahlen zu Tupel um gewandelt werden müssen. 
 
-$$
-
+\begin{equation}
 \text{idx}= 
-
 \begin{matrix}
  2 & 1 & 3
 \end{matrix}
-
 \rightarrow
-
-idx_m = 
-
+\text{idx\_m} = 
 \begin{matrix}
  (2, 1) & (1, 1) & (3, 1) \\ 
  (2, 2) & (1, 2) & (3, 2) \\
  (2, 3) & (1, 3) & (3, 3) \\
  (2, 4) & (1, 4) & (3, 4) \\
 \end{matrix}
-$$
+\end{equation}
 
 Die Anzahl der Zeilen in beiden Beispielen, ist abhänig von der anzahl der Freien variablen  
 der Multidimensionalen Dual Zahlen.
 
-Wird nun \textit{dst_m}, \textit{src_m} und \textit{idx_m} an die \textit{scatter!} function über
+Wird nun \textit{dst\_m}, \textit{src\_m} und \textit{idx\_m} an die \textit{scatter!} function über
 geben, wird das erwünschte ergebnis berechnet. 
 
 Es muss nur noch in das korekte format zurück kopiert werden. 
 
 Für diesen Letzten schritt müssen mehrere \textit{views} auf
-\textit{dst_m} erstellt werden.
+\textit{dst\_m} erstellt werden.
 
 Das verwenden von \textit{views} Löst das Problem von scalarer indezierung innerhalb der Graphikkarten Kernel. 
 
@@ -91,13 +81,14 @@ Diese werden auf der CPU erstellt und dann dem Kernel als argument übergeben.
 
 Um zum Beispiel ein Array von Tupeln, mit den Partials als inhalt zuerhalten, wird folgender Code ausgeführt:
 
-\begin{lstlisting}{language=Julia}
+\begin{verbatim}
 	function f(x...)
 		return x
 	end
 	
-	tuples = f.([view(dst_i, repeat([:], ndims(dst_i) - 1)..., i) for i in 2:(N+1)]...)
-\end{lstlisting}
+	tuples = f.([view(dst_m, repeat([:], 
+	        ndims(dst_m) - 1)..., i) for i in 2:(N+1)]...)
+\end{verbatim}
 
 
 Für mehre details zur genauen umsetzung, kann der Code im anhang eingesehen werden.

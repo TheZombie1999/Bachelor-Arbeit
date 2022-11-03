@@ -19,13 +19,18 @@ Diese ist wie folgt definiert:
 
 \begin{lstlisting}{language=Julia}
 	"""
-	op ist die operation die auf alle werte die in die selbe zelle geschrieben werden angewendet wird.
-		mögliche werte sind +, -, *, /, min, max, mean
-	src ist eine beliebige matrix aus der wert gelesen und wieder an anderer stelle zurück geschrieben werden.
-	idx ist ebenfalls eine beliebige matrix aus der entnommen wird an welche position, der wert einer zelle geschrieben werden soll.
+	op ist die operation die auf alle werte die in die selbe 
+	    zelle geschrieben werden angewendet wird.
+		Moegliche werte sind +, -, *, /, min, max, mean.
+	src ist eine beliebige Matrix aus der wert gelesen 
+	    und wieder an anderer stelle zurück geschrieben werden.
+	idx ist ebenfalls eine beliebige matrix aus der entnommen wird,
+	    an welche position, der wert einer zelle geschrieben werden soll.
 	init beschreibt wie das ziel array initialisiert wird.
-			dies kann zum beispiel genutzt werden, um den inhalt des arrays in das geschrieben wird initial auf null zu setzten.
-	dstsize gibt die größe des zurück gegebenen arrays an.
+	     Dies kann zum Beispiel genutzt werden, 
+		 um den Inhalt des arrays in das geschrieben wird, 
+		 initial auf null zu setzten.
+	dstsize gibt die groeße des zurück gegebenen arrays an.
 	"""
 
 	function scatter(op, src, idx; [init, dstsize])

@@ -5,9 +5,10 @@ kann das eigentliche Problem betrachtet werden.
 Die Implementierung der \textit{scatter!} Funktion benutzt folgenden Programmcode, um die 
 Addition umzusetzen.
 
-\begin{lstlisting}{language=Julia}
-	CUDA.@atomic dst[idx[index]...] = op(dst[idx[index]...], src[index])
-\end{lstlisting}
+\begin{verbatim}
+    	CUDA.@atomic dst[idx[index]...] = op(dst[idx[index]...], src[index])
+\end{verbatim}
+
 
 Dabei ist der Macro \textit{@atomic} ein Wrapper um die C-Implementierung von \textit{CUDA}.
 Das Probelem das auftritt ist, dass der Macro nur die Datentypen \{Float16, Float32, Float64, BFloat16 \}
@@ -30,8 +31,8 @@ bzw. in der Praxis \textit{Floats} sind, liegt folgende Implementierung nahe:
 
 function gpu_add!(d0::Dual, d1::Dual, d2::Dual)
 	@atomic value(d0) = value(d1) + value(d2)
-	
-	for i in 1:length(partials(d0)) # length(partials( ... )) ist für alle Argumente Gleich
+	k = length(partials(d0)) # length(partials( )) ist fuer alle Argumente Gleich
+	for i in 1:k
 		@atomic partials(d0, i) = partials(d1, i) + partials(d2, i)
 	end
 end
@@ -39,7 +40,7 @@ end
 \end{lstlisting}
 
 Wird die \textit{scatter} Funktion nun wie beschrieben implementiert, kommt es zu einem weiteren Problem.
-Der Macro \textit{@atomic} verbietet die Funktions aufrufe \textit{value}und \textit{partial}.
+Der Macro \textit{@atomic} verbietet die Funktions aufrufe \textit{value} und \textit{partial}.
 Dies liegt daran, dass ein Macro in der Julia Sprache Zugang auf den \textit{Abstract Syntax Tree} des Compilers hat
 und einen direkten Zugriff auf ein \textit{Array} erwartet.
 Der Aufruf der \textit{partial} Funktion führt außerdem skalare Indexierung durch, welche auf der Grafikkarte nicht erlaubt ist.
