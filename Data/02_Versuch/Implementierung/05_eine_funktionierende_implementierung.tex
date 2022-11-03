@@ -1,18 +1,21 @@
 \subsection{Eine Funktionierende Implementierung}
 
-In diesem Kaptipel geht es darum, wie die \textit{scatter} function nun umgesetzt werden kann.
+In diesem Kaptipel geht es darum, wie die \textit{scatter} function umgesetzt werden kann.
 
 Dazu werde die argumente so umgeformt, 
-dass die bereits vorhandenen implementierungen der \textit{scatter!} function, diese richtig verarbeiten können.
+dass die bereits vorhandenen implementierungen der \textit{scatter!} function, 
+diese richtig verarbeiten können.
 
-Es wird dafür zurerst CUDA-speicher reserviert und dann werden Kernels verwenden um 
-die entsprechenede werte in diesen zu kopieren.
+Es wird dafür zurerst \textit{Global Memory} \ref{memory} reserviert und dann werden Kernels verwenden, 
+um die entsprechenede werte in diesen zu kopieren.
 
 Ein kernel ist eine Function die Auf der Graphikkarte ausgeführt wird.
 
 Wichtig ist dabei das der CUDA-speicher die richtige Dimension haben. 
 
-Das ursprünglichen Arrays \textit{src} und \textit{dst} haben die Dimension N.
+Wichtig ist dabei, dass die Kopierten Arrays die richtige dimension und inhalt haben. 
+
+Die ursprünglichen Arrays \textit{src} und \textit{dst} haben die Dimension N.
 
 Das Array \textit{idx} entweder dimension N und enthält tupel von gleicher Größe,
 oder dimension 1 und und enthält \textit{Interger} Zahlen.

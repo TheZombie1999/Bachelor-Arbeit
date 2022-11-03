@@ -1,17 +1,38 @@
-\subsection{Memory Allocation}
+\subsection{Speicher Allocierung} \label{memory}
 
-Wie bereits im Kaptiel \ref{atomic} beschrieben, muss die addition von Dual zahlen komponenten weiße durchgeführt werden.
-Da es aber nicht möglich ist auf die einezelen komponentn direkt zuzugreifen müssen diese zwischen gespeichert werden um direkten zugriff zu erlauben.
-Der erste ansatzt, dazu ist speicher direkt im kernel zu reservieren.
-Dies scheitert daran, dass andere Threads auf diesen speicher nicht zugreifen können.
-Um speicher zu erstellen der von allen threads verwendet werden kann, kann shared memory verwendent werden.
-Das problem dabei ist das shared memory nur von threads im gleichen thread block sind zugegriffen werden kann.
-Es kann global speicher reserviert werden, indem dieser Ausserhalb des Kernels allociert und dann beim start diesem als arguemnt übergeben wird.
-Dieser Ansatz führt zu erfolg, indem ein eigenenr speicher bereich für jede komponente einer dual zahl reserviert wird, den entsperechenden wert in diesen hinein copiert
-und dann die addition analog zu \ref{} innerhalb der \textit{scatter!} function implementiert.
-Dieser Ansatz hat zwei probleme.
-Das erste Problem ist, dass große teil der bereits vorhandenen implementierungen der \textit{scatter!} function mit minimalen änderungen reimplementiert werden müssen, was 
-gegen das dry-Prizip verstößt.
-Zweitens ist es aktuell zwar möglich die berechnung korrekt durchzuführen, dass ergebniss kann aber noch nicht in das ziel array zurück geschrieben werden.
-Das nächste Kaptiel bespricht wie genau diese zwei Probleme gelößt werden können.
+Wie bereits im Kapitel \ref{atomic} beschrieben, 
+muss die Addition von Dual zahlen Komponenten weiße durchgeführt werden.
+Da es aber nicht möglich ist, auf die einzelnen Komponenten direkt zu zugreifen,
+müssen diese zwischen gespeichert werden, um direkten Zugriff zu erlauben.
+\textit{CUDA} unterstützt die folgenden Arten von Speicher auf der GPU:
 
+\begin{itemize}
+	\item Constant Memory
+	\item Local Memory
+	\item Shared Memory
+	\item Global Memory
+\end{itemize}
+
+\textit{Constant Memory} ist für die Umsetzung der \textit{scatter!}-Funktion nicht geeignet,
+da dieser nicht verändert werden kann.
+\textit{Local Memory} ist Speicher, 
+der über die Register eines Threads in der Grafikkarte zugegriffen wird.
+Die Verwendung von \textit{Local Memory} scheitert daran, 
+das nur ein Thread auf diese Register zugreifen kann.
+\textit{Shared Memory} ist Speicher, 
+der von allen Threads in einem ThreadBlock erreichbar ist.
+Da nicht sicher gestellt werden kann das alle Threads, 
+die in dieselbe speicher stelle schreiben, auch im selben Threadblock sind,
+kann dies nicht verwendet werden.
+Der Speichertype für unser Problem ist \textit{Global Memory}, 
+da dieser von allen Threads erreicht werden kann.
+Mit dem Nachteil das die erhöte geschwindichkeit der ander Speichersorten, 
+nicht genutzt werden kann.
+\textit{Global Memory} muss ausserhalb des kernels allociert werden, 
+was zu einer fragmentierung der umsetzung der addition von Dual zahlen führt.
+Die Fragmentierung führt dazu, 
+dass große Teil der bereits vorhandenen Implementierungen der \textit{scatter!} Funktion mit minimalen Änderungen noch einmal
+implementiert werden müssen.
+Die Verwendung von \textit{Global Memory} ermöglicht es, die Berechnung korrekt durchzuführen,
+dass Ergebnis kann aber noch nicht in das Ziel Array zurückgeschrieben werden.
+In dem nächsten Kapitel geht es darum, wie diese Probleme gelöst werden können.
