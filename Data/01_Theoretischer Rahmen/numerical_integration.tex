@@ -1,5 +1,6 @@
-\chapter{Numerical Integration}
 
+
+\section{Anfangswert Probleme}
 % Numerical Integraion book
 % https://books.google.de/books?hl=de&lr=&id=gGCKdqka0HAC&oi=fnd&pg=PP1&dq=numerical+integration&ots=NDzzuAvLhM&sig=3_fDwVwrMX_kgecuXDtsKIZ6pgE&redir_esc=y#v=onepage&q&f=false
 
@@ -28,14 +29,16 @@ $$
 v(0) = 0
 $$
 
-Dieses System hat eine Einfache Numerische Lösung:
+Dieses System hat eine Einfache exacte Lösung:
 $$
-v = v_0 + \int_{t_0}^{t_1} ...
+v = v_0 + \int_{t_0}^{t_1} k dt = k \cdot (t_0 - t_1) 
 $$
 
 Im allgemeinen ist es aber nicht immer möglich ein Anfangswertproblem analytisch zu lösen, deshalb wurde verschiedene numersiche verfahren entwickelt um anfangswert problem numerisch zu lösen.
 
-\section{ Explizite Euler Verfahren}
+\section{Numerisches Lösen von Anfangswert problemen}
+
+\subsection{Explizite Euler Verfahren}
 
 % https://www.biancahoegel.de/mathe/verfahr/euler-verfahren_explizit.html
 
@@ -58,19 +61,116 @@ $$
 Das Euler-Verfahren verwendet folgende approxmation:
 
 $$
-\int_{}
+\int_{t_k}^{t_{k+1}} f(t_k, y_k(s)) ds \approx h f(t_k, y_k)
 $$
 
+Dies ist wichtig, da alle verfahren zum numerischen lösen von anfangswert problemen, sich hauptsächlich in dieser approximation unterscheiden.
+
+Das Expliziten Euler-verfahren mit einer neural ode zu berechnen
+ist sehr leicht, da $y_k$, h und $f(t_k, y_k)$ bekannt sind.
+
+Das nächste verfahren das vorgestellt wird verändert die art und weiße der Approximation, was dazu führt das die berechnung nicht mehr so direkt durchgeführt werden kann.
+
+
+
+\subsection{Implizite Euler Verfahren}
+
+Das implizite Euler verfahren ist sehr ähnlich zu der expliziten variante.
+
+Der entscheidende unterschied ist, dass das implizite verfahren nicht die steigung abhänig von aktuellen 
+zeitpunkt und y-wert verwendet, sondern vom nächsten zeitpunkt.
+
+Die Definition des lautet deshalb wie folgt.
+
+$$
+y_{k + 1} = y_k + h \cdot f(t_{k + 1}, y_{k + 1})
+$$
+
+Der rest der definition ist analog zum expliziten euler verfahren aus Kaptiel \ref{}.
+
+Das besondere dabei ist das $f(t_{k + 1}, y_{k + 1})$ nicht bekannt ist.
+
+Deshalb muss dieses gleichungs system gelößt werden.
+
+Dazu wird meist das Newton verfahren verwendet.
+
+Dazu muss die gleichung zunächst umgeformt werden.
+
+$$
+0 = (y_k - y_{k + 1})  + h \cdot f(t_{k + 1}, y_{k + 1})
+$$
+
+Nun wird die Funktion $g(x)$ wie folgt definiert:
+
+$$
+g(x) := (y_k - y_{k + 1})  + h \cdot f(t_{k + 1}, y_{k + 1}) = (y_k - x)  + h \cdot f(t_{k + 1}, x)
+$$
+$$
+g'(x) = -1 + h \cdot \frac{\partial f(t_{k+1}, x)}{\partial x}
+$$
+
+Nun kann dessen Nullstelle über das Newton verfahren wie folgt bestimmt werden.
+
+$$
+x_{n+1} = x_{n} - \frac{g(x_n)}{g'(x_n)}
+$$
+
+Dabei ist des wichtig $x_{0}$ auf eine Sinnvollen wert zu setzen ein guter kandidat ist zum beispiel
+$y_{k}$ da dieser bekannt und nahe am gesuchten wert liegt.
+
+Da dieser nahe am gewünschten Wehrt liegt und bekannt ist.
+
+Wichtig ist das damit das implizit euler verfahren berechnet werden kann die ableitung von $f(t_{k + 1}, y_{k + 1})$ benötigt wird.
+
+In userem fall handelt es sich hierbei um eine NeuralODE dessen ableitung mit einem automatischen ableitungs algorithmus berechnet wird. Wie dies funktioniert wird in Kaptitle \ref{} beschrieben.
+
+
+
+\subsection{Die Runge Kutta verfahren}
+
+Die Runge Kutta verfahren sind eine verallgemeinerung der
+bereits vorgestellten impliziten/expliziten Euler verfahren.
+
+Die Runge Kutta verfahren verwenden folgende approximation:
+
+$$
+\int_{t_k}^{t_{k+1}} f(t_k, y_k(s)) ds \approx h \sum_{j=1}^{s} b_j k_j
+$$
+wobei $k_j$ wie folgt definiert ist.
+$$
+k_j = f(t_n + h c_j, y_n + h \sum_{l=1}^{s}a_{jl}k_{l}) , j \in \{1, ..., s\}
+$$
+% https://www.youtube.com/watch?v=6cqn8cnYRUg&list=PLgPpaTsP_3DqH0RNVsSOiohhGQz_7vf_R&index=7
+
+
+Um Runge Kutta Methoden lösen zu können, wird im allgemeinen die Newton's Methode für ein 
+system von gleichungen verwendet werden.
+
+Dieses unterscheidet sich von den normalen Newton verfahren.
+
+Die grund vorraussetzung für dessen berechung ist jedoch die gleiche.
+
+Es werden die Paritellen ableitungen von der funktion 
+$f$ benötigt.
+
+
+\subsection{Mehr Schritt Methoden (Multistep Methods)}
+
+Mehr schritt methoden erweitern die ursprüngliche definition des anfangswert problem darum 
+das bereits eine beliegiege menge an punkten 
+vor dem aktuellen zeit schritt bekannt ist.
+Um den nächsten zeitschritt zuberechnen wird dann 
+zwischen den bekannten werten interpoliert um den 
+nächsten zeitschritt zu berechnen.
+
+Um die initialen punkte zu berechnen wird meistens 
+einen implizite Runge Kutta methode verwendet.
 
 
 
 
 
-% Explicit Euler
-
-% Implicit Eulter
-
-% Runge Kutta
 
 
-% Unterschied
+
+

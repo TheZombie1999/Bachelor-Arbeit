@@ -10,7 +10,7 @@ Addition umzusetzen.
 \end{verbatim}
 
 
-Dabei ist der Macro \textit{@atomic} ein Wrapper um die C-Implementierung von \textit{CUDA}.
+Dabei ist der Macro \textit{@atomic} ein Wrapper um die C-Implementierung von \textit{CUDA.jl} \cite{besard2018juliagpu}.
 Das Probelem das auftritt ist, dass der Macro nur die Datentypen \{Float16, Float32, Float64, BFloat16 \}
 unterstützt.
 Es ist möglich, die unterstützten Datentypen zu erweitern.
@@ -22,8 +22,8 @@ Der \textit{@atomic} Aufruf wird benötigt,
 um \textit{Read-Modify-Write} Operationen zu serialisieren, 
 und um \textit{Race-Conditions} zu vermeiden. 
 Deshalb kann dieser auch nicht weggelassen werden.
-Aus der Definition der Multidimensinalen \textit{Dual}-Zahlen, 
-ist bekannt das \textit{Dual}-Zahlen addiert werden indem die komponenten addiert werden.
+Aus der Definition der multidimensionalen \textit{Dual}-Zahlen 
+ist bekannt, das \textit{Dual}-Zahlen Komponenten weiße addiert werden.
 Da die einzelnen Komponenten reellen Zahlen 
 bzw. in der Praxis \textit{Floats} sind, liegt folgende Implementierung nahe:
 

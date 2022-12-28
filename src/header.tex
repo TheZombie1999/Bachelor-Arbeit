@@ -63,7 +63,7 @@
 \usepackage{todonotes}                      % Fügt Todo Notes ein
 \usepackage{eurosym}                        % Eurozeichen mit \euro
 \usepackage{afterpage}						% A3 pages in A4 Document
-\usepackage[decimalsymbol=comma]{siunitx}   % SI-Einheiten
+%\usepackage[decimalsymbol=comma]{siunitx}   % SI-Einheiten
 \usepackage{array}                          % Array
 
 
@@ -80,6 +80,28 @@
 \usetikzlibrary{shapes}
 \usetikzlibrary{backgrounds}
 
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{backgrounds}
+\usepgfplotslibrary{patchplots}
+\usepgfplotslibrary{fillbetween}
+\pgfplotsset{%
+    layers/standard/.define layer set={%
+        background,axis background,axis grid,axis ticks,axis lines,axis tick labels,pre main,main,axis descriptions,axis foreground%
+    }{
+        grid style={/pgfplots/on layer=axis grid},%
+        tick style={/pgfplots/on layer=axis ticks},%
+        axis line style={/pgfplots/on layer=axis lines},%
+        label style={/pgfplots/on layer=axis descriptions},%
+        legend style={/pgfplots/on layer=axis descriptions},%
+        title style={/pgfplots/on layer=axis descriptions},%
+        colorbar style={/pgfplots/on layer=axis descriptions},%
+        ticklabel style={/pgfplots/on layer=axis tick labels},%
+        axis background@ style={/pgfplots/on layer=axis background},%
+        3d box foreground style={/pgfplots/on layer=axis foreground},%
+    },
+}
+
+
 %%Mathematik-Pakete für Formeln
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -88,7 +110,7 @@
 \usepackage{mathrsfs}
 \usepackage{mathtools}
 %\usepackage{esvect}
-%\numberwithin{equation}{section} %Nummerierungsebene für Gleichungen
+%\numberwithin{equation}{section} %Nummerierungsebene für Gleichungeng
 \usepackage{gensymb}
 \usepackage{multirow}
 \usepackage{bigdelim}
@@ -156,3 +178,4 @@
 \setglossarysection{section}
 \printglossary[type = symbol, style=3colger]
 \printglossary[type = konstante, style=3colger]}
+

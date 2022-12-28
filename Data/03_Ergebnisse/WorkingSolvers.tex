@@ -1,0 +1,52 @@
+\section{Funktionierende Löser}
+
+In diesem Abschnitt wird ein überblick darüber gegeben, welche 
+ODE Löser nach dem hinzufügern der in \ref{} Vorgestellten 
+version der \textit{scatter}-Funktion nun möglich sind.
+
+Wichtig ist dabei das es nicht möglich ist jeden löser ausführlich zu testen
+da diese zum Teil eine sehr lange laufzeit haben.
+
+Aufgrund dessen wurde jeder der im folgenden grafik als Funktionend 
+bezeichnet solange laufen gelassen bis dieser den ersten zeit schritt gemacht hat.
+
+Der Grund für diese vorgehens weiße ist dass die löser an diesem punkt meistens scheitern.
+
+Wenn dieser punkt überschritten war dann kam es erfahrungs gemäß zu keinen 
+weitern problem eine 100\%-tige garantie lieftert dies aber nicht.
+
+\begin{table}[]
+    \centering
+
+    \begin{tabular}{c|c|c}
+        Kategorie & Name & Funktioniert \\
+        \hline\hline
+         SDIRK Methods & Implizit Euler & ja \\
+         & ImplicitMidpoint & ja\\
+         & Trapezoid & ja \\
+         & TRBDF2 & ja \\
+         & SDIRK2 & ja \\
+         & Kvaerno3 & ja \\
+         & KenCarp3 & ja \\
+         & Cash4 & ja \\
+         & Hairer4 & ja \\
+         & Hairer42 & ja \\
+         & Kvaerno4 & ja \\
+         & KenCarp4 & ja \\
+         & KenCarp47 & ja \\
+         & Kvaerno5 & ja \\
+         & KenCarp5 & ja \\
+         & KenCarp58 & ja \\
+         Fully-Implicit Runge-Kutta & & \\
+         & & \\
+         & & \\
+         & & \\
+         & & \\
+         & & \\
+         & & \\
+         & & \\
+    \end{tabular}
+    \caption{Caption}
+    \label{tab:my_label}
+\end{table}
+

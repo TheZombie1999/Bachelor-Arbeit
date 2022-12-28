@@ -1,36 +1,38 @@
 \subsection{Vorstellung der Scatter funktion} \label{vorstellung}
 
-Um die Probleme der \textit{scatter} Funktion lösen zu können, 
-wird dessen Funktionsweise vorgestellt.
+Um die Probleme der \textit{scatter}-Funktion lösen zu können, 
+wird diese vorgestellt.
 
-Dessen Aufgabe ist es, werte aus einem mehr dimensionalen Array 
-in ein anders Array ähnlicher Größe zuschreiben 
-und dabei auf alle in eine Zelle geschriebenen werte eine Operation anzuwenden.
+Die Aufgabe dieser Funktion ist es, Werte aus einem mehr dimensionalen Array 
+in ein anders Array ähnlicher Größe zu schreiben 
+und dabei auf alle Werte die in die selbe Zelle geschrieben werden eine Operation anzuwenden.
 
 
-Es können zum Beispiel mehrere eingaben in einen Knoten eines Graphen, 
-welcher in Matrix form aufgestellt wurde,
+Es können zum Beispiel mehrere Eingaben in einen Knoten eines Graphen, 
+welcher in Matrix Form aufgestellt wurde,
 zusammen gerechnet werden.
 
 Die Besonderheit der \textit{scatter}-Funktion ist dabei, 
-dass dies nicht nur für eine Zelle geschieht, sonder für alle.
+dass dies nicht nur für eine Zelle geschieht, sondern für alle.
 
-Diese ist wie folgt definiert:
+%Diese ist wie folgt definiert:
+% Die Definition der \textit{scatter}-Funktion lautet wie folgt:
+Die Definition lautet wie folgt:
 
 \begin{lstlisting}{language=Julia}
 	"""
-	op ist die operation die auf alle werte die in die selbe 
-	    zelle geschrieben werden angewendet wird.
-		Moegliche werte sind +, -, *, /, min, max, mean.
-	src ist eine beliebige Matrix aus der wert gelesen 
-	    und wieder an anderer stelle zurück geschrieben werden.
-	idx ist ebenfalls eine beliebige matrix aus der entnommen wird,
-	    an welche position, der wert einer zelle geschrieben werden soll.
-	init beschreibt wie das ziel array initialisiert wird.
+	op ist die Operation die auf alle Werte, die in die selbe 
+	    Zelle geschrieben werden, angewendet wird.
+		Moegliche Werte sind +, -, *, /, min, max, mean.
+	src ist eine beliebige Matrix aus der Werte gelesen 
+	    und wieder an anderer stelle zurueck geschrieben werden.
+	idx ist ebenfalls eine beliebige Matrix aus der entnommen wird,
+	    an welche Stelle der Wert einer Zelle geschrieben werden soll.
+	init beschreibt wie das Ziel-Array initialisiert wird.
 	     Dies kann zum Beispiel genutzt werden, 
-		 um den Inhalt des arrays in das geschrieben wird, 
+		 um den Inhalt des Arrays in das geschrieben wird, 
 		 initial auf null zu setzten.
-	dstsize gibt die groeße des zurück gegebenen arrays an.
+	dstsize gibt die Groesse des zurueck gegebenen Arrays an.
 	"""
 
 	function scatter(op, src, idx; [init, dstsize])
@@ -42,20 +44,20 @@ Diese ist wie folgt definiert:
 	end
 \end{lstlisting}
 
-Die Implementierung der \textit{scatter} Funktion ist eine vereinfachte Darstellung, 
-welche Details zur Berechnung der Größe des \textit{dst} Array weglässt.
-Die gesamte Implementierung kann in der \scatter{NNlib.jl} Bibliothek \cite{} nach geschlagen werden.
-Wichtig an der Implementierung ist, dass die \textit{similar} Funktion verwendet wird, um das
-\textit{dst} Array zu erstellen.
-Dieser Aufruf stellt sicher das \textit{dst} und \textit{src} denselben Datentyp haben.
+Die Implementierung der \textit{scatter}-Funktion ist eine vereinfachte Darstellung, 
+welche Details zur Berechnung der Größe des \textit{dst}-Arrays weglässt.
+Die gesamte Implementierung kann in der \scatter{NNlib.jl} Bibliothek \cite{nnlib} nachgeschlagen werden.
+Wichtig an der Implementierung ist, dass die \textit{similar}-Funktion verwendet wird, um das
+\textit{dst}-Array zu erstellen.
+Dieser Aufruf stellt sicher, dass das \textit{dst}- und \textit{src}-Array denselben Datentyp haben.
 Dies hat den großen Vorteil, 
-dass die beiden Argumente der \textit{op} Operation von Gleichen Datentyp sind.
+dass die beiden Argumente der \textit{op} Operation von gleichem Datentyp sind.
 Dies verhindert, 
 dass viele Spezialfälle der Addition von Dualzahlen nicht implementiert werden müssen.
-Es fällt außerdem auf das die Implementierung der Berechnung innerhalb der \textit{scatter!} Funktion
+Es fällt außerdem auf, dass die Implementierung der Berechnung innerhalb der \textit{scatter!}-Funktion
 durchgeführt wird.
 Das Ausrufezeichen im Funktionsnamen bedeutet, das die Argumente der Funktion überschrieben werden können.
-Die \textit{NNlibCuda.jl} Bibliothek überlädt diese Funktion für \textit{CUDA}-Arrays und
+Die \textit{NNlibCuda.jl} \cite{nnlibcuda} Bibliothek überlädt diese Funktion für \textit{CUDA}-Arrays und
 implementiert die Berechnung auf der Grafikkarte.
 Innerhalb dieser Implementierung tritt der Fehler auf, der die Verwendung von \textit{Dual}-Zahlen
 verhindert.

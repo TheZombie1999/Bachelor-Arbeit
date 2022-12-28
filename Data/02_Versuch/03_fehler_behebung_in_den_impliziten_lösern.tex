@@ -9,13 +9,13 @@ Obwohl die \textit{scatter} Funktion nun \textit{Dual} Zahlen auf der Grafikkart
 funktionieren die implizierten Löser noch nicht. 
 Julia hat sich im laufe der zeit weiter entwickelt und einig API Änderungen vorgenommen.
 Dies hat dazu geführt, dass die \textit{lu-instance} Funktion
-der \textit{ArrayInterface.jl} Bibliothek nicht mehr aktuell
+der \textit{ArrayInterface.jl} Bibliothek \cite{arrayinterface} nicht mehr aktuell
 war.
 Das Problem war, das sich die Implementierung der Lu-Zerlegung geändert hat.
-In den älteren Versionen hat \textit{CUDA} diese Implementierung selbst bereitgestellt.
+In den älteren Versionen hat \textit{CUDA} \cite{besard2018juliagpu} diese Implementierung selbst bereitgestellt.
 Mit der Version 1.8 wurde diese Funktion so in die Standardbibliothek mit aufgenommen, 
 dass die Faktorisierung auch auf der Grafikkarte durchgeführt werden kann.
-Dank der Hilfe von Christopher Rackauckas \cite{...} ist es 
+Dank der Hilfe von Christopher Rackauckas \cite{chris} ist es 
 dann nach vielen Versuchen gelungen, die \textit{lu\_instance} Funktion 
-von \textit{ArrayInterface.jl} richtig umzusetzen 
+von \textit{ArrayInterface.jl} richtig umzusetzen \cite{firstIssue,finalIssue,testForIssue,rosenbrock}
 und es damit möglich zu machen, implizite Löser zu verwenden.

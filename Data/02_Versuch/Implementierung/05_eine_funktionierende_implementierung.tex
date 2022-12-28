@@ -1,9 +1,9 @@
 \subsection{Eine Funktionierende Implementierung}
 
 In diesem Kapitel geht es darum, wie die \textit{scatter} Funktion umgesetzt werden kann.
-Dazu werden die Argumente der \textit{scatter} Funktion aus Kapitel \ref{Vorstellung} so
+Dazu werden die Argumente der \textit{scatter} Funktion aus Kapitel \ref{vorstellung} so
 umgeformt, 
-dass die bereits vorhandenen Implementierungen der \textit{scatter!} Funktion der \textit{NNlibCUDA.jl} Bibliothek 
+dass die bereits vorhandenen Implementierungen der \textit{scatter!} Funktion der \textit{NNlibCUDA.jl} \cite{nnlibcuda} Bibliothek 
 diese richtig verarbeiten kann.
 Dafür wird zuerst \textit{Global Memory} \ref{memory} reserviert. Dann werden Kernels verwenden, 
 um die Werte schnell und im richtigen Format in den neuen Speicherbereich zu kopieren.
@@ -63,14 +63,14 @@ Im letzten Schritt muss nun der Inhalt von \textit{dst\_m} nach \textit{dst} zur
 Dabei tritt das Problem auf das die partiellen Komponenten innerhalb der \textit{Dual}-Zahl
 als Tupel gespeichert werden.
 Tupel in Julia sind unveränderlich, nachdem sie erstellt wurden.
-Das Problem dabei ist, dass alle partiellen Komponenten der dual zahl gleichzeitig zugegriffen werden muss.
+Das Problem dabei ist, dass alle partiellen Komponenten der \textit{Dual} Zahl gleichzeitig zugegriffen werden muss.
 Dazu muss jede einzelne Komponente Scalar indiziert werden.
 Dabei kommt es innerhalb der Julia Implementierung zu inkonsistenten verhalten.
 Folgender Speicherzugriff eines bestimmten Kernels funktioniert problemlos:
 
 
 \begin{verbatim}
-    dst\_m[3, 4, 5, 1]
+    dst_m[3, 4, 5, 1]
 \end{verbatim}
 Wird dieser Aufruf leicht modifiziert, um all partiellen Komponenten zu einem Tupel zusammen zu fassen, 
 kommt es zu einem Compiler Fehler.

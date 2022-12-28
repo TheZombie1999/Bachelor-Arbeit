@@ -2,9 +2,17 @@
 
 Um zu verstehen, was auf der Grafikkarte zu Problemen führt, 
 wird zunächst die Definition von \textit{Dual}-Zahlen betrachtet.
+
+\textit{Dual}-Zahlen werden von der \textit{ForwardDiff.jl} Bibliothek \cite{juliaForwardDiffPackage}
+implementiert. 
+
+Die Definition dieser Zahlen ist von Imaginären-Zahlen abgeleitet.
+
+Genauer gesagt handelt es sich um mehrdimensinale Dual Zahlen, 
+
 Da sich hinter diesem Begriff zwei sehr ähnliche Konzepte verbergen, 
 führen wir folgende zwei Begriffe ein.
-Mit einer \textit{Dual}-Zahl wird die konkrete Implementierung in der \textit{ForwardDiff.jl} Bibliothek bezeichnet.
+Mit einer \textit{Dual}-Zahl wird die konkrete Implementierung in der \textit{ForwardDiff.jl} Bibliothek \cite{juliaForwardDiffPackage} bezeichnet.
 Eine Multidimensionale \textit{Dual}-Zahl bezeichnet die mathematische Definition, 
 welche von imaginären Zahlen abgeleitet ist.
 
@@ -15,7 +23,7 @@ welche von imaginären Zahlen abgeleitet ist.
 	y_i \text{ sind die imaginären komponenten mit } i \in \{1, ..., k\}
 \end{gather}
 
-Bei Multidimensinalen \textit{Dual}-Zahlen git:
+Bei Multidimensinalen \textit{Dual}-Zahlen gilt:
 \begin{equation}
  \epsilon_i \cdot \epsilon_j = 0
 \end{equation}
