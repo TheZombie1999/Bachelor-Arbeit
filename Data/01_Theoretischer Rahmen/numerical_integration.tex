@@ -2,39 +2,36 @@
 \section{Anfangswert Probleme} \label{sec:anfangswert_probleme}
 % Numerical Integraion book
 % https://books.google.de/books?hl=de{sec:explizites_euler_verfahren}&lr=&id=gGCKdqka0HAC&oi=fnd&pg=PP1&dq=numerical+integration&ots=NDzzuAvLhM&sig=3_fDwVwrMX_kgecuXDtsKIZ6pgE&redir_esc=y#v=onepage&q&f=false
-
 % https://en.wikipedia.org/wiki/Numerical_integration#:~:text=In%20analysis%2C%20numerical%20integration%20comprises,numerical%20solution%20of%20differential%20equations.
 
-% Anfangswert Probleme
-
-
-Ein Anfangswertproblem 1. Ordnung ist ein Gleichungssystem, das wie folgt definiert ist:
+Anfangswertprobleme treten in vielen Naturwissenschaften auf, denn sie erlauben es Wissenschafterlern, 
+den Verlauf eines Systems im Laufe der Zeit zu modellieren.
+Um dies umzusetzen, wird eine Differenzialgleichung benötigt, welche die Veränderung des Systems beschreibt.
+Diese ist jedoch nutzlos, falls nicht der initiale Zustand des Systems bekannt ist.
+Für diese Arbeit sind vor allem Anfangswertprobleme erster Ordnung interessant.
+Dessen Definition setzt sich aus der Differenzialgleichung. $\frac{dy}{dt}$ und der Anfangsbedingung $y(t_0)$ zusammen:
 
 $$
 \frac{dy}{dt} = f(t, y(t)) \text{ mit der anfangs bedingung } y(t_0) = y_0
 $$
 
-Anfangswertprobleme spielen eine große Rolle in der Physik.
-Ein bekanntes Beispiel ist die vereinfachte Beschleunigung eines Autos.
-Es wird dabei angenommen, dass keine Reibung vorliegt und der Motor mit einer konstanten Kraft auf das Auto wirkt.
+Ein bekanntes Beispiel in der Physik ist die vereinfachte Beschleunigung eines Autos.
+Es wird dabei angenommen, dass keine Reibung vorliegt und der Motor mit einer konstanten Kraft auf dieses wirkt.
 In diesem Fall lautet, dass daraus entstehende Anfangswert Problem wie folgt:
 
 $$
 a = \frac{dv}{dt} = k \text{ wobei k const.}
 $$
 
-Die Geschwindigkeit am Anfang ist 0, daher gilt:
-
-$$
-v(0) = 0
-$$
-
+Die Geschwindigkeit am Anfang ist gleich Null, demnach gilt  $v(0) = 0$.
 Dieses System hat eine Einfache exakte Lösung:
 $$
 v = v_0 + \int_{t_0}^{t_1} k dt = k \cdot (t_0 - t_1) 
 $$
 
-Im Allgemeinen ist es aber nicht immer möglich, ein Anfangswertproblem analytisch zu lösen, deshalb wurden Verschiedene verfahren entwickelt, um diese numerisch zu berechnen.
+Im Allgemeinen ist es aber nicht immer möglich, 
+ein Anfangswertproblem analytisch zu lösen. 
+In den Nächsten Kapiteln werden mehrer verfahren vorgestellt diese numerisch zu berechnen.
 Ein Beispiel für ein solches Problem wird in Kapitel \ref{} vorgestellt.
 
 \section{Numerisches Lösen von Anfangswert problemen} \label{sec:numerisches_lösen_von_anfangswert_problemen}
