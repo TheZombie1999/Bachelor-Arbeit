@@ -1,1 +1,29 @@
 \section{\textit{NeuralODEs}}
+
+Eine NeuralODE basiert auf dem in Kaptiel \ref{} vorgestellten anfangswert problemen.
+
+Der unterschied zwischen ein NeuralODE und einem anfangswertproblem ist, 
+die Funktion f in einer NeuralODE nicht mehr eine Klassische gleichung sonder ein 
+neuronales netzt repräsentiert wird.
+
+Da ein NeuronalesNetzt nicht nur von seinen eingaben sonder auch von seien gewichten und biasies abhängt
+lautet die defninitin einer NeuralODE wie folgt:
+
+$$
+\frac{d y(t)}{dt} = f(y(t), t, \theta)
+$$
+
+Durch den Trainings prozess des Neuronales Netzes werden die Gewichte und biasis des NeuronalesNetzes 
+so gewählt das die funktion $f(y(t), t, \theta)$ eine Approximation der Klassischen Differentialgleichung 
+$f(y(t), t)$ darstellt.
+
+Der Grund führ diese Approximation ist, dass das NeuronaleNetz mehrere vorteile gegenüber der Klassischen DifferentialGleichung besitzt.
+
+% Vorteil mit betreuer durch sprechen.
+
+% https://book.sciml.ai/notes/03-Introduction_to_Scientific_Machine_Learning_through_Physics-Informed_Neural_Networks/
+
+
+
+
+

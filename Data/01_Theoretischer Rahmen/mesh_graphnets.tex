@@ -2,3 +2,63 @@
 
 \section{MeshgraphNets}
 
+MeshgraphNets sind eine Methode mit der komplexe physikalischen systeme modeliert werden können.
+
+Beispiele für diese Systeme sind zum Beispiel verschiedene köper in innerhalb einer luft und wasser strömung, 
+sich aufgrund von externen kräften verformende platten oder Stoff simulationen.
+
+
+Die gemeinsamkeit all dieser Probleme ist, dass zu simulierende Objekt als ein varialbes Mesh dargestellt wird.
+
+Ein variables Mesh ist eine aus dreiecken aufgebaute gitterstruktur die den zu simulierenden Raum approximiert.
+
+Das besondere dabei ist, das dieses Mesh eine variable auflösung hat, das heißt unterschieliche bereiche des raumes 
+habe eine unterschieliche hohe dichte an punkten durch die dass Mesh dargestellt wird.
+
+So kann in einer flüssichkeits simutlation zum beispiel die grenzfläche zwischen einem objekt innerhalb der flüssigkeit
+gennauer dargestellt werden, da dort die meisten turbulenzen auftreten.
+
+Um so größer der abstand von der Grenzfläche, desto laminarer verfählt sich die flüssigkeit.
+Eine laminare strömung kann durch wenige punkte gut angenähert werden.
+
+Der grund für diese vorgehensweiße ist, dass dadurch die berechungs der simulation bescheuningt werden kann,
+ohne die genauichkeit der berechnung zu stark zu verringern.
+
+Normaler weiß werden nun die dem pyhsikalischen problem zugrunde liegenden diffrential gleichungen mit einem numerischen verfahren gelößt und damit die attribute der Mesh punkte im laufe der zeit vorhergesagt.
+
+Die Differenzial gleichungen für flüssichkeits simultionen wird in Kaptiel \ref{} genauer eingagen.
+
+Wie diese numerische berechnet werden wird ausserdem in Kapitel \ref{} erläutert.
+
+MeshGraphNets veränder nun eine entscheidende komponente.
+Sie ersetzten die klassischen differentialgleichungen durche eine NeuralODE.
+
+Die neural ode wird annhand von beispiel daten die mit den klassischen Differentialgleichungen erzeugt werden trainiert.
+
+Da dass mesh für jedes Problem unterschiedlich ist, muss das mesh in ein einheitliches format gebracht werden.
+
+Dazu wird das mesh in einen mulitgraphen umgewandelt.
+
+der multi graph setzt sich grunsätzlichen aus drei komponentenn zusammen.
+Die erste komponente sind alle konten der simulation diese sind analogo zu den punkten des mesh.
+
+Die Kanten des MultiGraphen setzt sich aus den Welt und Mesh Kanten zusammen.
+
+Welt Kanten werden Grundsätzlich verwendet um externe kräfte zu modelieren und werden grusätzlich erzeugt, wenn zwei 
+Punkte sich räumlich sehr nahe sind.
+
+Die Mesh kanten sind relevant um die dynamiken innerhalb des Mesh darzustellen und werden von diesem übernommen.
+
+Über die kanten des Multigraphen werden dann informationen zwischen den Knoten ausgetauscht werden dann die 
+ändungen der eigenschaften der Mesh Knoten berechnet.
+
+Aus diesen änderungen kann dann mit den unterschiedlichen differential gleichungs löser der zustand des Meshes im nächsten zeit schritt berechnet werden. Dieses verfahren wird nun so lange wieder holt bis der gewünschte zeitpunkt ereicht wird.
+
+
+
+
+
+
+
+
+

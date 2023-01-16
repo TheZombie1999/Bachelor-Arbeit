@@ -9,7 +9,7 @@ dass die Laufzeit der \textit{scatter}-Funktion verbessert werden kann,
 indem die Größe des ziel Arrays beim Funktionsaufruf mit angegeben wird.
 
 Erste Messungen dieser Verbesserung haben eine Zeit Ersparnis von etwa 8 ms bei einer Laufzeit von 21 ms 
-versprochen
+versprochen.
 
 Genauere Untersuchungen haben jedoch gezeigt, dass dies eine massive Übertreibung war.
 Dennoch konnte eine verbesserte Laufzeit erreicht werden, auch wenn diese deutlich geringer ist als zuvor angenommen.
@@ -143,9 +143,27 @@ Daran lässt sich wenig ändern.
 Der zweite Grund ist, dass das hin und her copieren der Daten vom index array in das von der \textit{scatter!}-Funktion verarbeitbares Format, 
 lange dauert. Einzelne Messungen haben angedeutet, dass dies etwa 50\% der Laufzeit ausmacht.
 
-....
 
 % Tabelle
+%Section   ncalls     time    %tot     avg     alloc    %tot      avg
+% ────────────────────────────────────────────────────────────────────
+% 1          2.00k    153ms    9.2%  76.4μs   12.8MiB   16.4%  6.54KiB
+% 2          2.00k    1.20s   72.7%   601μs   13.0MiB   16.7%  6.65KiB
+% 3          2.00k   84.4ms    5.1%  42.2μs   2.90MiB    3.7%  1.48KiB
+% 4          2.00k    215ms   13.0%   108μs   49.3MiB   63.2%  25.2KiB
+% ────────────────────────────────────────────────────────────────────
+
+\begin{table}[h]
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Abschnitt}                                                                                & \textbf{Anzahl der Aufrufe} & \textbf{Durchschnittliche Laufzeit} \\ \hline
+Erzeugen des dst-Arrays                                                                           & 2.000                       & 76 \mu s             \\ \hline
+\begin{tabular}[c]{@{}l@{}}Kopieren der Werte in \\ die Temporären Arrays\end{tabular}            & 2.000                       & 601 \mu s            \\ \hline
+Die eigentliche berechnung                                                                        & 2.000                       & 42 \mu s             \\ \hline
+\begin{tabular}[c]{@{}l@{}}Zurück Koperien der Temporären \\ Arrays in das dst-Array\end{tabular} & 2.000                       & 108 \mu s            \\ \hline
+\end{tabular}
+\end{table}
+
 
 Theoretisch könnte direkt auf den übergebenen Daten operiert werden.
 

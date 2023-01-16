@@ -18,33 +18,71 @@ weitern problem eine 100\%-tige garantie lieftert dies aber nicht.
 \begin{table}[]
     \centering
 
-    \begin{tabular}{c|c|c}
-        Kategorie & Name & Funktioniert \\
+    \begin{tabular}{p{5cm}|c|p{5cm}}
+        Name & Funktionale & Fehler \\
         \hline\hline
-         SDIRK Methods & Implizit Euler & ja \\
-         & ImplicitMidpoint & ja\\
-         & Trapezoid & ja \\
-         & TRBDF2 & ja \\
-         & SDIRK2 & ja \\
-         & Kvaerno3 & ja \\
-         & KenCarp3 & ja \\
-         & Cash4 & ja \\
-         & Hairer4 & ja \\
-         & Hairer42 & ja \\
-         & Kvaerno4 & ja \\
-         & KenCarp4 & ja \\
-         & KenCarp47 & ja \\
-         & Kvaerno5 & ja \\
-         & KenCarp5 & ja \\
-         & KenCarp58 & ja \\
-         Fully-Implicit Runge-Kutta & & \\
-         & & \\
-         & & \\
-         & & \\
-         & & \\
-         & & \\
-         & & \\
-         & & \\
+        ImplicitEuler & true & \\ 
+ImplicitMidpoint & true & \\ 
+Trapezoid & true & \\ 
+TRBDF2 & true & \\ 
+SDIRK2 & true & \\ 
+Kvaerno3 & true & \\ 
+KenCarp3 & true & \\ 
+Cash4 & true & \\ 
+Hairer4 & true & \\ 
+Hairer42 & true & \\ 
+Kvaerno4 & true & \\ 
+KenCarp4 & true & \\ 
+KenCarp47 & true & \\ 
+Kvaerno5 & true & \\ 
+KenCarp5 & true & \\ 
+KenCarp58 & true & \\ 
+RadauIIA3 & false & Error: DimensionMismatch: arguments must have the same number of rows \\
+RadauIIA5 & false & Error: DimensionMismatch: arguments must have the same number of rows \\
+PDIRK44 & false & Error: `@threads :static` cannot be used concurrently or nested \\
+ROS3P & true & \\ 
+Rodas3 & true & \\ 
+RosShamp4 & true & \\ 
+Veldd4 & true & \\ 
+Velds4 & true & \\ 
+GRK4T & true & \\ 
+GRK4A & true & \\ 
+Ros4LStab & true & \\ 
+Rodas4 & true & \\ 
+Rodas42 & true & \\ 
+Rodas4P & true & \\ 
+Rodas4P2 & true & \\ 
+Rodas5 & true & \\ 
+Rodas5P & true & \\ 
+Rosenbrock23 & true & \\ 
+Rosenbrock32 & true & \\ 
+RosenbrockW6S4OS & true & \\ 
+ROS34PW1a & true & \\ 
+ROS34PW1b & true & \\ 
+ROS34PW2 & true & \\ 
+ROS34PW3 & true & \\ 
+ImplicitEulerExtrapolation & true & \\ 
+ImplicitEulerBarycentricExtrapolation & true & \\ 
+ImplicitDeuflhardExtrapolation & true & \\ 
+ImplicitHairerWannerExtrapolation & true & \\ 
+PDIRK44 & false & Error: `@threads :static` cannot be used concurrently or nested \\
+LawsonEuler & false & Error: ArgumeError: Caching can only be used with SplitFunction \\
+NorsettEuler & false & Error: ArgumeError: Caching can only be used with SplitFunction \\
+ETD2 & false & Error: type ODEFunction has no field f1 \\
+ETDRK2 & false & Error: ArgumeError: Caching can only be used with SplitFunction \\
+ETDRK3 & false & Error: ArgumeError: Caching can only be used with SplitFunction \\
+ETDRK4 & false & Error: ArgumeError: Caching can only be used with SplitFunction \\
+HochOst4 & false & Error: ArgumeError: Caching can only be used with SplitFunction \\
+Exprb32 & false & Error: DimensionMismatch: array could not be broadcast to match destination \\
+Exprb43 & false & Error: DimensionMismatch: A has dimensions (3792,3792) but B has dimensions (2,1896) \\
+Exp4 & false & Error: AssertiError: Dimension mismatch \\
+EPIRK4s3A & false & Error: AssertiError: Dimension mismatch \\
+EPIRK4s3B & false & Error: AssertiError: Dimension mismatch \\
+EPIRK5P1 & false & Error: AssertiError: Dimension mismatch \\
+EPIRK5P2 & false & Error: AssertiError: Dimension mismatch \\
+EPIRK5s3 & false & Error: DimensionMismatch: tried to assign 2×1896 array to 3792×1 destination \\
+EXPRB53s3 & false & Error: AssertiError: Dimension mismatch \\
+SSPSDIRK2 & false & Error: MethError: Cannot `convert` an object of type Float32 to an object of type CUDA.CuArray{Float32, 2, CUDA.Mem.DeviceBuffer} \\
     \end{tabular}
     \caption{Caption}
     \label{tab:my_label}

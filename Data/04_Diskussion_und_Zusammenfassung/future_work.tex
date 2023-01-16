@@ -1,2 +1,22 @@
 
 \section{Zukünftige Arbeiten}
+
+\subsection{Mehr Schritt Methoden für ein bessres Gedächtniss}
+
+In dem Paper von ... wurde der Vergleich zweischen NeuralODEs und RNN angesprochen.
+Wird eine der Runge-Kutta-Methoden verwendet um die NeuralODE zu lösen hat grunsätzlich nur kenntniss
+über den aktuellen zeit schritt.
+Das heißt das neuronale Netz hat prizipiel nur ein extrem Kurzes gedächniss.
+RNN haben das gleichen problem mit dem großen unterschied das diese weiter in die zunkunft schauen können, 
+die sichtbarkeit der vergangen informationen, aber exponentiell abnimmt.
+Es gibt mehrere ansätze diesen exponentiellen vergesssens prozess von RNNs zu umgehen, 
+diese sind aber um ein vielfaches teurer zuberechnen.
+
+Die Idee ist nun das die Mehr Schritt Methoden es dem Löser der NeuralODE ermöglichen informationen 
+aus vergangenen und zukünfitigen Zeitschritten zuverbinden und dadurch der NeuralODE ein besseres 
+"gedächtniss" zu geben.
+
+Ob dies funktioniert ist eine offe Frage die noch untersucht werden kann.
+
+
+

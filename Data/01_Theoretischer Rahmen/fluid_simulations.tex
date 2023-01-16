@@ -1,2 +1,85 @@
 
 \section{Flüssigkeits simulationen}
+
+Da MeshGraphNets in der Regel verwendet werden um reale Probleme zu simiulieren, 
+wird im folgendem eine anwendung dieser genauer betrachtet.
+
+Für die Analyse dieser Arbeit wird eine Flüssichkeits simulation verwendet.
+
+Es gibt eine viel Zahl an verfahren um flüssichkeiten zu simulieren.
+Viele davon werden allerdings, in der Computer Grafik verwendet um 
+effizient den anschein einer Flüssichkeit zu erwecken.
+
+Diese verfahren verwenden in der Regel eine vereinfachte version der Physikalischen gleichungen,
+um diese schneller berechnen zu können.
+
+Für die zwecke dieser Arbeit sind vorallem möglichst realistische verfahren intressant.
+
+Eines der ersten bekanntern verfahren zur beschreibung von Flüssichkeiten ist die Euler-Gleichung:
+$$
+\frac{\partial \vec{u}}{\partial t} + (\vec{u} \cdot \nabla) \vec{u} =  \vec{g} - \frac{1}{\rho} \nabla \cdot p
+$$
+Die Euler-Gleichung beschreibt das verhalten von Flüssichkeiten annhand von zwei Phänomenen.
+
+Das erste Phänomen beschreibt das verhalten, annhand von unterschiedlichen drücken innerhalb einer Flüssichkeit.
+
+In der Euler-Gleichung spieglet sich dieses Phänomen in Gradient des Druckes p wieder.
+
+Das zweite Phänomen das die Euler-Gleichung berücksichtigt ist, dass Flüssigkeiten mit
+einer höhren dichte nach untern sinken und demnach flüssigkeiten mit einer geringen dichte aufsteigen.
+
+Dafür verantwortlich ist die Gewichtskraft $\vec{g}$ und Dichte $\rho$.
+
+Die Linke seite der Gleichungs beschreibt, dass sich die Geschwindichkeit u der Flüssigkeit sowohl im laufe 
+der zeit, als auch abhängig vom Ort ändert.
+
+Wird die Euler-Gleichung nun leicht umgestellt kann diesem mit einem der in kapitel \ref{} vorgestellten 
+numerischen differential-gleihcungs löser berechnet werden.
+$$
+f(u(t), t) = \frac{\partial \vec{u}}{\partial t}  =  \vec{g} - \frac{1}{\rho} \nabla \cdot p -  (\vec{u} \cdot \nabla) \vec{u}
+$$
+
+Bei dem numerischen Lösen der Differentialgleichung kommt es zu dem problem das sich das druck Feld p
+abhängig von der Geschwindichkeit ebenfalls ändert.
+
+Diese problem kann gelößt werden indem die Differentialgleichung in zwei teile geteilt wird.
+
+Genauers kann in folgendem paper nachgelesen werden \cite{}.
+
+Die Euler-Gleichungs vernachlässicht ein entscheidendes Phähnomen.
+
+Sie vernachlässicht das es innerhalb der Flüssichkeiten und an grenz flächen zu einer reibungskarft kommt.
+
+
+Dieses Phänomen ist besonders wichtig da es ohne die beachtung von reibung innerhalb der Flüssigkeit,
+nicht zu tubulenzen kommt.
+
+Soll zum beispiel der Luftwiederstand und Auftrieb eines Tragflächen elementes bestimmt werden,
+dann sind diese verwirbelungen entscheident dafür das eine region hohen drucks unterhalb des flügels entsteht.
+Dieser Druck unterschied zwischen der ober und unter seite des Flügels sind verantwortlich für dessen auftrieb.
+
+Wird die Euler-Gleichung nun um dieses Phänomen erweitert ergibt sich die bekannte Navier-Stokes-Gleichung 
+welche wie folgt lautet:
+
+$$
+\rho \frac{\partial \vec{u}}{\partial t} + \rho (\vec{u} \cdot \vec{\nabla} ) \vec{u} = 
+\rho \vec{g} - \nabla \cdot \vec{p} + \eta \Delta \vec{u}
+$$
+Der große unterschied der Navier-Stokes-Gleichung zur Euler-Gleichung ist der Term $\eta \Delta \vec{u}$.
+$\eta$ ist dabei eine Material konstante für die Viskosität.
+
+Die navier stokes gleichung ist unter keinen umstenden vollständig.
+Das heißt es gibt phänomenen die in der gleichung nicht berücksichtigt werden.
+
+Oft wird dies deutlich gemacht indem ein Kraft Vektor $\vec{f}$ zur rechten seite addiert wird.
+
+Für die Meisten realen anwendung reichen diese annahmen jedoch aus weshalb die navier stokes gleichung sehr Nützlich ist.
+
+
+
+
+
+
+
+
+% https://www.youtube.com/watch?v=OjbQbPSopu0

@@ -1,4 +1,18 @@
 \chapter*{Kurzfassung}
 
-Kurzfassung hier einfügen oder \verb+\include{002_Kurzfassung.tex}+ in der Main-Datei auskommentieren.
+Diese Arbeit demonstriert wie es möglich ist Implizite numerische differenzialgleichungslöser 
+auf der Graphikkarte für Meshgraphnets zu verwenden.
+Ein Meshgraphnet besteht dabei aus drei komponenten.
+Einer Gitterstruktur die die diskreten messpunkte der simulation darstellen.
+Einem Graphen der dazu genutz wird informationen zwischen den einzelnen gitter punkten im Mesh auszutauschen
+und einen NeuronalenNetzt das den nächsten zeit schritt vorher sagt.
+Um das Neuronale Netz auswerten zukönnen soll ein impliziter differential gleichungs löser verwendet werden.
+Das lösen von implizitern verfahren setzt jedoch vorraus das die implementierung des neuronalen
+netzen automatisch abgeleitet werden kann.
+Innerhalb der implementierung des Meshgraphnets wird die scatter funktion verwendet um informationen
+innerhalb der graphdarstellung zwischen den einzelnen konoten zupropagieren.
+Diese kann jedoch keine dual zahlen verarbeiten, welche grundlage für die automatischen differenzierung sind.
+In dieser Arbeit wird demonstriert wie diese Funktion so modifiziert werden kann das dies doch möglich ist.
+Annschließend wird der effekt der impliziten lösen auf die genauigkeit und laufzeit der Meshgraphnets betrachtet. 
+
 \cleardoublepage
