@@ -5,9 +5,9 @@
 
 
 
-\chapter{Versuch}
+\chapter{Versuch} \label{ch:versuch}
 
-\section{Ziel der Arbeit}
+\section{Ziel der Arbeit} \label{sec:goal}
 
 %= Version 1=
 
@@ -50,9 +50,9 @@ Im folgendem wird beschrieben, warum die \textit{scatter} function \textit{Dual}
 
 
 
-\section{Implementierung der Scatter funktion}
+\section{Implementierung der Scatter funktion} \label{sec:implementation_scatter}
 
-\subsection{Vorstellung der Scatter funktion}
+\subsection{Vorstellung der Scatter funktion} \label{sec:scatter}
 
 % = TODO =  
 % Rechtschreibung
@@ -118,7 +118,7 @@ Dies macht es für unsere Zwecke unmöglich, Dual zahlen mit dieser Operation di
 Da die Atomic-opertion von Cuda nicht direkt verwenden kann, muss eine anderer weg gefunden werden.
 Um Dual Zahlen zu implementieren, wird dessen mathematisch definition betrachtet.
 
-\subsection{Dual Zahlen}
+\subsection{Dual Zahlen} \label{sec:dual_zahlen}
 
 Wenn von Dual-Zahlen gesprochen wird, dann gibt es verschiedenen dinge über die gesprochen werden kann.
 Als erstes gibt es die Mathematische definition und eine mal die konkrete implementierung von Dual zahlen in der Julia programmier sprache.
@@ -184,7 +184,7 @@ allerdings führt es zu sehr unübersichtlichen code, der sehr fehleranfällig i
 da große Teil der scatter Funktion mit minimalen Veränderungen wieder implementiert werden müssen.
 Außerdem muss innerhalb des Kernels speicher reserviert werden, was zu Problemen bei großen Probleminstanzen führt.
 
-\subsection{Eine Funktionierende Implementierung}
+\subsection{Eine Funktionierende Implementierung} \label{sec:funktional_implementation}
 
 % Bis her haben wir nun ansätze gesehen die aus unterschiedlichen gründen nicht funktionieren.
 Bisher wurden nur A
