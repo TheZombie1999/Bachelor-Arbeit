@@ -1,58 +1,39 @@
 
 
-\section{MeshgraphNets} \label{sec:meshgraphnets}
+\section{\textit{MeshGraphNets}} \label{sec:meshgraphnets}
 
-MeshgraphNets sind eine Methode mit der komplexe physikalischen systeme modeliert werden können.
-
-Beispiele für diese Systeme sind zum Beispiel verschiedene köper in innerhalb einer luft und wasser strömung, 
-sich aufgrund von externen kräften verformende platten oder Stoff simulationen.
-
-
+MeshgraphNets \cite{meshgraphnets} sind eine Methode mit der komplexe physikalische Systeme modeliert werden können.
+Beispiele für diese Systeme sind zum Beispiel verschiedene Köper in innerhalb einer Luft oder Wasser strömung, 
+sich aufgrund von externen Kräften verformende Platten oder Stoff simulationen.
 Die gemeinsamkeit all dieser Probleme ist, dass zu simulierende Objekt als ein varialbes Mesh dargestellt wird.
-
-Ein variables Mesh ist eine aus dreiecken aufgebaute gitterstruktur die den zu simulierenden Raum approximiert.
-
-Das besondere dabei ist, das dieses Mesh eine variable auflösung hat, das heißt unterschieliche bereiche des raumes 
-habe eine unterschieliche hohe dichte an punkten durch die dass Mesh dargestellt wird.
-
-So kann in einer flüssichkeits simutlation zum beispiel die grenzfläche zwischen einem objekt innerhalb der flüssigkeit
-gennauer dargestellt werden, da dort die meisten turbulenzen auftreten.
-
-Um so größer der abstand von der Grenzfläche, desto laminarer verfählt sich die flüssigkeit.
-Eine laminare strömung kann durch wenige punkte gut angenähert werden.
-
-Der grund für diese vorgehensweiße ist, dass dadurch die berechungs der simulation bescheuningt werden kann,
-ohne die genauichkeit der berechnung zu stark zu verringern.
-
-Normaler weiß werden nun die dem pyhsikalischen problem zugrunde liegenden diffrential gleichungen mit einem numerischen verfahren gelößt und damit die attribute der Mesh punkte im laufe der zeit vorhergesagt.
-
-Die Differenzial gleichungen für flüssichkeits simultionen wird in Kaptiel \ref{} genauer eingagen.
-
-Wie diese numerische berechnet werden wird ausserdem in Kapitel \ref{} erläutert.
-
+Ein variables Mesh ist eine aus Dreiecken aufgebaute Gitterstruktur die den zu simulierenden Raum approximiert.
+Das besondere dabei ist, dass dieses Mesh eine variable Auflösung hat, das heißt unterschieliche bereiche des Raumes 
+habe eine unterschieliche hohe Dichte an Punkten durch die das Mesh dargestellt wird.
+So kann in einer Flüssichkeits simutlation zum Beispiel die Grenzfläche zwischen einem objekt innerhalb der Flüssigkeit
+genauer dargestellt werden, da dort die meisten Turbulenzen auftreten.
+Um so größer der Abstand von der Grenzfläche, desto laminarer verfählt sich die Flüssigkeit.
+Eine laminare Strömung kann durch wenige Punkte gut angenähert werden.
+Der Grund für diese vorgehensweiße ist, dass dadurch die berechung der simulation bescheuningt werden kann,
+ohne die genauigkeit der Berechnung zu stark zu verringern.
+Normaler weiß werden nun die dem pyhsikalischen Problem zugrunde liegenden Diffrentialgleichungen mit einem numerischen Verfahren gelößt und damit die attribute der Mesh punkte im laufe der zeit vorhergesagt.
+Die Differenzialgleichungen für Flüssichkeitssimultionen wird in Kaptiel \ref{sec:simulationen} genauer eingagen.
+Wie diese numerische berechnet werden wird ausserdem in Kapitel \ref{sec:numerisches_lösen_von_anfangswert_problemen} erläutert.
 MeshGraphNets veränder nun eine entscheidende komponente.
-Sie ersetzten die klassischen differentialgleichungen durche eine NeuralODE.
-
-Die neural ode wird annhand von beispiel daten die mit den klassischen Differentialgleichungen erzeugt werden trainiert.
-
-Da dass mesh für jedes Problem unterschiedlich ist, muss das mesh in ein einheitliches format gebracht werden.
-
-Dazu wird das mesh in einen mulitgraphen umgewandelt.
-
-der multi graph setzt sich grunsätzlichen aus drei komponentenn zusammen.
-Die erste komponente sind alle konten der simulation diese sind analogo zu den punkten des mesh.
-
-Die Kanten des MultiGraphen setzt sich aus den Welt und Mesh Kanten zusammen.
-
-Welt Kanten werden Grundsätzlich verwendet um externe kräfte zu modelieren und werden grusätzlich erzeugt, wenn zwei 
+Sie ersetzten die klassischen Differentialgleichungen durche eine NeuralODE.
+Die NeuralODE wird annhand von Beispieldaten die mit den klassischen Differentialgleichungen erzeugt werden trainiert.
+Da dass \textit{Mesh} für jedes Problem unterschiedlich ist, muss das \textit{Mesh} in ein einheitliches Format gebracht werden.
+Dazu wird das \textit{Mesh} in einen Mulitgraphen umgewandelt.
+der Multigraph setzt sich Grunsätzlichen aus drei Komponenten zusammen.
+Die erste Komponente sind alle Konten der simulation diese sind analog zu den Punkten des \textit{Mesh}.
+Die Kanten des MultiGraphen setzt sich aus den Welt- und Mesh- Kanten zusammen.
+Weltkanten werden Grundsätzlich verwendet um externe Kräfte zu modelieren und werden grusätzlich erzeugt, wenn zwei 
 Punkte sich räumlich sehr nahe sind.
-
-Die Mesh kanten sind relevant um die dynamiken innerhalb des Mesh darzustellen und werden von diesem übernommen.
-
-Über die kanten des Multigraphen werden dann informationen zwischen den Knoten ausgetauscht werden dann die 
-ändungen der eigenschaften der Mesh Knoten berechnet.
-
-Aus diesen änderungen kann dann mit den unterschiedlichen differential gleichungs löser der zustand des Meshes im nächsten zeit schritt berechnet werden. Dieses verfahren wird nun so lange wieder holt bis der gewünschte zeitpunkt ereicht wird.
+Die Meshkanten sind relevant um die Dynamiken innerhalb des \textit{Mesh} darzustellen und werden von diesem übernommen.
+Über die Kanten des Multigraphen werden dann Informationen zwischen den Knoten ausgetauscht.
+Diese werden dann genutzt, um die Änderung der Eigenschaften der Meshknoten zuberechnen.
+Aus diesen Änderungen kann, 
+dann mit den unterschiedlichen Differentialgleichungslösern der Zustand des \textit{Meshes} im nächsten Zeitschritt berechnet werden. 
+Dieses Verfahren wird nun so lange wieder holt bis der gewünschte Zeitpunkt erreicht wird.
 
 
 

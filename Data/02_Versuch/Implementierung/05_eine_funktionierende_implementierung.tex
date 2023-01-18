@@ -9,10 +9,8 @@ Dafür wird zuerst \textit{Global Memory} \ref{memory} reserviert. Dann werden K
 um die Werte schnell und im richtigen Format in den neuen Speicherbereich zu kopieren.
 Als Kernel wird eine Funktion bezeichnet, die auf mehreren Threads von der Grafikkarte ausgeführt wird.
 Die ursprünglichen Arrays \textit{src} und \textit{dst} haben die Dimension N.
-
 Das Array \textit{idx} hat entweder Dimension N und enthält Tupel von gleicher Größe
 oder Dimension eins und enthält \textit{Interger} Zahlen.
-
 Falls die Dimension von \textit{idx} eins ist und die Dimension von \textit{src}
 und \textit{dst} größer, dann wird \textit{idx} Zeilen weiße angewendet.
 Es wird nun eine Kopie dieser drei Arrays erstellt mit Dimension N+1.

@@ -1,167 +1,186 @@
-% Web References
-
-
-
 @online{chris,
-    author = {Christopher Rackauckas},
     title = {Githup Profile Christopher},
+    author = {Christopher Rackauckas},
+    urldate = {2022-11-03},
     url = {https://github.com/ChrisRackauckas},
-    urldate = {2022-11-03}
 }
 
 @online{finalIssue,
-    author = {Tim Schneider (TheZombie1999)},
     title = {ImplicitEuler and ImplicitMidpoint try to convert LinearAlgebra.LU to LinearAlgebra.QR},
     url = {https://github.com/SciML/OrdinaryDiffEq.jl/issues/1764},
-    urldate = {2022-11-03}
+    author = {Tim Schneider (TheZombie1999)},
+    urldate = {2022-11-03},
 }
 
 @online{firstIssue,
     author = {Tim Schneider (TheZombie1999)},
-    title = {Fixing lu\_instance doesnt work on julia-1.8},
     url = {https://github.com/JuliaArrays/ArrayInterface.jl/pull/346?notification_referrer_id=NT_kwDOAizRL7M0MzU5NDM5NTQ4OjM2NDkxNTY3&notifications_query=is\%3Adone#issuecomment-1240830612},
-     urldate = {2022-11-03}
+    title = {Fixing lu\_instance doesnt work on julia-1.8},
+    urldate = {2022-11-03},
 }
 
 @online{testForIssue,
     author = {Tim Schneider (TheZombie1999)},
+    urldate = {2022-11-03},
     title = {Fixing the ArrayInterfaceCUDA lu\_instance test},
     url = {https://github.com/JuliaArrays/ArrayInterface.jl/pull/347/commits/1dabc4ab249b9e635b012df0f53b2478425a221b},
-    urldate = {2022-11-03}
 }
 
 @online{rosenbrock,
+    urldate = {2022-11-03},
+    url = {https://github.com/SciML/OrdinaryDiffEq.jl/pull/1754?notification_referrer_id=NT_kwDOAizRL7M0MzU5MjkzNzE0OjM2NDkxNTY3&notifications_query=is\%3Adone#issuecomment-1240884650},
     author = {Tim Schneider (TheZombie1999)},
     title = {Fixing Rosenbrock tableaus cant handle float32 datatype},
-    url = {https://github.com/SciML/OrdinaryDiffEq.jl/pull/1754?notification_referrer_id=NT_kwDOAizRL7M0MzU5MjkzNzE0OjM2NDkxNTY3&notifications_query=is\%3Adone#issuecomment-1240884650},
-    urldate = {2022-11-03}
 }
 
 @online{nnlib,
-    author = {FLuxML},
-    title = {NNlib.jl Bibliothek},
     url = {https://github.com/FluxML/NNlib.jl},
-    urldate = {2022-11-03}
+    urldate = {2022-11-03},
+    title = {NNlib.jl Bibliothek},
+    author = {FLuxML},
 }
 
 @online{nnlibcuda,
     author = {FLuxML},
-    title = {NNlibCUDA.jl Bibliothek},
     url = {https://github.com/FluxML/NNlibCUDA.jl},
-    urldate = {2022-11-03}
+    urldate = {2022-11-03},
+    title = {NNlibCUDA.jl Bibliothek},
 }
 
 @online{arrayinterface,
-    author = {JuliaArrays},
     title = {ArrayInterface.jl Bibliothek},
+    author = {JuliaArrays},
+    urldate = {2022-11-03},
     url = {https://github.com/JuliaArrays/ArrayInterface.jl},
-    urldate = {2022-11-03}
 }
 
-
-
-% Web References End
-
-% CUDA specific
-% primary paper, detailing the GPU compiler and relevant aspects
 @article{besard2018juliagpu,
-  author        = {Besard, Tim and Foket, Christophe and De Sutter, Bjorn},
-  title         = {Effective Extensible Programming: Unleashing {Julia} on {GPUs}},
-  journal       = {IEEE Transactions on Parallel and Distributed Systems},
-  year          = {2018},
-  doi           = {10.1109/TPDS.2018.2872064},
-  ISSN          = {1045-9219},
-  archivePrefix = {arXiv},
-  eprint        = {1712.03112},
-  primaryClass  = {cs.PL},
+    issn = {1045-9219},
+    primaryclass = {cs.PL},
+    doi = {10.1109/TPDS.2018.2872064},
+    author = {Besard, Tim and Foket, Christophe and De Sutter, Bjorn},
+    eprint = {1712.03112},
+    journal = {IEEE Transactions on Parallel and Distributed Systems},
+    archiveprefix = {arXiv},
+    year = {2018},
+    title = {Effective Extensible Programming: Unleashing {Julia} on {GPUs}},
 }
 
-% specific paper on array programming for heterogeneous systems
 @article{besard2019prototyping,
-  title         = {Rapid software prototyping for heterogeneous and distributed platforms},
-  author        = {Besard, Tim and Churavy, Valentin and Edelman, Alan and De Sutter, Bjorn},
-  journal       = {Advances in Engineering Software},
-  volume        = {132},
-  pages         = {29--46},
-  year          = {2019},
-  publisher     = {Elsevier}
+    author = {Besard, Tim and Churavy, Valentin and Edelman, Alan and De Sutter, Bjorn},
+    volume = {132},
+    title = {Rapid software prototyping for heterogeneous and distributed platforms},
+    pages = {29--46},
+    publisher = {Elsevier},
+    journal = {Advances in Engineering Software},
+    year = {2019},
 }
-% CUDA specific End
-
 
 @article{juliaForwardDiffPackage,
+    author = {{Revels}, J. and {Lubin}, M. and {Papamarkou}, T.},
     title = {Forward-Mode Automatic Differentiation in {J}ulia},
-   author = {{Revels}, J. and {Lubin}, M. and {Papamarkou}, T.},
-  journal = {arXiv:1607.07892 [cs.MS]},
-     year = {2016},
-      url = {https://arxiv.org/abs/1607.07892}
+    journal = {arXiv:1607.07892 [cs.MS]},
+    year = {2016},
+    url = {https://arxiv.org/abs/1607.07892},
 }
 
+@article{sympy,
+    author = {Meurer, Aaron and Smith, Christopher P. and Paprocki, Mateusz and \v{C}ert\'{i}k, Ond\v{r}ej and Kirpichev, Sergey B. and Rocklin, Matthew and Kumar, AMiT and Ivanov, Sergiu and Moore, Jason K. and Singh, Sartaj and Rathnayake, Thilina and Vig, Sean and Granger, Brian E. and Muller, Richard P. and Bonazzi, Francesco and Gupta, Harsh and Vats, Shivam and Johansson, Fredrik and Pedregosa, Fabian and Curry, Matthew J. and Terrel, Andy R. and Rou\v{c}ka, \v{S}t\v{e}p\'{a}n and Saboo, Ashutosh and Fernando, Isuru and Kulal, Sumith and Cimrman, Robert and Scopatz, Anthony},
+    url = {https://doi.org/10.7717/peerj-cs.103},
+    keywords = {Python, Computer algebra system, Symbolics},
+    journal = {PeerJ Computer Science},
+    volume = {3},
+    issn = {2376-5992},
+    abstract = {SymPy is an open source computer algebra system written in pure Python. It is built with a focus on extensibility and ease of use, through both interactive and programmatic applications. These characteristics have led SymPy to become a popular symbolic library for the scientific Python ecosystem. This paper presents the architecture of SymPy, a description of its features, and a discussion of select submodules. The supplementary material provide additional examples and further outline details of the architecture and features of SymPy.},
+    year = {2017},
+    doi = {10.7717/peerj-cs.103},
+    month = {January},
+    title = {SymPy: symbolic computing in Python},
+    pages = {e103},
+}
 
 @misc{neuralode,
-  doi = {10.48550/ARXIV.1806.07366},
-  
-  url = {https://arxiv.org/abs/1806.07366},
-  
-  author = {Chen, Ricky T. Q. and Rubanova, Yulia and Bettencourt, Jesse and Duvenaud, David},
-  
-  keywords = {Machine Learning (cs.LG), Artificial Intelligence (cs.AI), Machine Learning (stat.ML), FOS: Computer and information sciences, FOS: Computer and information sciences},
-  
-  title = {Neural Ordinary Differential Equations},
-  
-  publisher = {arXiv},
-  
-  year = {2018},
-  
-  copyright = {arXiv.org perpetual, non-exclusive license}
+    doi = {10.48550/ARXIV.1806.07366},
+    publisher = {arXiv},
+    title = {Neural Ordinary Differential Equations},
+    author = {Chen, Ricky T. Q. and Rubanova, Yulia and Bettencourt, Jesse and Duvenaud, David},
+    url = {https://arxiv.org/abs/1806.07366},
+    keywords = {Machine Learning (cs.LG), Artificial Intelligence (cs.AI), Machine Learning (stat.ML), FOS: Computer and information sciences, FOS: Computer and information sciences},
+    copyright = {arXiv.org perpetual, non-exclusive license},
+    year = {2018},
 }
 
 @book{RecentAdvances,
- author = {Forth, Shaun and Hovland, Paul and Phipps, Eric and Utke, Jean and Walther, Andrea},
- year = {2012},
- title = {Recent Advances in Algorithmic Differentiation},
- address = {Berlin, Heidelberg},
- volume = {87},
- publisher = {{Springer Berlin Heidelberg}},
- isbn = {978-3-642-30022-6},
- doi = {10.1007/978-3-642-30023-3},
- file = {recent_advances_in_autoDiff:Attachments/recent_advances_in_autoDiff.pdf:application/pdf}
+    author = {Forth, Shaun and Hovland, Paul and Phipps, Eric and Utke, Jean and Walther, Andrea},
+    publisher = {{Springer Berlin Heidelberg}},
+    doi = {10.1007/978-3-642-30023-3},
+    title = {Recent Advances in Algorithmic Differentiation},
+    file = {recent_advances_in_autoDiff:Attachments/recent_advances_in_autoDiff.pdf:application/pdf},
+    volume = {87},
+    year = {2012},
+    isbn = {978-3-642-30022-6},
+    address = {Berlin, Heidelberg},
 }
 
-
-% Books
-
 @book{ode1,
- year = {2009},
- title = {Solving ordinary differential equations I},
- price = {Softcover : EUR 69.50},
- address = {Berlin and Heidelberg},
- edition = {2., rev. ed., 1. softcover printing},
- volume = {8},
- publisher = {Springer},
- isbn = {3-540-56670-8},
- series = {Springer series in computational mathematics}
+    publisher = {Springer},
+    isbn = {3-540-56670-8},
+    title = {Solving ordinary differential equations I},
+    edition = {2., rev. ed., 1. softcover printing},
+    address = {Berlin and Heidelberg},
+    volume = {8},
+    year = {2009},
+    price = {Softcover : EUR 69.50},
+    series = {Springer series in computational mathematics},
 }
 
 @book{ode2,
- year = {2010},
- title = {Solving ordinary differential equations II},
- price = {Kart. : EUR 69.50 (freier Pr.), sfr 101.00 (freier Pr.)},
- address = {Berlin and Heidelberg},
- edition = {2., rev. ed., 1. softcover printing},
- volume = {14},
- publisher = {Springer},
- isbn = {3-540-60452-9},
- series = {Springer series in computational mathematics},
- doi = {10.1007/978-3-642-05221-7}
+    title = {Solving ordinary differential equations II},
+    volume = {14},
+    address = {Berlin and Heidelberg},
+    publisher = {Springer},
+    price = {Kart. : EUR 69.50 (freier Pr.), sfr 101.00 (freier Pr.)},
+    edition = {2., rev. ed., 1. softcover printing},
+    isbn = {3-540-60452-9},
+    series = {Springer series in computational mathematics},
+    doi = {10.1007/978-3-642-05221-7},
+    year = {2010},
 }
 
 @book{numerisch,
- year = {2002},
- title = {Numerische Mathematik},
- address = {Berlin},
- edition = {3., {\"u}berarb. und erw. Aufl.},
- publisher = {{de Gruyter}},
- isbn = {3-11-017182-1}
+    isbn = {3-11-017182-1},
+    address = {Berlin},
+    title = {Numerische Mathematik},
+    publisher = {{de Gruyter}},
+    year = {2002},
+    edition = {3., {\"u}berarb. und erw. Aufl.},
 }
 
+@book{autodiff,
+    address = {Philadelphia},
+    publisher = {SIAM},
+    isbn = {978-0-89871-659-7},
+    edition = {2. ed.},
+    keywords = {Data processing;Differential calculus},
+    url = {http://bvbr.bib-bvb.de:8991/F?func=service&doc_library=BVB01&doc_number=016738224&line_number=0002&func_code=DB_RECORDS&service_type=MEDIA},
+    title = {Evaluating derivatives: Principles and techniques of algorithmic differentiation},
+    year = {2008},
+    author = {Griewank, Andreas and Walther, Andrea},
+}
+
+@article{meshgraphnets,
+    url = {https://arxiv.org/abs/2010.03409},
+    year = {2020},
+    eprinttype = {arXiv},
+    bibsource = {dblp computer science bibliography, https://dblp.org},
+    author = {Tobias Pfaff and
+               Meire Fortunato and
+               Alvaro Sanchez{-}Gonzalez and
+               Peter W. Battaglia},
+    journal = {CoRR},
+    timestamp = {Tue, 13 Oct 2020 15:25:23 +0200},
+    eprint = {2010.03409},
+    title = {Learning Mesh-Based Simulation with Graph Networks},
+    volume = {abs/2010.03409},
+    biburl = {https://dblp.org/rec/journals/corr/abs-2010-03409.bib},
+}
