@@ -1,18 +1,18 @@
 \chapter*{Kurzfassung}
 
-Diese Arbeit demonstriert, wie es möglich ist implizite Differenzialgleichungslöser 
-auf der Graphikkarte für \textit{MeshGraphNets} zu verwenden.
+Diese Arbeit demonstriert, wie es möglich ist, implizite Differenzialgleichungslöser 
+auf der Grafikkarte für \textit{MeshGraphNets} zu verwenden.
 Ein \textit{MeshGraphNet} besteht dabei aus drei Komponenten.
 Einer Gitterstruktur, die die diskreten Messpunkte der Simulation darstellen.
 Einem Graphen, der dazu genutzt wird, Informationen zwischen den einzelnen gitter punkten im Mesh auszutauschen
-und einem neuronalen Netzwerk, das den nächsten zeit schritt vorher sagt.
+und einem neuronalen Netzwerk, dass den nächsten Zeitschritt vorher sagt.
 Um das neuronale Netzwerk auswerten zu können, soll ein impliziter Differenzialgleichungslöser verwendet werden.
-Das Lösen von Impliziten verfahren setzt jedoch voraus, das die Implementierung des Neuronalen
-netzen automatisch abgeleitet werden kann.
-In der Implementierung des MeshGraphNets wird die scatter Funktion verwendet, um Informationen
+Das Lösen von Impliziten verfahren setzt jedoch voraus, dass die Implementierung des neuronalen
+Netzes automatisch abgeleitet werden kann.
+In der Implementierung der MeshGraphNets wird die scatter Funktion verwendet, um Informationen
 innerhalb der Graphdarstellung zwischen den einzelnen Knoten zu propagieren.
-Diese kann jedoch keine dual zahlen verarbeiten, welche Grundlage für die Automatischen Differenzierung sind.
+Diese kann jedoch keine \textit{Dual}-Zahlen verarbeiten, was die Grundlage für die automatische Differenzierung ist.
 In dieser Arbeit wird demonstriert, wie diese Funktion so modifiziert werden kann, dass dies doch möglich ist.
-Anschließend wird der Effekt der Impliziten lösen auf die Genauigkeit und Laufzeit der MeshGraphNets betrachtet.
+Anschließend wird der Effekt der impliziten Löser auf die Genauigkeit und Laufzeit der MeshGraphNets betrachtet.
 
 \cleardoublepage

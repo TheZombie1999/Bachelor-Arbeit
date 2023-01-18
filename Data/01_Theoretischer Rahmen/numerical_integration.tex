@@ -12,7 +12,7 @@ Für diese Arbeit sind vor allem Anfangswertprobleme erster Ordnung interessant.
 Dessen Definition setzt sich aus der Differenzialgleichung. $\frac{dy}{dt}$ und der Anfangsbedingung $y(t_0)$ zusammen:
 
 $$
-\frac{dy}{dt} = f(t, y(t)) \text{ mit der anfangs bedingung } y(t_0) = y_0
+\frac{dy}{dt} = f(t, y(t)) \text{ mit der anfangs Bedingung } y(t_0) = y_0
 $$
 
 Ein bekanntes Beispiel in der Physik ist die vereinfachte Beschleunigung eines Autos.
@@ -24,15 +24,15 @@ a = \frac{dv}{dt} = k \text{ wobei k const.}
 $$
 
 Die Geschwindigkeit am Anfang ist gleich Null, demnach gilt  $v(0) = 0$.
-Dieses System hat eine Einfache exakte Lösung:
+Dieses System hat eine einfache exakte Lösung:
 $$
 v = v_0 + \int_{t_0}^{t_1} k dt = k \cdot (t_0 - t_1) 
 $$
 
 Im Allgemeinen ist es aber nicht immer möglich, 
 ein Anfangswertproblem analytisch zu lösen. 
-In den Nächsten Kapiteln werden mehrer verfahren vorgestellt diese numerisch zu berechnen.
-Ein Beispiel für ein solches Problem wird in Kapitel \ref{} vorgestellt.
+In den nächsten Kapiteln werden mehrer Verfahren vorgestellt diese numerisch zu berechnen.
+Ein Beispiel für ein solches Problem wird in Kapitel \ref{sec:simulationen} vorgestellt.
 
 \section{Numerisches Lösen von Anfangswert problemen} \label{sec:numerisches_lösen_von_anfangswert_problemen}
 
@@ -40,10 +40,10 @@ Ein Beispiel für ein solches Problem wird in Kapitel \ref{} vorgestellt.
 
 % https://www.biancahoegel.de/mathe/verfahr/euler-verfahren_explizit.html
 
-Das einfachste Verfahren, um Anfangswertprobleme zu lösen, ist das explizite Euler verfahren.
-Das explizit Euler-Verfahren approximiert verschiedene werte des Anfangswertproblems 
+Das einfachste Verfahren, um Anfangswertprobleme zu lösen, ist das explizite Euler-Verfahren \cite[Kapitel~II.1]{ode1}.
+Dieses approximiert verschiedene Werte des Anfangswertproblems 
 im Abstand einer konstanten Schrittweite h.
-Die approximierten Zeitpunkte sind wie folgt definiert.
+Die Definition der zu approximierenden Zeitpunkte lautet:
 
 $$
 t_k = t_0 + kh \text{, mit } k = 0, 1, 2, ...
@@ -55,24 +55,22 @@ $$
 y_{k + 1} = y_{k} + h \cdot f(t_k, y_k)
 $$
 
-Das Euler-Verfahren verwendet folgende Approximation:
+Das Euler-Verfahren basiert auf folgender approximation des zu berechnenden Integrals:
 
 $$
 \int_{t_k}^{t_{k+1}} f(t_k, y_k(s)) ds \approx h f(t_k, y_k)
 $$
 
-Dies ist wichtig, da alle verfahren zum numerischen Lösen von Anfangswertproblemen sich hauptsächlich in dieser Approximation unterscheiden.
-
+Dies ist wichtig, da alle verfahren zum numerischen Lösen von Anfangswertproblemen sich hauptsächlich darin unterscheiden wie sie diese Approximation berechnen.
 Das expliziten Euler-Verfahren mit einer NeuralODE  zu berechnen
 ist sehr leicht, da $y_k$, h und $f(t_k, y_k)$ bekannt sind.
-
-Das nächste Verfahren, das vorgestellt wird, verändert die Art und weiße der Approximation, was dazu führt, dass die Berechnung nicht mehr so direkt durchgeführt werden kann.
+Das nächste Verfahren, das vorgestellt wird, verändert die Art und weiße der Approximation, dies führt dazu, dass die Berechnung nicht direkt durchgeführt werden kann.
 
 \subsection{Implizite Euler Verfahren}
 
-Das implizite Euler verfahren ist sehr ähnlich zu der expliziten Variante.
+Das implizite Euler-Verfahren  \cite[Kapitel~II.7]{ode1} ist sehr ähnlich zu der expliziten Variante.
 Der entscheidende Unterschied ist, dass nicht die Steigung abhängig vom aktuellen 
-Zeitpunkt und y-wert verwendet wird, sondern vom nächsten Zeitschritt.
+Zeitpunkt und y-Wert verwendet wird, sondern vom nächsten Zeitschritt.
 Die Definition lautet deshalb wie folgt:
 
 $$
@@ -83,12 +81,12 @@ Die restliche Definition ist analog zum expliziten Euler-Verfahren aus Kaptiel \
 Das Besondere dabei ist, dass $y_{k + 1}$ nicht bekannt ist.
 Demnach enthält $f(t_{k + 1}, y_{k + 1})$ auch eine unbekannte.
 Es muss also ein Gleichungssystem mit einer unbekannten gelößt werden.
-Das Problem dabei ist, dass um das gleichungssystem zui lösen muss nach $y_{k + 1}$ aufgelößt werden.
+Das Problem dabei ist, dass um das Gleichungssystem zu lösen muss nach $y_{k + 1}$ aufgelößt werden.
 Im Allgemeinen kann allerdings nicht davon ausgegangen werden, dass dies immer effizient möglich ist.
-Deshalb wird für das lösen des gleichungssytems meist das newton verfahren verwendet.
-Das Sekantern-Verfahren könnte ebenfalls genutzt werden, ist aber aufgrund seinen hohen numerischen 
-fehlers meist sehr unattraktiv.
-Um das Newton-Verfahren anwenden zu können muss das Problem wie folgt umgeformt werden.
+Deshalb wird für das Lösen des Gleichungssytems das Newton-Verfahren verwendet.
+Das Sekanten-Verfahren könnte ebenfalls genutzt werden, ist aber aufgrund seinen hohen numerischen 
+Fehlers meist sehr unattraktiv.
+Um das Newton-Verfahren anwenden zu können, muss das Problem wie folgt umgeformt werden:
 
 $$
 0 = (y_k - y_{k + 1})  + h \cdot f(t_{k + 1}, y_{k + 1})
@@ -103,30 +101,28 @@ $$
 g'(x) = -1 + h \cdot \frac{\partial f(t_{k+1}, x)}{\partial x}
 $$
 
-Nun kann dessen Nullstelle über das Newton-Verfahren wie folgt bestimmt werden.
+Nun kann dessen Nullstelle über das Newton-Verfahren so bestimmt werden:
 
 $$
 x_{n+1} = x_{n} - \frac{g(x_n)}{g'(x_n)}
 $$
 
-Dabei ist des wichtig, $x_{0}$ auf einen Sinnvollen wert zu setzen ein guter Kandidat ist zum Beispiel
-$y_{k}$ ,da dieser bekannt und nahe am gesuchten Wert liegt.
-
+Dabei ist des wichtig, $x_{0}$ auf einen sinnvollen Wert zu setzen ein guter Kandidat ist zum Beispiel
+$y_{k}$, da dieser bekannt und nahe am gesuchten Wert liegt.
 Wichtig ist, dass damit das implizit Euler-Verfahren berechnet werden kann, die Ableitung von $f(t_{k + 1}, y_{k + 1})$ benötigt wird.
-
-In unserem Fall handelt es sich hierbei um eine NeuralODE dessen Ableitung mit einem automatischen Ableitungsalgorithmus berechnet wird. Wie dies funktioniert, wird in Kapitel \ref{} beschrieben.
+In unserem Fall handelt es sich hierbei um eine NeuralODE, dessen Ableitung mit einem automatischen Ableitungsalgorithmus berechnet wird. 
+Wie dies funktioniert, wird in Kapitel \ref{sec:auto_diffentiation} beschrieben.
 
 \subsection{Die Runge Kutta verfahren} \label{sec:runge_kutta}
 
-Die Runge-Kutta-Verfahren sind eine Verallgemeinerung des
+Die Runge-Kutta-Verfahren \cite[Kapitel~II.1]{ode1} sind eine Verallgemeinerung des
 bereits vorgestellten impliziten/expliziten Euler-Verfahrens.
-
 Die Runge-Kutta-Verfahren verwenden folgende approximation:
 
 $$
 \int_{t_k}^{t_{k+1}} f(t_k, y_k(s)) ds \approx h \sum_{j=1}^{s} b_j k_j
 $$
-wobei $k_j$ wie folgt definiert ist.
+wobei $k_j$ wie folgt definiert ist:
 $$
 k_j = f(t_n + h c_j, y_n + h \sum_{l=1}^{s}a_{jl}k_{l}) , j \in \{1, ..., s\}
 $$
@@ -135,25 +131,23 @@ $$
 
 Um die Runge-Kutta-Verfahren lösen zu können, wird das Newton-Verfahren für ein 
 System von Gleichungen verwendet.
-
 Diese ist eine Verallgemeinerung des zuvor gezeigten Newton-Verfahrens.
-
 Die Grund vorraussetzung für dessen berechung ist jedoch die gleiche.
-
-Es werden die Paritellen ableitungen von der funktion 
-$f$ benötigt.
+Mit dem einzigen Unterschied, dass nun nicht nur die Ableitung nach $x$ benötigt wird, sondern alle partiellen Ableitungen von $f$.
 
 \subsubsection{Das Newtonverfahren für Mehrdimensionale Gleichungssysteme}
 
-Um die Runge-Kutta-Methoden lösen zu können, wird eine angepasste variante des Newton verfahren, verwendet
-welches wie folgt lautet:
+Um die Runge-Kutta-Verfahren lösen zu können, 
+wird eine angepasste variante des Newton-Verfahren, 
+verwendet welches wie folgt lautet:
+
 $$
 x_{n+1} = x_n - (J(x_n))^{-1} f(x_n)
 $$
 
 $x$ und $h$ sind dabei Vektoren aus $\mathbb{R}^n$. 
 Ausserdem ist $f$ ein vektor von funktionen $[f_1, ..., f_n]$.
-$J$ steht dabei für die Jacobi Matrix welche wie folgt definiert ist:
+$J$ steht dabei für die Jacobi-Matrix welche wie folgt definiert ist:
 $$
 J(x) = \left( \frac{\partial f_i}{\partial x_j}(x) \right)_{i, j} = \begin{bmatrix}
 \frac{\partial f_1}{\partial x_1} & \frac{\partial f_1}{\partial x_2} & \dots & \frac{\partial f_1}{\partial x_n} \\
@@ -163,7 +157,7 @@ J(x) = \left( \frac{\partial f_i}{\partial x_j}(x) \right)_{i, j} = \begin{bmatr
 \end{bmatrix}
 $$
 
-Da es sehr aufwendig ist, das Inverse einer Matrix zu berechnen, wird das Newton verfahren zu einem linearen Gleichungssystem mit einer unbekannten $\Delta x_n$ um formuliert.
+Da es sehr aufwendig ist, das Inverse einer Matrix zu berechnen, wird das Newton-Verfahren zu einem linearen Gleichungssystem mit einer unbekannten $\Delta x_n$ um formuliert.
 $$
 J(x_n) \Delta x_n = -f(x_n)
 $$
@@ -179,26 +173,25 @@ $$
 \Delta x_n := -(J(x_n))^{-1} f(x_n)
 $$
 
+Da $f(x_n)$ und $J(x_n)$ sich berechnen lassen, 
+erlaub diese darstellung das Newton-Verfahren auf mehrdimensionale Daten anzuwenden. 
+
 
 \subsection{Mehr-Schritt-Methoden (Multistep Methods)} \label{sec:multi_step}
 
-Mehr-Schritt-Methoden verbessern die Approximation der analytischen Lösung, indem sie 
+Mehr-Schritt-Methoden \cite[Kapitel~III.1]{ode1} verbessern die Approximation der analytischen Lösung, indem sie 
 die Informationen der letzten $s$ bereits berechneten Punkte mit in den neuen Zeitschritt einbeziehen.
-
 Es gibt mehrere Versionen, dies umzusetzen.
 Im Allgemeinen sind die Mehr-Schritt-Methoden wie folgt definiert:
 $$
 \sum_{j= 0}^{s} a_j y_{n+j} = h \sum_{j=0}^s b_j f(t_{n+j}, y_{n+j})
 $$
+
 Wobei gilt $a_s= 1$.  Die Parameter $a_0 ... a_{s-1}$ und $b_0 ... b_{s}$ sind entscheident dafür, welche Methode verwendet wird.
-
 Besonderes Augenmerk, fällt dabei auf $b_s$ da dieser entscheidet ist ob das verfahren explizit oder implizit ist.
+Um die Parameter $a_i$ und $b_j$ zu bestimmen wird das Lagrange-Polynom verwendet.
+Dies ist definiert, als das kleinste Polynom, dass eine Menge von Punkten interpoliert.
 
-Um die Parameter $a_i$ und $b_j$ zu bestimmen wird das Lagrage-Polynom verwendet.
-
-Das Lagrange-Polynom ist das kleinste Polynom das eine Menge von Punkten interpoliert.
-
-Dessen Definition lautet wie folgt:
 $$
 l_j(x) = \prod_{x \leq m \leq k \\ m \neq j} \frac{x - x_m}{x_j - x_m}
 $$
@@ -208,9 +201,19 @@ L(x) = \sum_{j = 0}^{k} y_j l_j(x)
 $$
 
 Wobei die Menge der zu interpolierenden Punkte wie folgt festgelegt ist:
+
 $$
 \{(x_0, y_0), ..., (x_k, y_k)\}
 $$
+
+Die Intuition hiner der Definition des Lagrange-Polynoms ist, 
+dass das Polynom $l_j(x)$ eine Null stelle an jedem punkt hat ausser $x_j$. 
+An dieser stelle hat das polynom $l_j(x)$ den Wert 1.
+Dafür sorg der Quotient $\frac{1}{x_j - x_m}$.
+Wird nun $l_j(x)$ mit $y_j$ multipliziert ergibt sich ein polynom mit dem richtigen y-Wert an der Stelle $x_j$ und den Wert Null an jedem anderen punkt $x_i$.
+Werden nun diese Polynome für jeden punkt auf addiert,
+ergibt sich das Langrange-Polynom das an jeder stelle $x_i$ garantiert den richtigen Wert $y_i$ hat.
+
 
 \subsubsection{Adam-Bashforth Verfahren} \label{sec:adam-bashforth}
 
@@ -219,13 +222,13 @@ die das Lagrange-Polynom verwendet,
 um die Steigung für den nächsten Zeitschritt abzuschätzen. 
 Dafür interpoliert das Verfahren über die Steigung der letzten $s$ Schritte.
 Konkeret bedeutet dies, dass das Lagrange-Polynom $p$ auf die Punkte $\{(t_{n}, f(t_{n}, y_{n}), ..., (t_{n + s - 1}, f(t_{n + s - 1}, y_{n + s - 1})\}$ angewendet wird.
-
 Der nächste Zeitschritt kann, dann wie folgt berechnet werden:
+
 $$
 y_{n + s} = y_{n + s -1} + \int_{t_{n+s-1}}^{t_{n + s}} p(t) dt
 $$
-Für die Koeffizentien gilt, dass $a_{s-1} = -1$ und $a_{s-2} ... a_{0} = 0$. 
 
+Für die Koeffizentien gilt, dass $a_{s-1} = -1$ und $a_{s-2} ... a_{0} = 0$. 
 Da dieses verfahren Explizit ist, gilt für $b_s = 0$. Die restlichen Koeffizienten $b_{s-1}, ... b_{0}$
 können dann wie folgt berechnet werden:
 
@@ -233,18 +236,18 @@ $$
 b_{s - j - 1} = \frac{(-1)^j}{j!(s- j -1 )!} \int_0^1 \prod_{i = 0 \\ j \neq j}^{s-1} (u + i) du \text{ mit } j = 0, ...,  s-1 
 $$
 
-
 \subsubsection{Adam-Moulton Verfahren} \label{adam-moulton}
 
 Das Adam-Moulten verfahren ist ähnlich zum
-Adam-Bashforth verfahren mit dem einzigen unterschied, dass das dieses implizit ist.
-
-Das heißt die Koeffizienten $b_{0}, ..., b_{s}$ sind wie folgt definiert:
+Adam-Bashforth verfahren mit dem einzigen unterschied, dass dieses implizit ist.
+Das heißt, dass das Lagrange-Polynom auf die Punkte $\{(t_{n}, f(t_{n})), ... (t_{n+s}, f(t_{n+s}))\} $ angewendet wird.
+Daraus folgt für die Koeffizienten $b_{0}, ..., b_{s}$ folgende Definition:
 
 $$
 b_{s - j} = \frac{(-1)^j}{j!(s - j)!} \int_0^{1} \prod_{i = 0 \\ i \neq j}^{s} (u + i - 1) du, \text{ mit j = 0, ..., s}
 $$
-Die koeffizeinten $a_0, ..., a_s$ sind analog zum Adam-Bashforth verfahren.
+
+Die Koeffizeinten $a_0, ..., a_s$ sind analog zum Adam-Bashforth-Verfahren.
 
 
 \subsubsection{Backward Differentiation formeln (BDF)} \label{sec:bdf}
@@ -252,12 +255,30 @@ Die koeffizeinten $a_0, ..., a_s$ sind analog zum Adam-Bashforth verfahren.
 Die Backward-Diffentiation formeln interpolieren im vergleich zu dem zwei zuvor gennanten verfahren nicht 
 die Steigungen der einzelnen Punkte sondern dessen y-Werte.
 Das heißt das Lagrange-Polynom $p$ wird auf die Punkte $\{ (t_n, y_n), ..., (t_{n + s}, y_{n + s}) \}$ angewendet.
-Ausserdem wird gefordert, dass gilt $p'(t_{n + s}) = f(t_{n + s}, y_{n + s})$
+Um die Koeffizienten $a_0, ..., a_k$ bestimmen zu können, muss ausserdem noch folgende Bedingung gelten:
+
+$$
+p'(t_{n + s}) = f(t_{n + s}, y_{n + s})
+$$
+
+Um nun die Koeffizeinten zu bestimmen wird zunächst die erste Ableitung des Langrange-Polynoms benötigt:
+
+$$
+p'(x) := \sum_{j = 0}^{k} y_j l'_j(x)
+$$
+$$
+l'_j(x) := \sum_{i = 0 \\ i \neq j}^{k} \left[ \frac{1}{x_j - x_i} \prod_{m = 0 \\ m \neq (i, j)}^k \frac{x - x_m}{x_j - x_m} \right]
+$$
+
+Daraus folgt nun der Wert für die Parameter $a_0, ... ,a_s$:
+
+$$
+a_j = l'_j(x_{n + k}) \text{, mit j = 0, ..., s}
+$$
+
+Aus dieser Bedingung folgt ausserdem, dass $b_0, ...,b_{s - 1} = 0$ sind und $b_s = 1$.
 Dadurch ergibt sich ein nichtlineares Gleichungssystem, mit dem implizit gegebenen Wert $y_{k + s}$.
-Dies bedeutet, dass $b_0, ...,b_{s - 1} = 0$ sind.
-Die koeffizienten $a_0, ..., a_k$ können für $s < 7$ nachgeschlagen werden.
-Ist s  > 7 kann die BDF formeln nicht mehr verwendet werden, da das verfahren ab diesem zeitpunkt nicht mehr null stabil ist.
-
-
-% Hinzufügen der konkreten darstellung der formeln mit dem langrage polynom
-
+Dies kann nun wieder mit dem Newton-Verfahren gelößt werden.
+Eine wichtige Anmerkung ist, 
+dass für $s > 6$ die BDF-Formeln nicht mehr angewendet werden sollten, 
+da das Verfahren ab diesem Grad nicht mehr null-stabil ist.
