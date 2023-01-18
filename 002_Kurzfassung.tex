@@ -6,10 +6,10 @@ Ein \textit{MeshGraphNet} besteht dabei aus drei Komponenten.
 Einer Gitterstruktur, die die diskreten Messpunkte der Simulation darstellen.
 Einem Graphen, der dazu genutzt wird, Informationen zwischen den einzelnen gitter punkten im Mesh auszutauschen
 und einem neuronalen Netzwerk, dass den nächsten Zeitschritt vorher sagt.
-Um das neuronale Netzwerk auswerten zu können, soll ein impliziter Differenzialgleichungslöser verwendet werden.
-Das Lösen von Impliziten verfahren setzt jedoch voraus, dass die Implementierung des neuronalen
+Um das neuronale Netzwerk mit einer erhöten Genauigkeit auswerten zu können, soll ein impliziter Differenzialgleichungslöser verwendet werden.
+Das Lösen von impliziten verfahren setzt jedoch voraus, dass die Implementierung des neuronalen
 Netzes automatisch abgeleitet werden kann.
-In der Implementierung der MeshGraphNets wird die scatter Funktion verwendet, um Informationen
+In der Implementierung der \textit{MeshGraphNets} wird die \textit{scatter} Funktion verwendet, um Informationen
 innerhalb der Graphdarstellung zwischen den einzelnen Knoten zu propagieren.
 Diese kann jedoch keine \textit{Dual}-Zahlen verarbeiten, was die Grundlage für die automatische Differenzierung ist.
 In dieser Arbeit wird demonstriert, wie diese Funktion so modifiziert werden kann, dass dies doch möglich ist.
