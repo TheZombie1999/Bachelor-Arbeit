@@ -1,18 +1,17 @@
 
 \section{Grafikkarten Programmierung} \label{sec:gpu}
 
-Da das Simulieren von physikalischen vorgängen, 
-meistens sehr Zeitintensive berechnungen zugrunde liegen, 
+Da das Simulieren von physikalischen Vorgängen, 
+meistens sehr zeit-intensive Berechnungen zugrunde liegen, 
 wurden verschiedene Methoden entwickelt, 
 um diese zu beschleuningen.
-Meistens wird die CPU benutzt um diese berechnungen durch zuführen.
+Meistens wird die CPU benutzt um diese Berechnungen durch zuführen.
 Die CPU ist sehr gut darin eine Sequenz von einnander abhängigen Operationen durch zuführen.
 Bei der Berechung von neuronalen Netzten oder Simulationen muss aber meistens eine große Menge 
 an von einander unabhängigen Operationen durch geführt werden.
 Da die einzelnen Operation unabhängig voneinander sind.
 Ist es irrelevant in welcher Reihenfolge diese ausgeführt werden.
 Dies macht sich die Grafikkarte zu nutzen und führt eine groß Zahl an Operationen gleichzeit aus.
-
 Um zum Beispiel eine \textit{NeuralODE} auswerten zu können muss folgende gleichung gelößt werden:
 
 $$
@@ -22,21 +21,20 @@ $$
 NN(x) = SN_1 \circ ... \circ SN_n (x)
 $$
 
-Wobei $\sigma$ die Aktivierungs-Funktion ist. $W_i$ ist die Gewichte Matrix und $t_i$ die Bias Matrix des Neuronales Netztes.
-$SN_i$ steht für eine einzelne schicht des neuronalen Netztes und $NN$ für das gesamte Netzt.
-Das entscheidende dabei ist, dass für die Berechung des Neuronales Netzes n-Mal die Addition, Multiplication und ein Broadcast der Aktivierungs-Fuktion
+Wobei $\sigma$ die Aktivierungs-Funktion ist, $W_i$ ist die Gewichte Matrix und $t_i$ die Bias Matrix des Neuronales Netztes.
+$SN_i$ steht für eine einzelne Schicht des neuronalen Netztes und $NN$ für das gesamte Netzt.
+Das entscheidende dabei ist, dass für die Berechung des neuronales Netzes n-Mal die Addition, Multiplication und ein Broadcast der Aktivierungs-Funktion
 $\sigma$ durch geführt werden muss.
-Jeder dieser Operationen führt eine viellzahl unabhängiger operationen auf einer Matrix aus.
+Jeder dieser Operationen führt eine viel zahl unabhängiger Operationen auf einer Matrix aus.
 Diese sind der Grund warum die verwendung der GPU von so großer bedeutung für das Auswerten von \textit{NeuralODEs} ist.
 MeshGraphNets profitiern ebenfalls stark von der berechnung auf der Grafikkarte.
-Da die Grafendarstellung des Meshes eine Matrix ist.
-Eine Operation die häufig durchgeführt werden muss ist das weiterleiten von informationen eines Kontens an seine nachbarn.
-Dazu werden informationen aus einer Zelle der Konoten Matrix in eine Andere Speicherzelle der Selben matrix geschrieben.
-Diese operation kann ebenfalls gut von einer Grafikkarte durch geführt werden.
-Im vergleich zu den typischen matrix operationen ist, dass nicht jede atomare operation komplett unabhähnig von einander ist,
-da es vorkommen kann das mehrer operationen gleichzeitig in die selbe Speicher zelle schreiben.
-
-Dies führt zu dem Hauptproblem dieser Arbeit auf was im folgendem näher eingegangen wird.
+Da die Graphen-Darstellung des Meshes eine Matrix ist.
+Eine Operation die häufig durchgeführt werden muss ist das weiterleiten von Informationen eines Kontens an seine Nachbarn.
+Dazu werden Informationen aus einer Zelle der Knoten-Matrix in eine andere Speicherzelle der selben Matrix geschrieben.
+Diese Operation kann ebenfalls gut von einer Grafikkarte durch geführt werden.
+Im Vergleich zu den typischen Matrix-Operationen ist, dass nicht jede atomare Operation komplett unabhähnig von einander ist,
+da es vorkommen kann das mehrer Operationen gleichzeitig in die selbe Speicherzelle schreiben.
+Dies führt zu dem Hauptproblem dieser Arbeit, auf welches im folgendem näher eingegangen wird.
 
 
 
