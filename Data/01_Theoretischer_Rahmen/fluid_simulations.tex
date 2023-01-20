@@ -4,13 +4,13 @@
 Da MeshGraphNets in der Regel verwendet werden um reale Probleme zu simiulieren, 
 wird im folgendem eine Anwendung dieser genauer betrachtet.
 Für die Analyse dieser Arbeit wird eine Flüssigkeits simulation verwendet.
-Es gibt eine viel Zahl an verfahren um Flüssichkeiten zu simulieren.
+Es gibt eine viel Zahl an verfahren um Flüssigkeiten zu simulieren.
 Viele davon werden allerdings, in der Computer-Grafik verwendet um 
 effizient den anschein einer Flüssigkeit zu erwecken.
 Diese verfahren verwenden in der Regel eine vereinfachte version der physikalischen Gleichungen,
 um diese schneller berechnen zu können.
 Für die zwecke dieser Arbeit sind vorallem möglichst Realistische verfahren intressant.
-Eines der ersten bekannten Verfahren zur beschreibung von Flüssigkeiten ist die Euler-Gleichung:
+Eines der ersten bekannten Verfahren zur beschreibung von Flüssigkeiten ist die Euler-Gleichung \cite[Kapitel~1]{navier_stokes}:
 
 $$
 \frac{\partial \vec{u}}{\partial t} + (\vec{u} \cdot \nabla) \vec{u} =  \vec{g} - \frac{1}{\rho} \nabla \cdot p
@@ -34,15 +34,14 @@ $$
 Bei dem numerischen Lösen der Differentialgleichung kommt es zu dem problem das sich das druck Feld p
 abhängig von der Geschwindichkeit ebenfalls ändert.
 Diese Problem kann gelößt werden indem die Differentialgleichung in zwei teile geteilt wird.
-Genauers kann in folgendem Paper nachgelesen werden \cite{}.
+Genauers kann in folgendem Paper nachgelesen werden \cite{num_navier}.
 Die Euler-Gleichungs vernachlässicht ein entscheidendes Phähnomen.
 Sie vernachlässicht das es innerhalb der Flüssichkeiten und an grenz flächen zu einer reibungskarft kommt.
-Dieses Phänomen ist besonders wichtig da es ohne die beachtung von reibung innerhalb der Flüssigkeit,
-nicht zu tubulenzen kommt.
 Soll zum beispiel der Luftwiederstand und Auftrieb eines Tragflächen elementes bestimmt werden,
-dann sind diese verwirbelungen entscheident dafür das eine region hohen drucks unterhalb des flügels entsteht.
+dann sind diese Reibungskraft besonder wichtig da sie für eine verlangsamung des Luftstroms nahe an der Oberfäche
+des flügels sorgt für Phänomene die dessen auftrieb und Luftwiederstand beeinflussen.
 Dieser Druck unterschied zwischen der ober und unter seite des Flügels sind verantwortlich für dessen auftrieb.
-Wird die Euler-Gleichung nun um dieses Phänomen erweitert ergibt sich die bekannte Navier-Stokes-Gleichung 
+Wird die Euler-Gleichung nun um dieses Phänomen erweitert ergibt sich die bekannte Navier-Stokes-Gleichung \cite[Kapitel~1.4]{navier_stokes} 
 welche wie folgt lautet:
 
 $$
@@ -56,5 +55,10 @@ Die Navier-Stokes-Gleichung ist unter keinen umstenden vollständig.
 Das heißt es gibt phänomenen die in der Gleichung nicht berücksichtigt werden.
 Oft wird dies deutlich gemacht, indem ein Kraft Vektor $\vec{f}$ zur rechten Seite addiert wird.
 Für die meisten realen Anwendung reichen diese annahmen jedoch aus, weshalb die Navier-Stokes-Gleichung sehr nützlich ist.
+
+Die Navier-Stokes-Gleichung ist für uns besonders intressant da sie die Datengrundlange für das Training unserer NeuralODE liefert.
+Ausserdem demonstriet sie welche vereinfachungen das verwenden der NeuralODE beim auswerten ermöglicht.
+Diese erlaubt es uns die DiffentialGleichung nur abhängig von der Geschwindichkeit $v$ auszuwerten.
+Demnach kann die berechnung des Druckes $p$ vermieden werden.
 
 % https://www.youtube.com/watch?v=OjbQbPSopu0

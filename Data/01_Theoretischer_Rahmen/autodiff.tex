@@ -3,12 +3,12 @@
 
 \section{Automatisches Differenzieren} \label{sec:auto_diffentiation}
 
-Beim automatischen Differenzieren \cite{autodiff} geht darum, die Ableitung einer Funktion automatisch zu berechnen.
+Beim automatischen Differenzieren \cite[Kapitel~2]{autodiff} geht darum, die Ableitung einer Funktion automatisch zu berechnen.
 Das besondere dabei ist das diese meistens als Computerprogramm gegeben ist.
 Automatisches Differenzieren findet Anwendung beim trainieren von neuronalen Netzen 
 und dem Lösen von nicht-linearen Gleichungssystemen durch das Newton-Verfahren.
 Der zweite Grund ist für diese Arbeit besonders relevant, da 
-dieses benötigt wird, um die Runge-Kutta verfahren, die in Kapitel \ref{sec:runge_kutta} vorgestellt wurden, zu berechnen.
+dieses benötigt wird, um die Runge-Kutta-Verfahren, die in Kapitel \ref{sec:runge_kutta} vorgestellt wurden, zu berechnen.
 Die mathematische Definition der Funktion lautet wie folgt:
 
 $$
@@ -22,7 +22,7 @@ $$
 $$
 
 Die Jacobi-Matrix wird in der Regel berechnet, wenn alle partiellen Ableitungen einer Funktion benötigt werden.
-Wird nur eine konkrete partielle Ableitung benötigt, kann diese ebenfalls mit Autodifferenzierung berechnet werden.
+Wird nur eine konkrete Partielle-Ableitung benötigt, kann diese ebenfalls mit Autodifferenzierung berechnet werden.
 
 \subsection{Implementation} \label{sec:implementation}
 
@@ -37,8 +37,8 @@ Diese Methode ist sehr leicht zu implementieren, allerdings ist sie sehr ungenau
 
 Eine exakte Lösung ergibt sich mit der Verwendung eines Computer-Algebra-Systems wie zum Beispiel Sympy \cite{sympy}.
 Dieses Verfahren operiert auf der symbolischen Repräsentation der Funktion.
-Es verwendet also die unterschiedlichen Ableitungsregeln, um eine exakte Lösung zu berechnen.
-Dieses Verfahren hat das Problem, dass häufig verwendete Ableitungsregel wie zum Beispiel die Produktregel
+Es verwendet also die unterschiedlichen Ableitungs-Regeln, um eine exakte Lösung zu berechnen.
+Dieses Verfahren hat das Problem, dass häufig verwendete Ableitungs-Regel wie zum Beispiel die Produktregel
 mit jeder Anwendung die Ergebnissgröße verdoppelt, wodurch es zu einem exponentiellen Wachstum 
 der symbolischen Repräsentation kommt.
 Dies macht dieses Verfahren unbrauchbar, um die Ableitung eines neuronalen Netzes zu berechnen.
@@ -49,13 +49,15 @@ Es wird dazu angenommen, dass die Funktion, dessen Ableitung berechnet werden so
 Nun kann die Kettenregel ausgenutzt werden, um Schritt für Schritt die Ableitung zu berechnen.
 Da dieses Verfahren für diese Arbeit sehr relevant ist, wird auf die genaue Umsetzung in Kapitel \ref{sec:ketten_regel} noch einmal genauer eingegangen.
 
-Die vierte und letzte Möglichkeit, die Autodifferenzierung umzusetzen, ist den Source-Code direkt zu manipulieren.
-Konzeptionell ist dieses verfahren sehr ähnlich zu der zuvor vorgestellten Methode. Der große Unterschied ist dann bei dieser Methode der Code der Funktion so umgeschrieben wird, dass diese sowohl ihre eigentliche Ausgabe als auch ihre Ableitung selbst mit berechnet.
+Die vierte und letzte Möglichkeit, die Automatische-Differenzierung umzusetzen, ist den Source-Code direkt zu manipulieren.
+Konzeptionell ist dieses Verfahren sehr ähnlich zu der zuvor vorgestellten Methode. 
+Der große Unterschied ist dann bei dieser Methode der Code der Funktion so umgeschrieben wird, 
+dass diese sowohl ihre eigentliche Ausgabe als auch ihre Ableitung selbst mit berechnet.
 Dies kann auch automatisch geschehen.
 So kann dafür in Julia oder C zum Beispiel ein Macro verwendet werden oder diese Funktion direkt in den Compiler mit eingebaut werden.
 Diese Methoden ist Vermutliche die zur Laufzeit schnellste variante.
 Hat den Nachteil, dass diese sehr schwer umzusetzen ist.
-So kann zu Beispiel meistens keine if Statements oder andere kontroll - flow Methoden innerhalb der Funktion verwendet werden. 
+So kann zu Beispiel meistens keine if Statements oder andere Kontroll-Fluss-Methoden innerhalb der Funktion verwendet werden. 
 Diese führt dazu, dass diese Variante nur selten zum Einsatz kommt.
 
 \subsection{Automatische Differenzierung über die Ketten Regel} \label{sec:ketten_regel}
@@ -63,7 +65,7 @@ Diese führt dazu, dass diese Variante nur selten zum Einsatz kommt.
 Soll die Ableitung einer Funktion berechnet werden, 
 kann die Annahme gemacht werden, 
 dass diese Funktion aus primitiven Operationen aufgebaut ist, dessen Ableitung bereits bekannt ist.
-So ist die folgende Funktion aus den primitiven Operationen $+$, $\cdot$  und $\sin$ aufgebaut:
+So ist die folgende Funktion aus den primitiven Operationen $+$, $\cdot$ und $\sin$ aufgebaut:
 
 $$
 f(x_1, x_2, a) = (x_1 + x_2) \cdot a \cdot \sin(x_1 + x_2) = y_2
@@ -96,7 +98,7 @@ $$
 $$
 
 Für $\frac{\partial y_2}{\partial x_2}$ ist das Verfahren analog. 
-Nun kann die Funktion f so angepasst werden, dass sie nicht nur den Wert $y_2$ berechnet sonder auch $y'_2$.
+Nun kann die Funktion $f$ so angepasst werden, dass sie nicht nur den Wert $y_2$ berechnet sonder auch $y'_2$.
 
 \begin{lstlisting}
     funktion f2 (x1, x2, x'1, x'2, a)
@@ -113,15 +115,15 @@ Nun kann die Funktion f so angepasst werden, dass sie nicht nur den Wert $y_2$ b
     end
 \end{lstlisting}
 
-Welche partielle Ableitung von $f2$ berechnet wird, hängt davon ab, wie die Argumente $x'_1$ und $x'_2$ gesetzt werden.
+Welche Partielle-Ableitung von $f2$ berechnet wird, hängt davon ab, wie die Argumente $x'_1$ und $x'_2$ gesetzt werden.
 Wird $x'_1 = 1$ gesetzt und $x_2' = 0$ dann führt dies dazu, dass $\frac{\partial y_2}{\partial x_1}$ berechnet wird.
 Um die Ableitung nach $x_2$ zu berechnen, werden die Werte einfach vertauscht.
-Diese Verfahren liefert das gewünschte Ergebnis, ist aber noch lange nicht automatisch.
+Diese Verfahren liefert das gewünschte Ergebniss, ist aber noch lange nicht automatisch.
 Es ist zwar möglich, diesen Code vom Compiler oder durch einen Macro generieren zu lassen.
 In den meisten fällen wird ausgenutzt, dass es in einer 
 Programmiersprachen möglich ist, Operationen zu überladen.
 Das heißt, die gleiche Funktion verhält sich abhängig vom Datentype anders.
-Konkret bedeutet das die Funktion f wie folgt aufgerufen wird.
+Konkret bedeutet das die Funktion $f$, wie folgt aufgerufen wird.
 
 \begin{lstlisting}
 	x1 = (v1, p1)
@@ -131,7 +133,7 @@ Konkret bedeutet das die Funktion f wie folgt aufgerufen wird.
 \end{lstlisting}
 
 Es fällt auf das nun $x_1$ und $x_2$ nicht mehr Fließkomma zahlen sind, sondern Tupel sind.
-Damit am Ende f1, das gleiche Ergebnis ausgibt wie f2 müssen alle in der Funktion vorkommenden Operationen überladen werden.
+Damit am Ende $f1$, das gleiche Ergebnis ausgibt, wie $f2$ müssen alle in der Funktion vorkommenden Operationen überladen werden.
 
 \begin{lstlisting}
 	funktion *(a::Tupel, b::Tupel)
@@ -147,28 +149,28 @@ Damit am Ende f1, das gleiche Ergebnis ausgibt wie f2 müssen alle in der Funkti
     end
 \end{lstlisting}
 
-In der Realität werden für diesen Zweck meistens keine Tupel verwendet, sondern eine dual zahl definiert.
-Die analoge Version einer Dualzahl zu dem definierten Tupel lautet wie folgt:
+In der Realität werden für diesen Zweck meistens keine Tupel verwendet, sondern eine \textit{Dual}-Zahl definiert.
+Dessen Definition lautet wie folgt:
 
 \begin{equation}
 	d = a + b \epsilon \text{ mit } \epsilon^2 = 0
 \end{equation}
 
-Wird eine skalare Funktion nun auf die Dual-Zahl angewendet, dann verhält sich diese wie folgt:
+Wird eine skalare Funktion nun auf die \textit{Dual}-Zahl angewendet, dann verhält sich diese wie folgt:
 
 \begin{equation}
 	f( a + b \epsilon) = f(a) + b f'(a) \epsilon
 \end{equation}
 
-Eine allgemeinere Version der Dual Zahl für höher dimensionale Probleme wird auch in Kapitel \ref{sec:dual_zahlen} diskutiert.
-Die beschriebene Methode zum Automatischen differenzieren wird oft auch als Vorwärtsmodus Differenzierung bezeichnet.
-Erwähnens wert ist auch die Rückwertsmodus Differenzierung.
+Eine allgemeinere Version der \textit{Dual}-Zahl für höher dimensionale Probleme wird auch in Kapitel \ref{sec:dual_zahlen} diskutiert.
+Die beschriebene Methode zum Automatischen-Differenzieren wird oft auch als Vorwärtsmodus-Differenzierung bezeichnet.
+erwähnenswert ist auch die Rückwertsmodus-Differenzierung.
 Diese funktioniert sehr ähnlich zu Vorwärtsmodus-Differenzierung.
-Mit dem unterschied das die zwischen Ergebnis $y_0, ... , y_n$ zuerst berechnet und zwischen gespeichert werden.
+Mit dem unterschied, dass die zwischen Ergebnis $y_0, ... , y_n$ zuerst berechnet und zwischen gespeichert werden.
 Dann wird auf Grundlage der zwischen gespeicherten Werte die Ableitung berechnet.
 Das heißt, anstatt die Ableitung in jeden Berechnungsschritt mit zuziehen, wird diese erst am Ende für alle freien Variablen berechnet.
-Dies hat den großen Vorteil, dass die Laufzeit des Algorithmus von der Berechnungszeit der Funktion f abhängt und nicht von der Anzahl der Parameter.
-Der Nachteil dieser Methoden ist das wesentlich mehr Speicherplatz verbraucht wird.
+Dies hat den großen Vorteil, dass die Laufzeit des Algorithmus von der Berechnungszeit der Funktion $f$ abhängt und nicht von der Anzahl der Parameter.
+Der Nachteil dieser Methoden ist, dass dafür wesentlich mehr Speicherplatz verbraucht wird.
 Welcher dieser beiden Verfahren besser geeignet ist, hängt stark vom Problem ab.
 Bei einem neuronalen Netz gibt es in der Regeln eine große Anzahl an freien Parametern, was die Rückwärtsmodus-Differenzierung bevorzugt.
 Die meisten Differenzialgleichungen haben in der Regel nur 4 freie Variablen.
