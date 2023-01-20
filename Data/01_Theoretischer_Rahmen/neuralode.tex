@@ -2,47 +2,44 @@
 \section{\textit{NeuralODEs}} \label{sec:neural_ode}
 
 Eine \textit{NeuralODE} \cite{neuralode} basiert auf dem in Kapitel \ref{sec:anfangswert_probleme} vorgestellten Anfangswert-Problemen.
-Der unterschied zwischen ein NeuralODE und einem Anfangswert-Problem ist, 
-die Funktion $f$ in einer \textit{NeuralODE} nicht mehr eine klassische Gleichung sondern ein 
-neuronales Netzt repräsentiert wird.
-Da ein neuronales Netzt nicht nur von seinen Eingaben, sondern auch von seinen Gewichten und Biasies abhängt,
+Der unterschied zwischen ein NeuralODE und einem Anfangswert-Problem ist 
+die Funktion $f$ in einer \textit{NeuralODE} nicht mehr eine klassische Gleichung, 
+sondern ein neuronales Netz repräsentiert wird.
+Da ein neuronales Netz nicht nur von seinen Eingaben, 
+sondern auch von seinen Gewichten und Biasies abhängt,
 lautet die Definition einer \textit{NeuralODE} wie folgt:
 
 $$
 \frac{d y(t)}{dt} = f(y(t), t, \theta)
 $$
 
-Durch den trainings Prozess des neuronales Netzes werden, dessen Gewichte und Biasis 
-so gewählt das die Funktion $f(y(t), t, \theta)$ eine Approximation der klassischen Differentialgleichung 
-$f(y(t), t)$ darstellt.
+Durch den Trainingsprozess des neuronales Netzes werden dessen Gewichte und Biasis 
+so gewählt, das die Funktion $f(y(t), t, \theta)$ eine Approximation der klassischen 
+Differenzialgleichung $f(y(t), t)$ darstellt.
 
 Ziel dieser Approximation ist es, das Auswerten von großen Physik-Simulationen zu beschleunigen.
 Der Grund für die erhoffte beschleunigte Auswertung ist, dass sich neuronale Netze besser parallelisiert auswerten lassen
-als die klassischen Differentialgleichungen.
-Ausserdem fallen Berechungen weg ,die die innere Dynamik des Anfangswert-Problems beschreiben.
-So muss bei der berechnung der Navier-Stokes-Gleichung durch eine \textit{NeuralODE}, die änderung des Druck-Feldes 
+als die klassischen Differenzialgleichungen.
+Außerdem fallen Berechnungen weg, die die innere Dynamik des Anfangswert-Problems beschreiben.
+So muss bei der Berechnung der Navier-Stokes-Gleichung durch eine \textit{NeuralODE} die Änderung des Druck-Feldes 
 nicht mit berechnet werden, da diese Dynamik von dem neuronalen Netz erlernt wurde.
 
-Ausserdem ist es möglich die \textit{NeuralODE} auf Daten zu trainieren, 
-zu denen die eigentliche Differentialgleichung nicht bekannt ist.
-Soll zum Beispiel die größe einer Hasen-Population vorhergesagt werden, dann gibt es vielleicht Daten über dessen 
-vergangenen verlauf, aber keine bekannte Differentialgleichung die dessen Verlauf beschreibt.
+Außerdem ist es möglich, die \textit{NeuralODE} auf Daten zu trainieren, 
+zu denen die eigentliche Differenzialgleichung nicht bekannt ist.
+Soll zum Beispiel die Größe einer Hasen-Population vorhergesagt werden, dann gibt es vielleicht Daten über dessen 
+vergangenen Verlauf, aber keine bekannte Differenzialgleichung, die dessen Verlauf beschreibt.
 Nun kann über Finite-Differenzen-Methode die Ableitung dieser Daten berechnet werden.
 Aufgrund dieser Daten wird nun die \textit{NeuralODE} trainiert.
-Das trainierte neuronale Nezt kann, nun für unbekannte Zeit-Punkte ausgewertet werden.
+Das trainierte neuronale Netz kann nun für unbekannte Zeit-Punkte ausgewertet werden.
 
-Um diese Probleme jedoch mit einer möglichst hohen genauigkeit trainieren und auswerten zu können
+Um diese Probleme jedoch mit einer möglichst hohen Genauigkeit trainieren und auswerten zu können,
 sollen die in Kapitel \ref{sec:numerisches_lösen_von_anfangswert_problemen} vorgestellten Diffential-Gleichungs-Löser auf diese angewendet werden.
-Um das Problem bei der Auswertung verstehen zukönnen müssen, zunächst noch \textit{MeshGraphNets} eingeführt werden.
+Um das Problem bei der Auswertung verstehen zu können, müssen zunächst noch \textit{MeshGraphNets} eingeführt werden.
 
 % Der Grund führ diese Approximation ist, dass das NeuronaleNetz mehrere Vorteile gegenüber der klassischen Differentialgleichung besitzt.
-
 % Vorteil mit betreuer durch sprechen.
-
 % https://book.sciml.ai/notes/03-Introduction_to_Scientific_Machine_Learning_through_Physics-Informed_Neural_Networks/
-
 % Schnellere berechnung da gewisse phänomene gelernt werden zum bsp. durck feld der navier stokes gleichung
-
 % Daten getriebenes lernen
 
 
