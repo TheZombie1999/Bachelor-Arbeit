@@ -3,88 +3,212 @@
 In diesem Abschnitt wird ein überblick darüber gegeben, welche 
 ODE Löser nach dem hinzufügern der in \ref{} Vorgestellten 
 version der \textit{scatter}-Funktion nun möglich sind.
-
 Wichtig ist dabei das es nicht möglich ist jeden löser ausführlich zu testen
 da diese zum Teil eine sehr lange laufzeit haben.
-
 Aufgrund dessen wurde jeder der im folgenden grafik als Funktionend 
 bezeichnet solange laufen gelassen bis dieser den ersten zeit schritt gemacht hat.
-
 Der Grund für diese vorgehens weiße ist dass die löser an diesem punkt meistens scheitern.
-
 Wenn dieser punkt überschritten war dann kam es erfahrungs gemäß zu keinen 
 weitern problem eine 100\%-tige garantie lieftert dies aber nicht.
 
-\begin{table}[]
-    \centering
+% \begin{table}[]
+%     \centering
+    
+%     \begin{tabular}{p{5cm}|c|p{5cm}}
+%         Name             & Funktionale & Fehler \\
+%         \hline\hline        
+%         ImplicitEuler    & true        & \\ 
+%         ImplicitMidpoint & true        & \\ 
+%         Trapezoid        & true        & \\ 
+%         TRBDF2           & true        & \\ 
+%         SDIRK2           & true        & \\ 
+%         Kvaerno3         & true        & \\ 
+%         KenCarp3         & true        & \\ 
+%         Cash4            & true        & \\ 
+%         Hairer4          & true        & \\ 
+%         Hairer42         & true        & \\ 
+%         Kvaerno4         & true        & \\ 
+%         KenCarp4         & true        & \\ 
+%         KenCarp47        & true        & \\ 
+%         Kvaerno5         & true        & \\ 
+%         KenCarp5         & true        & \\ 
+%         KenCarp58        & true        & \\       
+%     \end{tabular}
+%     \caption{SDIRK Methods}
+%     \label{tab:my_label}
+% \end{table}
 
-    \begin{tabular}{p{5cm}|c|p{5cm}}
-        Name & Funktionale & Fehler \\
-        \hline\hline
-        ImplicitEuler & true & \\ 
-ImplicitMidpoint & true & \\ 
-Trapezoid & true & \\ 
-TRBDF2 & true & \\ 
-SDIRK2 & true & \\ 
-Kvaerno3 & true & \\ 
-KenCarp3 & true & \\ 
-Cash4 & true & \\ 
-Hairer4 & true & \\ 
-Hairer42 & true & \\ 
-Kvaerno4 & true & \\ 
-KenCarp4 & true & \\ 
-KenCarp47 & true & \\ 
-Kvaerno5 & true & \\ 
-KenCarp5 & true & \\ 
-KenCarp58 & true & \\ 
-RadauIIA3 & false & Error: DimensionMismatch: arguments must have the same number of rows \\
-RadauIIA5 & false & Error: DimensionMismatch: arguments must have the same number of rows \\
-PDIRK44 & false & Error: `@threads :static` cannot be used concurrently or nested \\
-ROS3P & true & \\ 
-Rodas3 & true & \\ 
-RosShamp4 & true & \\ 
-Veldd4 & true & \\ 
-Velds4 & true & \\ 
-GRK4T & true & \\ 
-GRK4A & true & \\ 
-Ros4LStab & true & \\ 
-Rodas4 & true & \\ 
-Rodas42 & true & \\ 
-Rodas4P & true & \\ 
-Rodas4P2 & true & \\ 
-Rodas5 & true & \\ 
-Rodas5P & true & \\ 
-Rosenbrock23 & true & \\ 
-Rosenbrock32 & true & \\ 
-RosenbrockW6S4OS & true & \\ 
-ROS34PW1a & true & \\ 
-ROS34PW1b & true & \\ 
-ROS34PW2 & true & \\ 
-ROS34PW3 & true & \\ 
-ImplicitEulerExtrapolation & true & \\ 
-ImplicitEulerBarycentricExtrapolation & true & \\ 
-ImplicitDeuflhardExtrapolation & true & \\ 
-ImplicitHairerWannerExtrapolation & true & \\ 
-PDIRK44 & false & Error: `@threads :static` cannot be used concurrently or nested \\
-LawsonEuler & false & Error: ArgumeError: Caching can only be used with SplitFunction \\
-NorsettEuler & false & Error: ArgumeError: Caching can only be used with SplitFunction \\
-ETD2 & false & Error: type ODEFunction has no field f1 \\
-ETDRK2 & false & Error: ArgumeError: Caching can only be used with SplitFunction \\
-ETDRK3 & false & Error: ArgumeError: Caching can only be used with SplitFunction \\
-ETDRK4 & false & Error: ArgumeError: Caching can only be used with SplitFunction \\
-HochOst4 & false & Error: ArgumeError: Caching can only be used with SplitFunction \\
-Exprb32 & false & Error: DimensionMismatch: array could not be broadcast to match destination \\
-Exprb43 & false & Error: DimensionMismatch: A has dimensions (3792,3792) but B has dimensions (2,1896) \\
-Exp4 & false & Error: AssertiError: Dimension mismatch \\
-EPIRK4s3A & false & Error: AssertiError: Dimension mismatch \\
-EPIRK4s3B & false & Error: AssertiError: Dimension mismatch \\
-EPIRK5P1 & false & Error: AssertiError: Dimension mismatch \\
-EPIRK5P2 & false & Error: AssertiError: Dimension mismatch \\
-EPIRK5s3 & false & Error: DimensionMismatch: tried to assign 2×1896 array to 3792×1 destination \\
-EXPRB53s3 & false & Error: AssertiError: Dimension mismatch \\
-SSPSDIRK2 & false & Error: MethError: Cannot `convert` an object of type Float32 to an object of type CUDA.CuArray{Float32, 2, CUDA.Mem.DeviceBuffer} \\
-    \end{tabular}
-    \caption{Caption}
-    \label{tab:my_label}
-\end{table}
+% \begin{table}[]
+%     \centering
+
+%     \begin{tabular}{p{5cm}|c|p{5cm}}
+%         Name & Funktionale & Fehler \\
+%         \hline\hline
+%         RadauIIA3 & false & Error: DimensionMismatch: arguments must have the same number of rows \\
+%         RadauIIA5 & false & Error: DimensionMismatch: arguments must have the same number of rows \\
+%     \end{tabular}
+%     \caption{Fully-Implicit Runge-Kutta Methods}
+%     \label{tab:my_label}
+% \end{table}
+
+% \begin{table}[]
+%     \centering
+
+%     \begin{tabular}{p{5cm}|c|p{5cm}}
+%         Name & Funktionale & Fehler \\
+%         \hline\hline
+%         PDIRK44 & false & Error: `@threads :static` cannot be used concurrently or nested \\
+%     \end{tabular}
+%     \caption{Parallel Diagonally Implicit Runge-Kutta Methods}
+%     \label{tab:my_label}
+% \end{table}
+
+% \begin{table}[]
+%     \centering
+
+%     \begin{tabular}{p{5cm}|c|p{5cm}}
+%         Name & Funktionale & Fehler \\
+%         \hline\hline
+%         ROS3P     & true & \\ 
+%         Rodas3    & true & \\ 
+%         RosShamp4 & true & \\ 
+%         Veldd4    & true & \\ 
+%         Velds4    & true & \\ 
+%         GRK4T     & true & \\ 
+%         GRK4A     & true & \\ 
+%         Ros4LStab & true & \\ 
+%         Rodas4    & true & \\ 
+%         Rodas42   & true & \\ 
+%         Rodas4P   & true & \\ 
+%         Rodas4P2  & true & \\ 
+%         Rodas5    & true & \\ 
+%     \end{tabular}
+%     \caption{Rosenbrock Methods}
+%     \label{tab:my_label}
+% \end{table}
+
+% \begin{table}[]
+%     \centering
+
+%     \begin{tabular}{p{5cm}|c|p{5cm}}
+%         Name & Funktionale & Fehler \\
+%         \hline\hline
+%         Rosenbrock23     & true & \\                                                                                                                          ║
+%         Rosenbrock32     & true & \\                                                                                                                          ║
+%         RosenbrockW6S4OS & true & \\                                                                                                                      ║
+%         ROS34PW1a        & true & \\                                                                                                                             ║
+%         ROS34PW1b        & true & \\                                                                                                                             ║
+%         ROS34PW2         & true & \\                                                                                                                              ║
+%         ROS34PW3         & true & \\            
+%     \end{tabular}
+%     \caption{Rosenbrock-W Methods}
+%     \label{tab:my_label}
+% \end{table}
+
+% \begin{table}[]
+%     \centering
+
+%     \begin{tabular}{p{5cm}|c|p{5cm}}
+%         Name & Funktionale & Fehler \\
+%         \hline\hline
+%             ImplicitEulerExtrapolation & true & \\ 
+%             ImplicitDeuflhardExtrapolation & true & \\ 
+%             ImplicitHairerWannerExtrapolation & true & \\ 
+%     \end{tabular}
+%     \caption{Parallelized Implicit Extrapolation Methods}
+%     \label{tab:my_label}
+% \end{table}
+
+% \begin{table}[]
+%     \centering
+
+%     \begin{tabular}{p{5cm}|c|p{5cm}}
+%         Name & Funktionale & Fehler \\
+%         \hline\hline
+%         PDIRK44 & false & Error: `@threads :static` cannot be used concurrently or nested \\     
+%     \end{tabular}
+%     \caption{Parallelized DIRK Methods}
+%     \label{tab:my_label}
+% \end{table}
+
+% \begin{table}[]
+%     \centering
+
+%     \begin{tabular}{p{5cm}|c|p{5cm}}
+%         Name & Funktionale & Fehler \\
+%         \hline\hline
+%         LawsonEuler  & false & Error: ArgumeError: Caching can only be used with SplitFunction \\
+%         NorsettEuler & false & Error: ArgumeError: Caching can only be used with SplitFunction \\
+%         ETD2         & false & Error: type ODEFunction has no field f1 \\
+%         ETDRK2       & false & Error: ArgumeError: Caching can only be used with SplitFunction \\
+%         ETDRK3       & false & Error: ArgumeError: Caching can only be used with SplitFunction \\
+%         ETDRK4       & false & Error: ArgumeError: Caching can only be used with SplitFunction \\
+%         HochOst4     & false & Error: ArgumeError: Caching can only be used with SplitFunction \\
+%     \end{tabular}
+%     \caption{Exponential Runge-Kutta Methods}
+%     \label{tab:my_label}
+% \end{table}
+
+% \begin{table}[]
+%     \centering
+
+%     \begin{tabular}{p{5cm}|c|p{5cm}}
+%         Name & Funktionale & Fehler \\
+%         \hline\hline
+%         Exp4      & false & Error: AssertiError: Dimension mismatch \\
+%         EPIRK4s3A & false & Error: AssertiError: Dimension mismatch \\
+%         EPIRK4s3B & false & Error: AssertiError: Dimension mismatch \\
+%         EPIRK5P1  & false & Error: AssertiError: Dimension mismatch \\
+%         EPIRK5P2  & false & Error: AssertiError: Dimension mismatch \\
+%         EPIRK5s3  & false & Error: DimensionMismatch: tried to assign 2×1896 array to 3792×1 destination \\
+%         EXPRB53s3 & false & Error: AssertiError: Dimension mismatch \\
+%     \end{tabular}
+%     \caption{Exponential Propagation Iterative Runge-Kutta Methods}
+%     \label{tab:my_label}
+% \end{table}
+
+% \begin{table}[]
+%     \centering
+
+%     \begin{tabular}{p{5cm}|c|p{5cm}}
+%         Name & Funktionale & Fehler \\
+%         \hline\hline
+%         Exprb32 & false & Error: DimensionMismatch: array could not be broadcast to match destination \\
+%         Exprb43 & false & Error: DimensionMismatch: A has dimensions (3792,3792) but B has dimensions (2,1896) \\       
+%     \end{tabular}
+%     \caption{Adative Exponential Rosenbrock Methods}
+%     \label{tab:my_label}
+% \end{table}
+
+% \begin{table}[]
+%     \centering
+
+%     \begin{tabular}{p{5cm}|c|p{5cm}}
+%         Name & Funktionale & Fehler \\
+%         \hline\hline
+%         QNDF1 & true   & \\
+%         QBDF1 & true   & \\
+%         ABDF2 & true   & \\
+%         QNDF2 & true   & \\
+%         QBDF2 & true   & \\
+%         QNDF  & false  & Erros DimensionMissmatch \\
+%         QBDF  & false  & Erros DimensionMismatch \\
+%         MEBDF2& false  & Works but slow \\
+%         FBDF  & false  & Doesn work on gpu because scalar indexing \\
+%     \end{tabular}
+%     \caption{Mutlistep Methods}
+%     \label{tab:my_label}
+% \end{table}
+
+% \begin{table}[]
+%     \centering
+
+%     \begin{tabular}{p{5cm}|c|p{5cm}}
+%         Name & Funktionale & Fehler \\
+%         \hline\hline
+%         SSPSDIRK2 & false & Error: MethError: Cannot `convert` an object of type Float32 to an object of type CUDA.CuArray{Float32, 2, CUDA.Mem.DeviceBuffer}║ \\        
+%     \end{tabular}
+%     \caption{Implicit Strong-Stability Preserving Runge-Kutta Methods for Hyperbolic PDEs}
+%     \label{tab:my_label}
+% \end{table}
 

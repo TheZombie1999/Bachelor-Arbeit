@@ -2,24 +2,17 @@
 \section{Vergleich des impliziten und expliziten Eulers}
 
 In diesem Kaptiel gehts es darum die auswirkung der Impliciten Löser auf die NeuralODE zu analysieren.
-
 Dazu wurden Drei bespiel trajektorien berechnet.
-
 Welche jeweils mit dem impliziten und expliziten Euler berechnet wurde.
-
 Um beide verfahren möglichst gut miteinander vergleichen zu können wurde darauf geachtet das beide verfahren mit den gleichen einstellungen berechnet wurden.
-
 Dies führt jedoch dazu dass damit die expliziten methoden
 überhaupt ihre trajektorie komplett berechenen können, 
 die Fehler werte auf einen mindest wert gesetzt werden müssen.
-
 Dies führt dazu das die impliziten methoden ihre eigentlichen stärke ihre schritt weite so anzupassen 
 dass diese das bestmögliche ergebniss erreichen nicht 
 voll ausnutzen können.
-
 Werden nun die fehler der beiden berechneten trajektorien
 direkt miteinander verglichen, kann kaum ein unterschied erkannt werden.
-
 Desshalb wird in der folgenden Graphik
 die Differenz der impliziten und expliziten löser geplottet.
 
@@ -28,59 +21,37 @@ d = e_{Implizit} - e_{Explizit}
 $$
 
 Dabei wurde explizit auf den Betrag verzichtet damit gesehen werden kann in welchem abschnitt welcher löser den geringeren fehler hat.
-
 Ist also in der Folgenden Graphic die Differenz positiv 
 ist der explizite euler besser.
-
 Im Negativen bereich hat dann der impliziten euler den geringeren fehler.
 
 \begin{figure}
 \includegraphics[width=\textwidth]{Data/03_Ergebnisse/errors.png}
 \label{fig:eulervergleich}
 \end{figure}
-In der Graphic kann beobachtet werden, dass beim allen Trajektorien zuerst der Explizite euler das bessere ergebniss liefert.
 
+In der Graphic kann beobachtet werden, dass beim allen Trajektorien zuerst der Explizite euler das bessere ergebniss liefert.
 Dies liegt vorallem daran dass es sich in unserem beispiel 
 um einen Flüssigkeits simulation handelt, welche mit einer laminaren strömung begint.
-
 Da diese sich sehr linear verhalten liefert der expliziten 
 euler hier sehr gute ergebnisse.
-
 In der Simulation trifft das wasser dann nach 0.5s bis 1s
 auf ein objekt.
-
 Dies sorgt für mehr turbulenzen im fluss der flüssigkeit.
-
 Ab diesem Zeitpunkt ist der Implizite euler besser.
-
 Dies liegt vorallem daran das diser mit nicht linearen problemen besser zurecht kommt.
-
 Es fällt aussdem auf das sich beide verfahren mit der zeit
 immer weiter annähern.
-
 Dies liegt daran das im allgemeinen mit der zeit die fehler der
 trajektorien immer größer werden.
-
 Auch wenn es an hand der daten nicht zeifels frei zu erkennen ist,
 lassen die daten vermuten das der impliziten euler auch bei längeren trajektorien ein besseres ergebniss liefert.
-
 Obwohl die daten klar zeigen dass der Implizite Euler bessere
 ergebnisse liefert, sollte dieser doch nicht immer gewählt werden.
-
 Wie bereits angesprochen hängt die Qualität der Löser stark vom zu berechnedem problem ab.
-
 Der geringere Fehler der Trajektorie, benötigt jedoch eine deutlich
 größere laufzeit.
-
 Bei den expliziten methoden kann einen laufzeit von ein paar minuten 
 erwartet werden. Beim impliziten euler kommt es zu einer laufzeit von einigen Tagen. 
-
 In diesem Kaptiel wurden die Vor- und Nachteil der beiden Methoden vorgestellt.
-
 Wie diese Zwei verfahren miteinander verbunden werden können geht es im nächsten Kapitel.
-
-
-
-
-
-

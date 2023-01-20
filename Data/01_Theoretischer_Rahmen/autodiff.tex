@@ -73,8 +73,8 @@ $$
 
 Ein Programm, dass diese Funktion berechnet, könnte zum Beispiel wie folgt aussehen:
 
-\begin{lstlisting}
-    funktion f1 (x1, x2, a)
+\begin{lstlisting}[language=Julia]
+    function f1 (x1, x2, a)
         y0 = x1 + x2
         y1 = a * sin(y0)
         y2 = y_0 * y_1
@@ -100,8 +100,8 @@ $$
 Für $\frac{\partial y_2}{\partial x_2}$ ist das Verfahren analog. 
 Nun kann die Funktion $f$ so angepasst werden, dass sie nicht nur den Wert $y_2$ berechnet sonder auch $y'_2$.
 
-\begin{lstlisting}
-    funktion f2 (x1, x2, x'1, x'2, a)
+\begin{lstlisting}[language=Julia]
+    function f2 (x1, x2, x'1, x'2, a)
         y0 = x1 + x2
         y'0 = x'1 + x'2
 
@@ -125,7 +125,7 @@ Programmiersprachen möglich ist, Operationen zu überladen.
 Das heißt, die gleiche Funktion verhält sich abhängig vom Datentype anders.
 Konkret bedeutet das die Funktion $f$, wie folgt aufgerufen wird.
 
-\begin{lstlisting}
+\begin{lstlisting}[language=Julia]
 	x1 = (v1, p1)
     x2 = (v2, p2)
     
@@ -135,16 +135,16 @@ Konkret bedeutet das die Funktion $f$, wie folgt aufgerufen wird.
 Es fällt auf das nun $x_1$ und $x_2$ nicht mehr Fließkomma zahlen sind, sondern Tupel sind.
 Damit am Ende $f1$ das gleiche Ergebnis ausgibt, wie $f2$ müssen alle in der Funktion vorkommenden Operationen überladen werden.
 
-\begin{lstlisting}
-	funktion *(a::Tupel, b::Tupel)
+\begin{lstlisting}[language=Julia]
+	function *(a::Tupel, b::Tupel)
     	return (a[1] * b[1], a[1] * b[2] + a[2] * b[1]) 
     end
     
-    funktion +(a::Tupel, b:Tuple)
+    function +(a::Tupel, b:Tuple)
     	return (a[1] + b[1], a[2] + b[2])
     end
     
-    funktion sin(a:Tuple)
+    function sin(a:Tuple)
     	return (sin(a[1]), cos(a[1]) * a[2] ) 
     end
 \end{lstlisting}
