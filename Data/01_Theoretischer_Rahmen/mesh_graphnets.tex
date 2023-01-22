@@ -2,38 +2,40 @@
 
 \section{\textit{MeshGraphNets}} \label{sec:meshgraphnets}
 
-\textit{MeshGraphNets} \cite{meshgraphnets} sind eine Methode, mit der komplexe Physikalische-Systeme modelliert werden können.
-Beispiele für diese Systeme sind zum Beispiel verschiedene Köper in innerhalb einer Luft oder Wasser Strömung, 
+\textit{MeshGraphNets} \cite{meshgraphnets} sind eine Methode, mit dem komplexen Physikalische-Systeme modelliert werden können.
+Beispiele für diese Systeme sind zum Beispiel verschiedene Körper in innerhalb einer Luft oder Wasser Strömung, 
 sich aufgrund von externen Kräften verformende Platten oder Stoff Simulationen.
 Die Gemeinsamkeit all dieser Probleme ist, dass zu simulierende Objekt als ein variables Mesh dargestellt wird.
 Ein variables Mesh ist eine aus Dreiecken aufgebaute Gitterstruktur, die den zu simulierenden Raum approximiert.
-Das besondere dabei ist, dass dieses Mesh eine variable Auflösung hat, das heißt, unterschiedliche Bereiche des Raumes 
+Das Besondere dabei ist, dass dieses Mesh eine variable Auflösung hat, das heißt unterschiedliche Bereiche des Raumes 
 habe eine unterschiedliche hohe Dichte an Punkten, durch die das Mesh dargestellt wird.
-So kann in einer Flüssigkeits-Simutlation zum Beispiel die Grenzfläche zwischen einem Objekt innerhalb der Flüssigkeit
+So kann in einer Flüssigkeits-Simulation zum Beispiel die Grenzfläche zwischen einem Objekt innerhalb der Flüssigkeit
 genauer dargestellt werden, da dort die meisten Turbulenzen auftreten.
-Um so größer der Abstand von der Grenzfläche, desto laminarer verhält sich die Flüssigkeit.
+Um so größer der Abstand von der Grenzfläche, desto laminarer verfällt sich die Flüssigkeit.
 Eine laminare Strömung kann durch wenige Punkte gut angenähert werden.
 Der Grund für diese Vorgehensweise ist, dass dadurch die Berechnung der Simulation beschleunigt werden kann,
 ohne die Genauigkeit der Berechnung zu stark zu verringern.
-Normaler Weiß werden nun die dem physikalischen Problem zu Grunde liegenden Differenzialgleichungen mit einem numerischen Verfahren gelöst 
+Normaler Weiß werden nun die dem physikalischen Problem zugrunde liegenden Differenzialgleichungen mit einem numerischen Verfahren gelöst 
 und damit die Attribute der Mesh-Punkte im Laufe der Zeit vorhergesagt.
 Die Differenzialgleichungen für Flüssigkeits-Simulationen wird in Kapitel \ref{sec:simulationen} genauer eingegangen.
-Wie diese Numerische berechnet werden, wird außerdem in Kapitel \ref{sec:numerisches_lösen_von_anfangswert_problemen} erläutert.
+Wie diese numerische berechnet werden, wird außerdem in Kapitel \ref{sec:numerisches_lösen_von_anfangswert_problemen} erläutert.
 MeshGraphNets veränder nun eine entscheidende Komponente.
 Sie ersetzten die klassischen Differenzialgleichungen durch eine \textit{NeuralODE}.
 Die \textit{NeuralODE} wird anhand von Beispiel-Daten, die mit den klassischen Differenzialgleichungen erzeugt werden, trainiert.
 Da das \textit{Mesh} für jedes Problem unterschiedlich ist, muss dieses in ein einheitliches Format gebracht werden, dazu wird es in einen
 Multigraphen umgewandelt.
-Dieser setzt sich grundsätzliche aus drei Komponenten zusammen.
+Dieser setzt sich grundsätzlich aus drei Komponenten zusammen.
 Die erste Komponente sind alle Konten der Simulation, diese sind analog zu den Punkten des \textit{Mesh}.
-Die Kanten des Multigraphen setzt sich aus den Welt- und Mesh-Kanten zusammen.
+Die Kanten des MultiGraphen setzt sich aus den Welt- und Mesh-Kanten zusammen.
+
 Welt-Kanten werden grundsätzlich verwendet, um externe Kräfte zu modellieren und werden grundsätzlich erzeugt, 
 wenn zwei Punkte sich räumlich sehr nahe sind.
 Die Mesh-Kanten sind relevant, um die Dynamiken innerhalb des \textit{Mesh} darzustellen und werden von diesem übernommen.
 Über die Kanten des Multigraphen werden dann Informationen zwischen den Knoten ausgetauscht.
 Diese werden dann genutzt, um die Änderung der Eigenschaften der Meshknoten zu berechnen.
-Aus diesen Änderungen kann dann mit den unterschiedlichen Differenzialgleichungslösern der Zustand des \textit{Meshes} im nächsten Zeitschritt berechnet werden. 
+Aus diesen Änderungen kann, dann mit den unterschiedlichen Differenzialgleichens-Lösern, der Zustand des \textit{Meshes} im nächsten Zeitschritt berechnet werden. 
 Dieses Verfahren wird nun so lange wiederholt, bis der gewünschte Zeit-Punkt erreicht wird.
+
 
 
 
