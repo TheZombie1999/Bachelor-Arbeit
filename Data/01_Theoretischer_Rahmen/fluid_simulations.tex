@@ -49,16 +49,16 @@ $$
 \rho \vec{g} - \nabla \cdot \vec{p} + \eta \Delta \vec{u}
 $$
 
-Der große unterschied der Navier-Stokes-Gleichung zur Euler-Gleichung ist der Term $\eta \Delta \vec{u}$.
-$\eta$ ist dabei eine Material konstante für die Viskosität.
-Die Navier-Stokes-Gleichung ist unter keinen umstenden vollständig.
-Das heißt es gibt phänomenen die in der Gleichung nicht berücksichtigt werden.
-Oft wird dies deutlich gemacht, indem ein Kraft Vektor $\vec{f}$ zur rechten Seite addiert wird.
-Für die meisten realen Anwendung reichen diese annahmen jedoch aus, weshalb die Navier-Stokes-Gleichung sehr nützlich ist.
+Der große Unterschied der Navier-Stokes-Gleichung zur Euler-Gleichung ist der Term $\eta \Delta \vec{u}$.
+$\eta$ ist dabei eine Materialkonstante für die Viskosität.
+Die Navier-Stokes-Gleichung ist unter keinen Umständen vollständig.
+Das heißt, es gibt Phänomene, die in der Gleichung nicht berücksichtigt werden.
+Oft wird dies deutlich gemacht, indem ein Kraft-Vektor $\vec{f}$ zur rechten Seite addiert wird.
+Für die meisten realen Anwendung reichen diese Annahmen jedoch aus, weshalb die Navier-Stokes-Gleichung sehr nützlich ist.
 
-Die Navier-Stokes-Gleichung ist für uns besonders intressant da sie die Datengrundlange für das Training unserer NeuralODE liefert.
-Ausserdem demonstriet sie welche vereinfachungen das verwenden der NeuralODE beim auswerten ermöglicht.
-Diese erlaubt es uns die DiffentialGleichung nur abhängig von der Geschwindichkeit $v$ auszuwerten.
-Demnach kann die berechnung des Druckes $p$ vermieden werden.
+Die Navier-Stokes-Gleichung ist für uns besonders interessant, da sie die Datengrundlage für das Training unserer \textit{NeuralODE} liefert.
+Außerdem demonstriert sie, welche Vereinfachungen das Verwenden der NeuralODE beim Auswerten ermöglicht.
+Diese erlaubt es uns, die Differenzialgleichung nur abhängig von der Geschwindigkeit $v$ auszuwerten.
+Demnach kann die Berechnung des Druckes $p$ vermieden werden.
 
 % https://www.youtube.com/watch?v=OjbQbPSopu0

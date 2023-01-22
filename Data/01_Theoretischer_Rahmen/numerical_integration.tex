@@ -4,7 +4,7 @@
 % https://books.google.de/books?hl=de{sec:explizites_euler_verfahren}&lr=&id=gGCKdqka0HAC&oi=fnd&pg=PP1&dq=numerical+integration&ots=NDzzuAvLhM&sig=3_fDwVwrMX_kgecuXDtsKIZ6pgE&redir_esc=y#v=onepage&q&f=false
 % https://en.wikipedia.org/wiki/Numerical_integration#:~:text=In%20analysis%2C%20numerical%20integration%20comprises,numerical%20solution%20of%20differential%20equations.
 
-Anfangswert-Probleme treten in vielen Naturwissenschaften auf, denn sie erlauben es Wissenschafterlern, 
+Anfangswert-Probleme treten in vielen Naturwissenschaften auf, denn sie erlauben es Wissenschaftlern, 
 den Verlauf eines Systems im Laufe der Zeit zu modellieren.
 Um dies umzusetzen, wird eine Differenzialgleichung benötigt, welche die Veränderung des Systems beschreibt.
 Diese ist jedoch nutzlos, falls nicht der initiale Zustand des Systems bekannt ist.
@@ -31,7 +31,7 @@ $$
 
 Im allgemeinen ist es aber nicht immer möglich, 
 ein Anfangswert-Problem analytisch zu lösen. 
-In den nächsten Kapiteln werden mehrer Verfahren vorgestellt diese numerisch zu berechnen.
+In den nächsten Kapiteln werden mehrere Verfahren vorgestellt, diese numerisch zu berechnen.
 Ein Beispiel für ein solches Problem wird in Kapitel \ref{sec:simulationen} vorgestellt.
 
 \section{Numerisches Lösen von Anfangswert-Problemen} \label{sec:numerisches_lösen_von_anfangswert_problemen}
@@ -49,22 +49,22 @@ $$
 t_k = t_0 + kh \text{, mit } k = 0, 1, 2, ...
 $$
 
-Die approximierten Werte von $y$ werden,wie folgt berechnet:
+Die approximierten Werte von $y$ werden, wie folgt berechnet:
 
 $$
 y_{k + 1} = y_{k} + h \cdot f(t_k, y_k)
 $$
 
-Das Euler-Verfahren basiert auf folgender approximation des zu berechnenden Integrals:
+Das Euler-Verfahren basiert auf folgender Approximation des zu berechnenden Integrals:
 
 $$
 \int_{t_k}^{t_{k+1}} f(t_k, y_k(s)) ds \approx h f(t_k, y_k)
 $$
 
-Dies ist wichtig, da alle Verfahren zum numerischen Lösen von Anfangswert-Problemen sich darin unterscheiden wie sie diese Approximation berechnen.
+Dies ist wichtig, da alle Verfahren zum numerischen Lösen von Anfangswert-Problemen sich darin unterscheiden, wie sie diese Approximation berechnen.
 Das explizite Euler-Verfahren mit einer \textit{NeuralODE} zu berechnen
 ist leicht, da $y_k$, h und $f(t_k, y_k)$ bekannt sind.
-Das nächste Verfahren, das vorgestellt wird, verändert die Art und Weiße der Approximation, dies führt dazu, dass die Berechnung nicht direkt durchgeführt werden kann.
+Das nächste Verfahren, das vorgestellt wird, verändert die Art und Weise der Approximation, dies führt dazu, dass die Berechnung nicht direkt durchgeführt werden kann.
 
 \subsection{Implizite Euler Verfahren}
 

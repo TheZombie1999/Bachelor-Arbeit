@@ -4,8 +4,8 @@
 \section{Automatisches Differenzieren} \label{sec:auto_diffentiation}
 
 Beim automatischen Differenzieren \cite[Kapitel~2]{autodiff} geht darum, die Ableitung einer Funktion automatisch zu berechnen.
-Das besondere dabei ist das diese meistens als Computerprogramm gegeben ist.
-Automatisches Differenzieren findet Anwendung beim trainieren von neuronalen Netzen 
+Das besondere dabei ist, dass diese meistens als Computerprogramm gegeben ist.
+Automatisches Differenzieren findet Anwendung beim Trainieren von neuronalen Netzen 
 und dem Lösen von nicht-linearen Gleichungssystemen durch das Newton-Verfahren.
 Der zweite Grund ist für diese Arbeit besonders relevant, da 
 dieses benötigt wird, um die Runge-Kutta-Verfahren, die in Kapitel \ref{sec:runge_kutta} vorgestellt wurden, zu berechnen.
@@ -26,8 +26,8 @@ Wird nur eine konkrete Partielle-Ableitung benötigt, kann diese ebenfalls mit A
 
 \subsection{Implementation} \label{sec:implementation}
 
-Es gibt grundsätzlich vier Wege automatische Differenzierung umzusetzen.
-Die einfachste Variante approximiert die Limitdefinition in dem sie $h$ auf einen kleinen Wert setzt.
+Es gibt grundsätzlich vier Wege, automatische Differenzierung umzusetzen.
+Die einfachste Variante approximiert die Limit-Definition, in dem sie $h$ auf einen kleinen Wert setzt.
 
 $$
 \frac{\partial f_k}{\partial x} = \lim_{h \to 0} \frac{f_k(x+ h) - f_k(x)}{h} \approx \frac{f_k(x + h) - f_k(x)}{h} 
@@ -39,7 +39,7 @@ Eine exakte Lösung ergibt sich mit der Verwendung eines Computer-Algebra-System
 Dieses Verfahren operiert auf der symbolischen Repräsentation der Funktion.
 Es verwendet also die unterschiedlichen Ableitungs-Regeln, um eine exakte Lösung zu berechnen.
 Dieses Verfahren hat das Problem, dass häufig verwendete Ableitungs-Regel wie zum Beispiel die Produktregel
-mit jeder Anwendung die Ergebnissgröße verdoppelt, wodurch es zu einem exponentiellen Wachstum 
+mit jeder Anwendung die Ergebnis-Größe verdoppelt, wodurch es zu einem exponentiellen Wachstum 
 der symbolischen Repräsentation kommt.
 Dies macht dieses Verfahren unbrauchbar, um die Ableitung eines neuronalen Netzes zu berechnen.
 
@@ -54,10 +54,10 @@ Konzeptionell ist dieses Verfahren sehr ähnlich zu der zuvor vorgestellten Meth
 Der große Unterschied ist dann bei dieser Methode der Code der Funktion so umgeschrieben wird, 
 dass diese sowohl ihre eigentliche Ausgabe als auch ihre Ableitung selbst mit berechnet.
 Dies kann auch automatisch geschehen.
-So kann dafür in Julia oder C zum Beispiel ein Macro verwendet werden oder diese Funktion direkt in den Compiler mit eingebaut werden.
-Diese Methoden ist Vermutliche die zur Laufzeit schnellste variante.
+So kann dafür in Julia oder C zum Beispiel ein Makro verwendet werden oder diese Funktion direkt in den Compiler mit eingebaut werden.
+Diese Methoden sind vermutlich die zur Laufzeit schnellste Variante.
 Hat den Nachteil, dass diese sehr schwer umzusetzen ist.
-So kann zu Beispiel meistens keine if Statements oder andere Kontroll-Fluss-Methoden innerhalb der Funktion verwendet werden. 
+So kann zu Beispiel meistens keine \textit{if-Statements} oder andere Kontroll-Fluss-Methoden innerhalb der Funktion verwendet werden. 
 Diese führt dazu, dass diese Variante nur selten zum Einsatz kommt.
 
 \subsection{Automatische Differenzierung über die Ketten Regel} \label{sec:ketten_regel}
@@ -118,8 +118,8 @@ Nun kann die Funktion $f$ so angepasst werden, dass sie nicht nur den Wert $y_2$
 Welche Partielle-Ableitung von $f2$ berechnet wird, hängt davon ab, wie die Argumente $x'_1$ und $x'_2$ gesetzt werden.
 Wird $x'_1 = 1$ gesetzt und $x_2' = 0$ dann führt dies dazu, dass $\frac{\partial y_2}{\partial x_1}$ berechnet wird.
 Um die Ableitung nach $x_2$ zu berechnen, werden die Werte einfach vertauscht.
-Diese Verfahren liefert das gewünschte Ergebniss, ist aber noch lange nicht automatisch.
-Es ist zwar möglich, diesen Code vom Compiler oder durch einen Macro generieren zu lassen.
+Diese Verfahren liefert das gewünschte Ergebnis, ist aber noch lange nicht automatisch.
+Es ist zwar möglich, diesen Code vom Compiler oder durch einen Makro generieren zu lassen.
 In den meisten fällen wird ausgenutzt, dass es in einer 
 Programmiersprachen möglich ist, Operationen zu überladen.
 Das heißt, die gleiche Funktion verhält sich abhängig vom Datentype anders.
@@ -166,13 +166,13 @@ Eine allgemeinere Version der \textit{Dual}-Zahl für höher dimensionale Proble
 Die beschriebene Methode zum Automatischen-Differenzieren wird oft auch als Vorwärtsmodus-Differenzierung bezeichnet.
 erwähnenswert ist auch die Rückwertsmodus-Differenzierung.
 Diese funktioniert sehr ähnlich zu Vorwärtsmodus-Differenzierung.
-Mit dem unterschied, dass die zwischen Ergebnis $y_0, ... , y_n$ zuerst berechnet und zwischen gespeichert werden.
+Mit dem Unterschied, dass die zwischen Ergebnis $y_0, ... , y_n$ zuerst berechnet und zwischen gespeichert werden.
 Dann wird auf Grundlage der zwischen gespeicherten Werte die Ableitung berechnet.
 Das heißt, anstatt die Ableitung in jeden Berechnungsschritt mit zuziehen, wird diese erst am Ende für alle freien Variablen berechnet.
 Dies hat den großen Vorteil, dass die Laufzeit des Algorithmus von der Berechnungszeit der Funktion $f$ abhängt und nicht von der Anzahl der Parameter.
 Der Nachteil dieser Methoden ist, dass dafür wesentlich mehr Speicherplatz verbraucht wird.
 Welcher dieser beiden Verfahren besser geeignet ist, hängt stark vom Problem ab.
-Bei einem neuronalen Netz gibt es in der Regeln eine große Anzahl an freien Parametern, was die Rückwärtsmodus-Differenzierung bevorzugt.
+Bei einem neuronalen Netz gibt es in der Regel eine große Anzahl an freien Parametern, was die Rückwärtsmodus-Differenzierung bevorzugt.
 Die meisten Differenzialgleichungen haben in der Regel nur 4 freie Variablen.
 Die erste frei Variable ist meistens die Zeit und dann kommen noch die 3 Raumdimensionen hinzu.
 Diese führt dazu, dass die Vorwärzmodus-Differenzierung bei Differenzialgleichungen meist besser geeignet ist.
