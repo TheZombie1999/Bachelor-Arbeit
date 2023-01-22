@@ -1,7 +1,7 @@
 
 \section{Grafikkarten Programmierung} \label{sec:gpu}
 
-Da das Simulieren von physikalischen Vorgängen, 
+Da das Simulieren von physikalischen Vorgängen 
 meistens sehr zeit-intensive Berechnungen zugrunde liegen, 
 wurden verschiedene Methoden entwickelt, 
 um diese zu beschleunigen.
@@ -10,6 +10,7 @@ Die CPU ist sehr gut darin, eine Sequenz voneinander abhängigen Operationen zu 
 Bei der Berechnung von neuronalen Netzen oder Simulationen muss aber meistens eine große Menge 
 an voneinander unabhängigen Operationen durch geführt werden.
 Da die einzelnen Operationen unabhängig voneinander sind, ist es irrelevant, in welcher Reihenfolge diese ausgeführt werden.
+
 Dies macht sich die Grafikkarte zu nutzen und führt eine große Zahl an Operationen gleichzeitig aus.
 Um zum Beispiel eine \textit{NeuralODE} auswerten zu können, muss folgende Gleichung gelöst werden:
 
@@ -35,16 +36,7 @@ Im Vergleich zu den typischen Matrix-Operationen ist, dass nicht jede atomare Op
 da es vorkommen kann, dass mehrere Operationen gleichzeitig in dieselbe Speicherzelle schreiben.
 Dies führt zu dem Hauptproblem dieser Arbeit, auf welches im Folgenden näher eingegangen wird.
 
-
-
-
-
-
-
 % Mehr bezug zur eigenlichen arbeit
-
 % mehr auf neuronale netzte eingehen.
-
 % Matrix darstellung von neuralode zeigen
-
 % 

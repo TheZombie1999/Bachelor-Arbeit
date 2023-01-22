@@ -3,11 +3,12 @@
 Da nun bekannt ist, was eine \textit{Dual}-Zahl ist, 
 kann das eigentliche Problem betrachtet werden.
 Die Implementierung der \textit{scatter!} Funktion benutzt folgenden Programmcode, um die 
-Addition umzusetzen.
+Addition umzusetzen:
 
-\begin{verbatim}
-    	CUDA.@atomic dst[idx[index]...] = op(dst[idx[index]...], src[index])
-\end{verbatim}
+\begin{lstlisting}[language=Julia]
+CUDA.@atomic dst[idx[index]...] = 
+	op(dst[idx[index]...], src[index])
+\end{lstlisting}
 
 
 Dabei ist der Macro \textit{@atomic} ein Wrapper um die C-Implementierung von \textit{CUDA.jl} \cite{besard2018juliagpu}.
