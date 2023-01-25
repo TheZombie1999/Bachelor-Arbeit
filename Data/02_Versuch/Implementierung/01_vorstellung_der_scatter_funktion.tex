@@ -1,33 +1,37 @@
-\subsection{Vorstellung der Scatter funktion} \label{sec:vorstellung}
+\subsection{Vorstellung der \textit{scatter}-Funktion} \label{sec:vorstellung}
 
 Um die Probleme der \textit{scatter}-Funktion lösen zu können, 
-wird diese vorgestellt.
+wird in diesem Kapitel erstmal deren Funktionsweise betrachtet.
 
-Die Aufgabe dieser Funktion ist es, Werte aus einem mehr dimensionalen Array 
-in ein anders Array ähnlicher Größe zu schreiben 
-und dabei auf alle Werte die in die selbe Zelle geschrieben werden eine Operation anzuwenden.
+Aufgabe dieser Funktion ist es, den Wert aus einer Zelle 
+eines mehrdimensionalen Arrays, in ein anderes Array ähnlicher Größe zu schreiben.
 
+Dabei wird ein Operator auf alle Werte, die in dieselbe Zelle
+geschrieben werden, angewendet.
 
-Es können zum Beispiel mehrere Eingaben in einen Knoten eines Graphen, 
-welcher in Matrix Form aufgestellt wurde,
-zusammen gerechnet werden.
+Dies findet zum Beispiel Anwendung, wenn alle Eingaben in einen Knoten eines Graphen zusammen gezählt werden sollen.
+
+Der Graph besteht dabei aus einem Vektor aus Koten 
+und einer Matrix aus Kanten.
 
 Die Besonderheit der \textit{scatter}-Funktion ist dabei, 
 dass dies nicht nur für eine Zelle geschieht, sondern für alle.
 
+Wird diese auf der Grafikkarte ausgeführt, passiert dies parallel.
+
 %Diese ist wie folgt definiert:
 % Die Definition der \textit{scatter}-Funktion lautet wie folgt:
-Die Definition lautet wie folgt:
+Die Definition der \textit{scatter}-Funktion lautet wie folgt:
 
 \begin{lstlisting}{language=Julia}
 	"""
 	op ist die Operation die auf alle Werte, die in die selbe 
 	    Zelle geschrieben werden, angewendet wird.
 		Moegliche Werte sind +, -, *, /, min, max, mean.
-	src ist eine beliebige Matrix aus der Werte gelesen 
+	src ist eine Matrix aus der Werte gelesen 
 	    und wieder an anderer stelle zurueck geschrieben werden.
-	idx ist ebenfalls eine beliebige Matrix aus der entnommen wird,
-	    an welche Stelle der Wert einer Zelle geschrieben werden soll.
+	idx ist ebenfalls eine Matrix aus der entnommen wird,
+	    wo der Wert einer Zelle hin geschrieben werde soll.
 	init beschreibt wie das Ziel-Array initialisiert wird.
 	     Dies kann zum Beispiel genutzt werden, 
 		 um den Inhalt des Arrays in das geschrieben wird, 
@@ -56,7 +60,7 @@ Dies verhindert,
 dass viele Spezialfälle der Addition von Dualzahlen nicht implementiert werden müssen.
 Es fällt außerdem auf, dass die Implementierung der Berechnung innerhalb der \textit{scatter!}-Funktion
 durchgeführt wird.
-Das Ausrufezeichen im Funktionsnamen bedeutet, das die Argumente der Funktion überschrieben werden können.
+Das Ausrufezeichen im Funktionsnamen bedeutet, dass die Argumente der Funktion überschrieben werden können.
 Die \textit{NNlibCuda.jl} \cite{nnlibcuda} Bibliothek überlädt diese Funktion für \textit{CUDA}-Arrays und
 implementiert die Berechnung auf der Grafikkarte.
 Innerhalb dieser Implementierung tritt der Fehler auf, der die Verwendung von \textit{Dual}-Zahlen

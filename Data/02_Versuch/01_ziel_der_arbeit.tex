@@ -12,16 +12,15 @@ konzentriert sich diese Arbeit auf implizite Methoden.
 Die größte Herausforderung dabei ist, 
 diese auf der Grafikkarte und nicht auf der CPU zu berechnen.
 Der Grund ist die lange Berechnungsdauer der impliziten Methoden.
-Das Hauptproblem beim Berechnen von \textit{NeuralODEs} ist, das diese der Differentialgleichung nicht immer reelle Zahlen als arguement übergeben.
-Stat dessen wird oft eine dual zahl verwendet, welche eine abwandlung von 
-imaginär Zahlen sind.
-Diese sind Vorraussetzung dafür, 
+Das Hauptproblem beim Berechnen von \textit{NeuralODEs} ist, dass diese der Differenzialgleichung nicht immer reelle Zahlen als Argument übergeben.
+Stattdessen wird oft eine \textit{Dual}-Zahl verwendet.
+Diese sind Voraussetzung dafür, 
 automatische Differenzierungsalgorithmen berechnen zu können.
 Dies setzt voraus, dass alle Komponenten der \textit{NeuralODE}\cite{neuralode} diese verarbeiten können.
 Die meisten Komponenten sind dazu bereits in der Lage, 
 da die Implementierung der \textit{Dual}-Zahlen
-die standard Operationen überlädt.
-Auf der Grafikkarte tritt das Problem auf, dass die standard Operationen 
+die Standard-Operatoren überlädt.
+Auf der Grafikkarte tritt das Problem auf, dass diese
 zusätzlichen Beschränkungen unterliegen 
 und deshalb \textit{Dual}-Zahlen nicht verarbeiten können.
 In diesem Kapitel werden die Hintergründe erläutert und ein Lösungsansatz vorgestellt.

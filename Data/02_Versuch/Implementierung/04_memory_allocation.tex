@@ -1,8 +1,8 @@
-\subsection{Speicher Reservieren auf der Graphikkarte} \label{sec:memory}
+\subsection{Speicherreservierung auf der Grafikkarte} \label{sec:memory}
 
-Wie bereits im Kapitel \ref{atomic} beschrieben, 
+Wie bereits im Kapitel \ref{sec:atomic} beschrieben, 
 muss die Addition von Dual zahlen Komponenten weiße durchgeführt werden.
-Da es aber nicht möglich ist, auf die einzelnen Komponenten direkt zu zugreifen,
+Da es aber nicht möglich ist, auf die einzelnen Komponenten direkt zuzugreifen,
 müssen diese zwischen gespeichert werden, um direkten Zugriff zu erlauben.
 \textit{CUDA} \cite{besard2018juliagpu} unterstützt die folgenden Arten von Speicher auf der Grafikkarte:
 
@@ -18,21 +18,21 @@ da dieser nicht verändert werden kann.
 \textit{Local Memory} ist Speicher, 
 der über die Register eines Threads in der Grafikkarte zugegriffen wird.
 Die Verwendung von \textit{Local Memory} scheitert daran, 
-das nur ein Thread auf diese Register zugreifen kann.
+dass nur ein Thread auf diese Register zugreifen kann.
 \textit{Shared Memory} ist Speicher, 
-der von allen Threads in einem ThreadBlock erreichbar ist.
-Da nicht sicher gestellt werden kann das alle Threads, 
-die in dieselbe speicher stelle schreiben, auch im selben Threadblock sind,
+der von allen Threads in einem Thread Block erreichbar ist.
+Da nicht sichergestellt werden kann, dass alle Threads, 
+die in dieselbe Speicherstelle schreiben, auch im selben Thread block sind,
 kann dies nicht verwendet werden.
 Der Speichertype für unser Problem ist \textit{Global Memory}, 
 da dieser von allen Threads erreicht werden kann.
-Mit dem Nachteil das die erhöte geschwindichkeit der ander Speichersorten, 
+Mit dem Nachteil, dass die erhöhte Geschwindigkeit der andere Speichersorten, 
 nicht genutzt werden kann.
-\textit{Global Memory} muss ausserhalb des kernels allociert werden, 
-was zu einer fragmentierung der umsetzung der addition von Dual zahlen führt.
+\textit{Global Memory} muss außerhalb des Kernels allokiert werden, 
+was zu einer Fragmentierung der Umsetzung der Addition von \textit{Dual}-Zahlen führt.
 Die Fragmentierung führt dazu, 
-dass große Teil der bereits vorhandenen Implementierungen der \textit{scatter!} Funktion mit minimalen Änderungen noch einmal
+dass große Teil der bereits vorhandenen Implementierungen der \textit{scatter!}-Funktion mit minimalen Änderungen noch einmal
 implementiert werden müssen.
 Die Verwendung von \textit{Global Memory} ermöglicht es, die Berechnung korrekt durchzuführen,
-dass Ergebnis kann aber noch nicht in das Ziel Array zurückgeschrieben werden.
+das Ergebnis kann aber noch nicht in das Ziel Array zurückgeschrieben werden.
 In dem nächsten Kapitel geht es darum, wie die letzten zwei Probleme gelöst werden können.

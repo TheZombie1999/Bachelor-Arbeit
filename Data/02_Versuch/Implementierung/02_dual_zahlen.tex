@@ -1,16 +1,12 @@
-\subsection{Dual Zahlen} \label{sec:dual_zahlen}
+\subsection{\textit{Dual}-Zahlen} \label{sec:dual_zahlen}
 
 Um zu verstehen, was auf der Grafikkarte zu Problemen führt, 
 wird zunächst die Definition von \textit{Dual}-Zahlen betrachtet.
-
 \textit{Dual}-Zahlen werden von der \textit{ForwardDiff.jl} Bibliothek \cite{juliaForwardDiffPackage}
 implementiert. 
-
 Die Definition dieser Zahlen ist von Imaginären-Zahlen abgeleitet.
-
-Genauer gesagt handelt es sich um mehrdimensinale Dual Zahlen, 
-
-Da sich hinter diesem Begriff zwei sehr ähnliche Konzepte verbergen, 
+Genauer gesagt handelt es sich um mehrdimensionale \textit{Dual}-Zahlen, 
+da sich hinter diesem Begriff zwei sehr ähnliche Konzepte verbergen, 
 führen wir folgende zwei Begriffe ein.
 Mit einer \textit{Dual}-Zahl wird die konkrete Implementierung in der \textit{ForwardDiff.jl} Bibliothek \cite{juliaForwardDiffPackage} bezeichnet.
 Eine Multidimensionale \textit{Dual}-Zahl bezeichnet die mathematische Definition, 
@@ -19,30 +15,30 @@ welche von imaginären Zahlen abgeleitet ist.
 \begin{equation}
  d = x + \sum_{i = 1}^{k} y_i \epsilon_i 
 \end{equation}
-$$ \text{ d ist eine Multidimensionale Dual Zahl } $$ 
-$$ \text{ x ist die relle componente } $$ 
+$$ \text{ d ist eine Multidimensionale \textit{Dual}-Zahl } $$ 
+$$ \text{ x ist die relle komponente } $$ 
 $$ y_i \text{ sind die imaginären komponenten mit } i \in \{1, ..., k\} $$
 
-Bei Multidimensinalen \textit{Dual}-Zahlen gilt:
+Bei multidimensionalen \textit{Dual}-Zahlen gilt:
 \begin{equation}
  \epsilon_i \cdot \epsilon_j = 0
 \end{equation}
 
-Für die Definition von Multidimensinalen \textit{Dual}-Zahlen \cite{juliaForwardDiffPackage}
-ist ebenfalls ihr verhalten auf scalare Operationen wichtig:
+Für die Definition von multidimensionalen \textit{Dual}-Zahlen \cite{juliaForwardDiffPackage}
+ist ebenfalls ihr Verhalten auf skalare Operationen wichtig:
 
 \begin{equation}
  f( x + \sum_{i = 1}^{k} y_i \epsilon_i  ) = f(x) +  f'(x) \sum_{i = 1}^{k} y_i \epsilon_i
 \end{equation}
 
-Das verhalten auf skalare Operationen ist entscheidet 
-für die Berechnung von automatischen Differenzierungs Algorithmen.
+Das Verhalten auf skalare Operationen ist, entscheidet 
+für die Berechnung von automatischen Differenzierungs-Algorithmen.
 
 Um die \textit{scatter}-Funktion umzusetzen, 
-wird die Definition der Addition von Multidimensionalen \textit{Dual}-Zahlen \cite{RecentAdvances} benötigt.
+wird die Definition der Addition von multidimensionalen \textit{Dual}-Zahlen \cite{RecentAdvances} benötigt.
 
 \begin{equation}
 (x_1 + \sum_{i = 1}^{k} y_{1,k} \epsilon_i) + ( x_2 + \sum_{i = 2}^{k} y_{2,k} \epsilon_i) = (x_1 + x_2) + \sum_{i = 1}^{k} (y_{1, i} + y_{2, i}) \epsilon_i
 \end{equation}
-Alle weiteren Operationen lassen sich ebenfalls von den von den komplexen Zahlen ableiten, 
+Alle weiteren Operationen lassen sich ebenfalls von den komplexen Zahlen ableiten, 
 sind aber nicht relevant, um die Differenzialgleichungslöser zu unterstützen.

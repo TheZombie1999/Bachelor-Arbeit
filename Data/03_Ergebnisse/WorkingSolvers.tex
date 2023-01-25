@@ -1,15 +1,42 @@
 \section{Funktionierende Löser}
 
-In diesem Abschnitt wird ein überblick darüber gegeben, welche 
-ODE Löser nach dem hinzufügern der in \ref{} Vorgestellten 
-version der \textit{scatter}-Funktion nun möglich sind.
-Wichtig ist dabei das es nicht möglich ist jeden löser ausführlich zu testen
-da diese zum Teil eine sehr lange laufzeit haben.
-Aufgrund dessen wurde jeder der im folgenden grafik als Funktionend 
-bezeichnet solange laufen gelassen bis dieser den ersten zeit schritt gemacht hat.
-Der Grund für diese vorgehens weiße ist dass die löser an diesem punkt meistens scheitern.
-Wenn dieser punkt überschritten war dann kam es erfahrungs gemäß zu keinen 
-weitern problem eine 100\%-tige garantie lieftert dies aber nicht.
+In diesem Abschnitt wird ein Überblick darüber gegeben, welche 
+ODE-Löser nach dem Hinzufügen der in \ref{ch:versuch} vorgestellten 
+Version der \textit{scatter}-Funktion nun möglich sind.
+
+Eine detaillierte Auflistung aller impliziten Löser und ihrem 
+funktionalen Stand findet sich im Anhang \ref{solver_tabels}.
+
+Wichtig ist dabei, dass es nicht möglich ist jeden Löser ausführlich zu testen,
+da diese zum Teil eine sehr lange Laufzeit haben.
+Aufgrund dessen wurde jeder, der im folgenden Grafik als funktionierend 
+bezeichnet, so lange laufen gelassen, bis dieser den ersten Zeitschritt erfolgreich berechnet hat.
+Der Grund für diese Vorgehensweise ist, dass die Löser an diesem Punkt meistens scheitern,
+wenn dieser Punkt überschritten ist, dann kam es erfahrungsgemäß zu keinen 
+weiteren Problemen, eine 100\%-tige Garantie liefert dies aber nicht.
+Ausführlich getestet wurde alle die Algorithmen, die in Kapitel \ref{ch:versuch} vorgestellt wurden.
+
+Es sind nicht alle Gründe bekannt, warum manche Löser noch nicht funktionieren.
+
+Bekannte Probleme sind allerdings:
+
+\begin{itemize}
+    \item Multithreading
+    \item Asynchrone Ausführung
+    \item Komplexe Zahlen
+    \item Skalare Indexierung
+    \item Invalides Casting
+\end{itemize}
+
+Laut der \textit{CUDA} Dokumentation sollte Multithreading und Asynchrone Ausführung funktionieren.
+In unseren Tests hat sich das jedoch nie bestätigt.
+Die \textit{scatter}-Funktion kann aktuelle nur \textit{Dual}-Zaheln, die reelle Zahlen enthalten verwenden. Theoretisch könnten mache Löser allerdings auch komplexen Zahlen verwenden.
+
+Diese ist aktuell nicht unterstützt.
+Könnte aber relativ leicht mit einem ähnlichen Ansatz wie in Kapitel \ref{ch:versuch} vorgestellt wurde, gelöst werden.
+
+
+
 
 % \begin{table}[]
 %     \centering

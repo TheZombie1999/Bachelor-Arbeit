@@ -1,40 +1,39 @@
 
 \section{\textit{NeuralODEs}} \label{sec:neural_ode}
 
-Eine \textit{NeuralODE} \cite{neuralode} basiert auf dem in Kapitel \ref{sec:anfangswert_probleme} vorgestellten Anfangswert-Problemen.
-Der Unterschied zwischen ein NeuralODE und einem Anfangswert-Problem ist, 
-die Funktion $f$ in einer \textit{NeuralODE} nicht mehr eine klassische Gleichung, sondern ein 
-neuronales Netzt repräsentiert wird.
-Da ein neuronales Netzt nicht nur von seinen Eingaben, sondern auch von seinen Gewichten und Biasies abhängt,
-
-lautet die Definition einer \textit{NeuralODE} wie folgt:
+Eine \textit{NeuralODE} \cite{neuralode} basiert auf dem in Kapitel \ref{sec:anfangswert_probleme} vorgestellten Anfangswertproblemen.
+Der Unterschied zwischen einer \textit{NeuralODE} und einem Anfangswertproblem ist, 
+die Funktion $f$ in einer \textit{NeuralODE} nicht durch eine klassische Gleichung, sondern durch ein 
+neuronales Netz repräsentiert wird, welches nicht nur von seinen 
+Eingaben, sondern auch von seinen Gewichten und Biases abhängt.
+Deshalb lautet die Definition einer \textit{NeuralODE} wie folgt:
 
 $$
 \frac{d y(t)}{dt} = f(y(t), t, \theta)
 $$
 
-Durch den Trainingsprozess des neuronalen Netzes werden dessen Gewichte und Biasis 
-so gewählt, das die Funktion $f(y(t), t, \theta)$ eine Approximation der klassischen 
+Durch den Trainingsprozess des neuronalen Netzes werden dessen Gewichte und Biases 
+so gewählt, dass die Funktion $f(y(t), t, \theta)$ eine Approximation der klassischen 
 Differenzialgleichung $f(y(t), t)$ darstellt.
 
-Ziel dieser Approximation ist es, das Auswerten von großen Physik-Simulationen zu beschleunigen.
-Der Grund für die erhoffte beschleunigte Auswertung ist, dass sich neuronale Netze besser parallelisiert auswerten lassen
+Ziel dieser Approximation ist es, das Auswerten von komplexen Physik-Simulationen zu beschleunigen.
+Der Grund für die beschleunigte Auswertung ist, dass sich neuronale Netze besser parallelisiert auswerten lassen
 als die klassischen Differenzialgleichungen.
 Außerdem fallen Berechnungen weg, die die innere Dynamik des Anfangswert-Problems beschreiben.
 So muss bei der Berechnung der Navier-Stokes-Gleichung durch eine \textit{NeuralODE} die Änderung des Druck-Feldes 
-nicht mit berechnet werden, da diese Dynamik von dem neuronalen Netz erlernt wurde.
+nicht mit berechnet werden \ref{sec:simulationen}, da diese Dynamik von dem neuronalen Netz erlernt wird.
 
 Außerdem ist es möglich, die \textit{NeuralODE} auf Daten zu trainieren, 
 zu denen die eigentliche Differenzialgleichung nicht bekannt ist.
-Soll zum Beispiel die Größe einer Hasen-Population vorhergesagt werden, dann gibt es vielleicht Daten über dessen 
-vergangenen Verlauf, aber keine bekannte Differenzialgleichung, die dessen Verlauf beschreibt.
-Nun kann über Finite-Differenzen-Methode die Ableitung dieser Daten berechnet werden.
-Aufgrund dieser Daten wird nun die \textit{NeuralODE} trainiert.
-Das trainierte neuronale Netz kann nun für unbekannte Zeit-Punkte ausgewertet werden.
+Soll zum Beispiel die Größe einer Hasen-Population vorhergesagt werden, über dessen vergangenen Verlauf, Daten vorhanden sind und keine 
+Differenzialgleichung bekannt ist, die dessen Verlauf beschreibt.
+Dann kann über Finite-Differenzen-Methode die Ableitung dieser Daten berechnet werden.
+Aufgrund dieser wird nun die \textit{NeuralODE} trainiert.
+Das trainierte neuronale Netz kann nun für unbekannte Zeitpunkte ausgewertet werden.
 
 Um diese Probleme jedoch mit einer möglichst hohen Genauigkeit trainieren und auswerten zu können,
-sollen die in Kapitel \ref{sec:numerisches_lösen_von_anfangswert_problemen} vorgestellten Diffential-Gleichungs-Löser auf diese angewendet werden.
-Um das Problem bei der Auswertung verstehen zu können, müssen zunächst noch \textit{MeshGraphNets} eingeführt werden.
+sollen die in Kapitel \ref{sec:numerisches_lösen_von_anfangswert_problemen} vorgestellten Differenzialgleichungslöser auf die \textit{NeuralODE} angewendet werden.
+
 
 % Der Grund führ diese Approximation ist, dass das NeuronaleNetz mehrere Vorteile gegenüber der klassischen Differentialgleichung besitzt.
 % Vorteil mit betreuer durch sprechen.

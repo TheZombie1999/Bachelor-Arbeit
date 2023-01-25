@@ -1,2 +1,22 @@
 
-\section{Wann sollte welcher löser verwendet werden ?} \label{sec:chose_solver}
+\section{Vor- und Nachteile der verschiedenen Differenzialgleichungslöser} \label{sec:chose_solver}
+Bei der Wahl eines Löser müssen sich immer Gedanken gemacht werden, welches Ziel verfolgt wird.
+Es gibt grundsätzlich 2-Kriterien für die Wahl.
+Soll eine möglichst hohe Genauigkeit erzielt werden und ist die Laufzeit egal, 
+dann liefern die impliziten Methoden meistens das bessere Ergebnis.
+Ist vor allem eine gute Laufzeit wünschenswert, dann sind die expliziten Verfahren am besten 
+geeignet.
+Durch die Kombinierung der beiden Verfahren durch einen Komposit-Algorithmus kann auch eine Kombination
+der beiden Vorteile erreicht werden.
+Das heißt eine mittlere Laufzeit bei akzeptable Genauigkeiten.
+Die Gewichtung der einzelnen Vor- und Nachteile hängt dann stark von den konkreten Einstellungen 
+im Löser ab.
+Ein drittes Kriterium, das manchmal interessant ist, ist der speicher verbrauch des Programms.
+Die Mehr-Schritt-Methoden sind hierbei besonders interessant, da diese nur bereits berechnete Werte
+die für das Endergebnis ohnehin abgespeichert werden müssen, verwenden, um eine höhere Genauigkeit zu erzielen.
+Andere Verfahren werten oft die Differenzialgleichung an einer Stelle aus, die für die Ausgabe am 
+Ende nicht relevant ist. Diese werden oft in einem Cache abgespeichert, da zukünftige Schritte 
+diese noch benötigen könnten.
+
+
+

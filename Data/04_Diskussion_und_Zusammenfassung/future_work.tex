@@ -1,22 +1,64 @@
 
 \section{Zukünftige Arbeiten} \label{sec:future_work}
 
-\subsection{Mehr Schritt Methoden für ein bessres Gedächtniss} \label{sec:better_memory}
+\subsection{Mehr-Schritt-Methoden für ein besseres Gedächtnis} \label{sec:better_memory}
 
-In dem Paper von ... wurde der Vergleich zweischen NeuralODEs und RNN angesprochen.
-Wird eine der Runge-Kutta-Methoden verwendet um die NeuralODE zu lösen hat grunsätzlich nur kenntniss
-über den aktuellen zeit schritt.
-Das heißt das neuronale Netz hat prizipiel nur ein extrem Kurzes gedächniss.
-RNN haben das gleichen problem mit dem großen unterschied das diese weiter in die zunkunft schauen können, 
-die sichtbarkeit der vergangen informationen, aber exponentiell abnimmt.
-Es gibt mehrere ansätze diesen exponentiellen vergesssens prozess von RNNs zu umgehen, 
-diese sind aber um ein vielfaches teurer zuberechnen.
+In dem Paper von \cite{neuralode} wurde der Vergleich zwischen NeuralODEs und RNN angesprochen.
+Wird eine der Runge-Kutta-Methoden verwendet, um die NeuralODE zu lösen, hat grundsätzlich nur Kenntnis
+über den aktuellen Zeitschritt.
+Das heißt, das neuronale Netz hat prinzipiell nur ein extrem kurzes Gedächtnis.
+RNN haben das gleiche Problem, mit dem großen Unterschied, dass diese weiter in die Zukunft schauen können, 
+die Sichtbarkeit der vergangenen Informationen, aber exponentiell abnimmt.
+Es gibt mehrere Ansätze diesen exponentiellen vergessen Prozess von \textit{RNNs} zu umgehen, 
+diese sind aber um ein Vielfaches teurer zu berechnen.
+Die Idee ist nun, dass die Mehr-Schritt-Methoden es dem Löser der NeuralODE ermöglichen, Informationen 
+aus vergangenen und zukünftigen Zeitschritten zu verbinden und dadurch der NeuralODE ein besseres 
+„Gedächtnis“ zu geben.
+Ob dies funktioniert, ist eine offene Frage, die noch untersucht werden kann.
 
-Die Idee ist nun das die Mehr Schritt Methoden es dem Löser der NeuralODE ermöglichen informationen 
-aus vergangenen und zukünfitigen Zeitschritten zuverbinden und dadurch der NeuralODE ein besseres 
-"gedächtniss" zu geben.
+\subsection{Laufzeitverbesserung}
 
-Ob dies funktioniert ist eine offe Frage die noch untersucht werden kann.
+Wie in Kapitel \ref{sec:isolation_of_the_scatter_funktion}
+angesprochen wurde, benötigt die Speicherallokierung und 
+das Hinein- und Herauskopieren der Dual-Zahlen in ein für die \textit{scatter!}-Funktion verarbeitbares Format sehr viel Zeit.
+Dies ist notwendig aufgrund der Art und Weise wie das \textit{Dual}-Struct definiert ist.
+
+\begin{lstlisting}
+    struct Dual{T, V, N} <: Real
+        value::V
+        partials::Partials{N, V}
+    end
+
+    struct Partials{N,V} <: AbstractVector{V}
+        values::NTuple{N,V}
+    end
+\end{lstlisting}
+
+Da der Datentype von \textit{Partials.values} ein \textit{NTupel} ist und es sich um zwei geschachtelte 
+\textit{Struct} handelt, kann auf diese mit einer \textit{view} nicht richtig zugegriffen werden.
+Eine \textit{view} ist dringen notwendig, da es sonst innerhalb der \textit{scatter}-Funktion 
+zu Skalaren Indizierung kommt.
+Würde man die Definition der \textit{Dual}-Zahl abänder, könnte dies auf der 
+GPU zu einer deutlich besseren Laufzeit führen.
+Der Grund, warum die \textit{Dual}-Zahlen aktuell so definiert sind ist,
+dass die CPU Version ausnutzt, das \textiti{NTupel} immutable (unveränderlich) sind und deshalb
+nicht auf dem Heap, sondern auf dem Stack gespeichert werden können.
+Dies führt auf der CPU zu einer bessern Performance, da weniger Speicher allokiert
+werden muss.
+Auf der Grafikkarte gibt es das Konzept von Stack und Heap nicht, wodurch dessen Implementierung
+davon auch keinen Vorteil hat.
+Das Problem dabei ist, dass wenn die Definition der \textit{Dual}-Zahl veränder wird
+muss das gesamte \textit{ForwardDiff.jl} Paket und alle Bibliotheken, die diese verwenden
+um geschrieben werden.
+Die Laufzeit der MeshGraphNets könnte aber einen sehr großen Vorteil, daraus ziehen, weshalb 
+es sich lohnen könnte sich über eine für die Grafikkarte besser geeignete Version des 
+\textit{ForwardDiff.jl} Paketes Gedanken zu machen.
+
+
+
+
+
+
 
 
 

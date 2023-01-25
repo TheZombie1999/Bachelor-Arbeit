@@ -1,45 +1,45 @@
 
-\section{Analyse der Scatter Funktion}
+\section{Analyse der \textit{scatter}-Funktion} \label{sec:analyse_scatter}
 
 In diesem ersten Kapitel wird die \textit{scatter}-Funktion gesondert betrachtet, da
 dessen Implementierung entscheidend ist für die impliziten Löser.
 Außerdem wurde während der Datenanalyse für dieses Kapitel entdeckt,
 dass die Laufzeit der \textit{scatter}-Funktion verbessert werden kann, 
-indem die Größe des ziel Arrays beim Funktionsaufruf mit angegeben wird.
-Erste Messungen dieser Verbesserung haben eine Zeit Ersparnis von etwa 8 ms bei einer Laufzeit von 21 ms 
+indem die Größe des Ziel-Arrays beim Funktionsaufruf mit angegeben wird.
+Erste Messungen dieser Verbesserung haben eine Zeitersparnis von etwa 8 ms bei einer Laufzeit von 21 ms 
 versprochen.
 Genauere Untersuchungen haben jedoch gezeigt, dass dies eine massive Übertreibung war.
 Dennoch konnte eine verbesserte Laufzeit erreicht werden, auch wenn diese deutlich geringer ist als zuvor angenommen.
 In den folgenden Kapiteln geht es darum, wie es gelungen ist, die Messfehler zu beheben und den Effekt der Verbesserung auf NeuralODEs.
 
 
-\subsection{Isolierung der \textit{scatter}-Funktion}
+\subsection{Isolierung der \textit{scatter}-Funktion} \label{sec:isolation_of_the_scatter_funktion}
 
-Wie bereits angesprochen ist in den ersten Messungen ein Fehler aufgetreten.
-Das normale Vorgehen beim auswerten von \textit{CUDA}-Anweisungen ist, 
+Wie bereits angesprochen, ist in den ersten Messungen ein Fehler aufgetreten.
+Das normale Vorgehen beim Auswerten von \textit{CUDA}-Anweisungen ist, 
 dass diese synchronisiert werden.
 Das heißt, es wird gewartet, bis die asynchrone Anweisung auf der GPU beendet ist.
-Das Problem dabei ist das dazu laut der \textit{CUDA}-Dokumentation der Aufruf, mit dem \textit{@sync} Macro aufgerufen werden soll.
+Das Problem dabei ist, dass dazu laut der \textit{CUDA}-Dokumentation der Aufruf, mit dem \textit{@sync} Makro aufgerufen werden soll.
 Das Problem ist, dass der \textit{@sync}-Macro nur nach dem auszuführenden Code synchronisiert und nicht davor.
 Dies führt dann zu Problemen, wenn vor der zumessenden Aktion eine andere \textit{CUDA}-Operation gestartet wurde.
 Auf diese dann ebenfalls gewartet wird. 
-Dies verfälscht das Ergebnis, dass beobachtet wird und ist der Grund, warum unsere erste Messung so viel längere Laufzeit hatte.
-Dies hat es erschwert nachzuweißen, dass es zu der gewünschten Laufzeit-Verbesserung kommt.
+Dies verfälscht das Ergebnis, das beobachtet wird und ist der Grund, warum unsere erste Messung so viel längere Laufzeit hatte.
+Dies hat es erschwert nachzuweisen, dass es zu der gewünschten Laufzeit-Verbesserung kommt.
 Um Probleme dieser Art zu vermeiden, wurden die folgenden Messungen getrennt von der \textit{NeuralODE} durchgeführt.
-Die Größe des \textit{idx}-Arrays wurde für diese Tests nahe an der realen Größe gewählt, um einen Anhaltspunkt für die Zeit-Ersparnisse zu bekommen.
+Die Größe des \textit{idx}-Arrays wurde für diese Tests nahe an der realen Größe gewählt, um einen Anhaltspunkt für die Zeitersparnisse zu bekommen.
 Alle anderen Werte sind frei erfunden.
 So kann es bei dem \textit{idx}-Arrays zum Beispiel nicht dazu kommen, 
-das zwei Einträge denselben Wert haben oder die Größe und Form der \textit{src}-Arrays entspricht nicht der Realität.
+dass zwei Einträge denselben Wert haben oder die Größe und Form der \textit{src}-Arrays entspricht nicht der Realität.
 
 \begin{table}[h!]
 \centering
 \begin{tabular}{c|c|c|c|c} 
-     GPU & Optimiert & Durchnitt. Laufzeit & Standard Abweichung & Anzahl \\
+     GPU & optimiert & Durchnitt. Laufzeit & Standard Abweichung & Anzahl \\
      \hline
-     Ja & Ja     & 452.785 $\mu$s  & 7.278  $\mu$   & 646 * 1000\\
-     Ja & Nein   & 496.701 $\mu$s  & 8.920  $\mu$s  &  589 * 1000\\
-     Nein & Ja   & 256.064 $\mu$s  & 41.809 $\mu$s  & 1120 * 1000\\
-     Nein & Nein & 252.882 $\mu$s  & 36.462 $\mu$s  & 1134 * 1000\\
+     Ja & Ja     & 452.785 $\mu$s  & 7.278  $\mu$   & 646 \cdot 1000\\
+     Ja & Nein   & 496.701 $\mu$s  & 8.920  $\mu$s  &  589 \cdot 1000\\
+     Nein & Ja   & 256.064 $\mu$s  & 41.809 $\mu$s  & 1120 \cdot 1000\\
+     Nein & Nein & 252.882 $\mu$s  & 36.462 $\mu$s  & 1134 \cdot 1000\\
 \end{tabular}
 \caption{Messung der \textit{scatter}-Funktion}
 \label{table:Scatter}
@@ -50,42 +50,42 @@ das zwei Einträge denselben Wert haben oder die Größe und Form der \textit{sr
 \begin{tabular}{c|c|c|c}
      GPU & Durchnitt. Laufzeit & Standard Abweichung & Anzahl \\
      \hline
-     Ja     & 39.512 $\mu$s  & 2.835 $\mu$s & 5000 * 1000 \\
-     Nein   & 2.628  $\mu$s  &  206.906 ns & 5000 * 1000 \\
+     Ja     & 39.512 $\mu$s  & 2.835 $\mu$s & 5000 \cdot 1000 \\
+     Nein   & 2.628  $\mu$s  &  206.906 ns & 5000 \cdot 1000 \\
 \end{tabular}
-\caption{Messung der Maximums Berechenung}
+\caption{Messung der Maximums-Berechnung}
 \label{table:Maximum}
 \end{table}
 
 Die in den Tabellen \ref{table:Scatter} und \ref{table:Maximum} dargestellten Messwerte wurden mit dem \textit{BenchmarkTools.jl} Projekt durchgeführt.
 Dabei wurde der Durchschnitt von 1000 Evaluierungen zu einem Messpunkt zusammengefasst.
-Der Grund für diese Maßnahme ist das Speicherreservierungen während der Durchführung der Tests zu einer geringen Menge extrem großer 
+Der Grund für diese Maßnahme ist, dass Speicherreservierungen während der Durchführung der Tests zu einer geringen Menge extrem großer 
 Messungen führt.
-Dies beeinflusst den Durchschnittswert der Messung nur minimal, hat aber einen sehr großen Einfluss auf dessen Standard Abweichung.
+Dies beeinflusst den Durchschnittswert der Messung nur minimal, hat aber einen sehr großen Einfluss auf dessen Standard-Abweichung.
 Der durchschnittliche Abstand vom Mittelwert war ursprünglich
 um ein Vielfaches größer als der eigentliche Messwert.
 Dies führt dazu, dass der Fehler der Messung nicht richtig eingeschätzt werden kann und es demnach nicht sicher ist, ob das gemessene Ergebnis tatsächlich dem entspricht, was erwartet wird.
 Es wird angestrebt, diesen Effekt möglichst gering zu halten, da in den \textit{NeuralODEs} diese Speicher Reservierungen nur einmalig durchgeführt werden müssen.
-Es ist anzumerken, das die Anzahl der zusammen gefassten werte ab einem gewissen Werte keinen großen Einfluss auf das Endergebnis mehr hat.
+Es ist anzumerken, dass die Anzahl der zusammen gefassten Werte ab einem gewissen Punkt keinen großen Einfluss auf das Endergebnis mehr hat.
 Dies zeigt, dass dies nicht beliebig groß gemacht werden können, bis sich das gewünschte Ergebnis einstellt.
 Auf diese Art wurden zwei unterschiedliche Dinge gemessen.
-Die Tabelle \ref{Scatter} misst die Laufzeit der gesamten \textit{scatter}-Funktion.
-Die Tabelle \ref{Maximum} von Messdaten misst nur die Dauer der Maximumsberechnung, welcher vor allem als Anhaltspunkt für die zu erwartende Unterschiede zwischen den Messungen 
-existiert.
-Passt die gemessene Verbesserungszeit $R$ nicht zu der erwarteten Zeit der Maximumsberechnung, wäre dies ein Indikator, dass die Laufzeitverbesserung aus einem anderen Grund besser ist oder nicht existiert.
+Die Tabelle \ref{table:Scatter} misst die Laufzeit der gesamten \textit{scatter}-Funktion.
+Die Tabelle \ref{table:Maximum} von Messdaten misst nur die Dauer der Maximums-Berechnung, 
+welcher vor allem als Anhaltspunkt für die zu erwartende Unterschiede zwischen den Messungen existiert.
+Passt die gemessene Verbessbergungszeit $R$ nicht zu der erwarteten Zeit der Maximums-Berechnung, wäre dies ein Indikator, dass die Laufzeitverbesserung aus einem anderen Grund besser ist oder nicht existiert.
 
 $$
- R_{GPU} = | t_o - t_n | = | 452.785 - 496.701 | = 43.916 \mu s
+ R_{GPU} = | t_o - t_n | = | 452.785 \mu s - 496.701 \mu s | = 43.916 \mu s
 $$
 
 $$
- \Delta R_{GPU} = | 1 | \Delta t_o + |-1| \Delta t_n = | 1| * 7.278 +  |-1| * 8.920 = 16.198 \mu s
+ \Delta R_{GPU} = | 1 | \Delta t_o + |-1| \Delta t_n = | 1| * 7.278 \mu s +  |-1| * 8.920 \mu s = 16.198 \mu s
 $$
 
-Der unterschied zwischen den beiden GPU Messungen ist 43.916 $\mu$s mit einem Fehler von $\pm 16.198 \mu s$.
-Da der unterschied zwischen den beiden Werten größer als dessen Fehler ist, kommt es auf der GPU zu einer messbaren Beschleunigung.
+Der Unterschied zwischen den beiden GPU Messungen ist 43.916 $\mu$s, mit einem Fehler von $\pm 16.198 \mu s$.
+Da der Unterschied zwischen den beiden Werten größer als dessen Fehler ist, kommt es auf der GPU zu einer messbaren Beschleunigung.
 Außerdem passt die erwartete Laufzeit Verbesserung von $39,512 \mu s$ zu dem gemessenen Wert unterschied von $43,916 \mu s$.
-Da die Werte in der Fehlertoleranz liegen, weißt dies nach, dass das angeben der Zielgröße des \textit{src}-Arrays den gewünschten Effekt hat.
+Da die Werte in der Fehlertoleranz liegen, weißt dies nach, dass das Angeben der Zielgröße des \textit{src}-Arrays den gewünschten Effekt hat.
 Auf der CPU ergibt sich ein anderes Bild.
 
 $$
@@ -100,22 +100,18 @@ $$
 Da die Größe $R_{CPU}$ deutlich geringer ist als dessen absolut Fehler, ist die Messmethode nicht genau genug, um die bessere Laufzeit akkurat zu messen.
 Interessant ist die Beobachtung, dass die GPU Variante deutlich langsamer ist als die CPU Variante.
 Da dieser Benchmark so geschrieben wurde das die GPU jeden möglichen Vorteil hat.
-Dies liegt daran das die Werte im \textit{idx}-Array einzigartig sind.
-Das heißt das die \textit{@atomic} aufrufe eigentlich nicht benötigt werden, da nie mehr als zwei Threads in die gleiche speicher Zelle schreiben,
-und desshalb auch zu keinen serialisierten \textit{Read-Modify-Write}-Operationen kommt.
-Es gibt zwei Gründe warum die GPU version dennoch langsammer ist.
-Der erst grund ist das es relativ lange dauert daten von der CPU auf die GPU zu kopieren.
+Dies liegt daran, dass die Werte im \textit{idx}-Array einzigartig sind.
+Das heißt, dass die \textit{@atomic} Aufrufe eigentlich nicht benötigt werden, da nie mehr als zwei Threads in die gleiche speicher Zelle schreiben,
+und deshalb auch zu keinen serialisierten \textit{Read-Modify-Write}-Operationen kommt.
+Es gibt zwei Gründe, warum die GPU Version dennoch langsamer ist.
+Der erst Grund ist das es relativ lange dauert Daten von der CPU auf die GPU zu kopieren.
 Daran lässt sich wenig ändern.
-Der zweite Grund ist, dass das hin und her kopieren der Daten vom \textit{idx}-Array in das von der \textit{scatter!}-Funktion verarbeitbares Format, 
+Der zweite Grund ist, dass das Hin und Her Kopieren der Daten vom \textit{idx}-Array in das von der \textit{scatter!}-Funktion verarbeitbares Format, 
 lange dauert. 
-
-
-In folgender Tabelle wird die laufzeit der \textit{scatter}-Funktion in mehrere Abschnitte unterteil.
-
-Die erste und zweite Zeile sind zwingen Notwending und identisch zur unmodifizierten implementierung der \textit{scatter}-Funktion.
-
-Die Zweite und Dritte Zeile der Tabelle Messen die Zeit, 
-die es braucht die \textit{Dual}-Zahlen in ein \textit{Float-Array} zu schreiben 
+In folgender Tabelle wird die Laufzeit der \textit{scatter}-Funktion in mehrere Abschnitte unterteilt.
+Die erste und dritte Zeile ist zwingen notwendig und identisch zur unmodifizierten Implementierung der \textit{scatter}-Funktion.
+Die zweite und vierte Zeile der Tabelle messen die Zeit, 
+die es braucht, die \textit{Dual}-Zahlen in ein \textit{Float-Array} zu schreiben 
 und dann wieder zurück zu kopieren.
 
 % Tabelle
@@ -130,19 +126,19 @@ und dann wieder zurück zu kopieren.
 \begin{table}[h]
 \begin{tabular}{c|c|c}
 \textbf{Abschnitt}                                                                                & \textbf{Anzahl der Aufrufe} & \textbf{durchschn. Laufzeit} \\ \hline
-Erzeugen des dst-Arrays                                                                           & 2.000                       & 76 \mu s             \\ \hline
-\begin{tabular}[c]{@{}l@{}}Kopieren der Werte in \\ die Temporären Arrays\end{tabular}            & 2.000                       & 601 \mu s            \\ \hline
-Die eigentliche berechnung                                                                        & 2.000                       & 42 \mu s             \\ \hline
-\begin{tabular}[c]{@{}l@{}}Zurück Koperien der Temporären \\ Arrays in das dst-Array\end{tabular} & 2.000                       & 108 \mu s            \\ 
+Erzeugen des dst-Arrays                                                                           & 2.000                       & 76 $\mu s$             \\ \hline
+\begin{tabular}[c]{@{}l@{}}Kopieren der Werte in \\ die temporären Arrays\end{tabular}            & 2.000                       & 601 $\mu s$            \\ \hline
+Die eigentliche Berechnung                                                                        & 2.000                       & 42 $\mu s$             \\ \hline
+\begin{tabular}[c]{@{}l@{}}Zurück Kopieren der Temporären \\ Arrays in das dst-Array\end{tabular} & 2.000                       & 108 \mu s            \\ 
 \end{tabular}
 \end{table}
 
 Theoretisch könnte direkt auf den übergebenen Daten operiert werden.
-Dies würde zu einer Theoretischen Zeitersparniss von $709 \mu s$ führen.
+Dies würde zu einer theoretischen Zeitersparnis von $709 \mu s$ führen, dies entspricht etwa $86\%$ der Laufzeit.
 Dazu müsste aber die Definition der \textit{Dual}-Zahlen innerhalb der \textit{ForwardDiff.jl} Bibliothek umgeschrieben werden.
-Dies ist allerdings nicht besonders leicht und würde vorraussetzen große Abschnitte der bereits verhandenen implementierungen umzuschreiben.
+Dies ist allerdings nicht besonders leicht und würde voraussetzen, große Abschnitte der bereits vorhandenen Implementierungen umzuschreiben.
 
-\subsection{Effekt auf verschiedene Löser Klassen}
+\subsection{Effekt auf verschiedene Löserklassen}
 
 In diesem Kapitel wird analysiert, wie sich die Verbesserung der \textit{scatter}-Funktion auf die Laufzeit der unterschiedlichen 
 Löser Klassen auswirkt.
@@ -151,38 +147,38 @@ Dazu wird exemplarisch der implizite und explizite Euler verwendet.
 \begin{table}[h!]
 \centering
     \begin{tabular}{c|c|c|c}
-         Löser & Optimiert & Sekunden Pro Iteration & Zeit \\
+         Löser & optimiert & Sekunden Pro Iteration & Zeit \\
          \hline
-         Explicit Euler & Ja & 16.80 ms/it & 0:01:40 \\
-         Explicit Euler & Nein & 18.94 ms/it & 0:01:53 \\
-         Implicit Euler & Ja & 0.4886 s/it & 7:19:57 \\
-         Implicit Euler & Nein &  0.4775 s/it & 17:18:13 \\
+         Explizit Euler & Ja & 16.80 ms/it & 0:01:40 \\
+         Explizit Euler & Nein & 18.94 ms/it & 0:01:53 \\
+         Implizit Euler & Ja & 0.4886 s/it & 7:19:57 \\
+         Implizit Euler & Nein &  0.4775 s/it & 17:18:13 \\
     \end{tabular}
     \label{table:langzeitMessung}
     \caption{Messung der NeuralODEs}
 \end{table}
 
-In den Daten ist zu beachten, dass die expliziten Methoden aufgrund ihrer kurzen Laufzeit bis zum ende durch gelaufen sind.
+In den Daten ist zu beachten, dass die expliziten Methoden aufgrund ihrer kurzen Laufzeit bis zum Ende durchgelaufen sind.
 Bei den impliziten Lösern wurde aufgrund ihrer langen Berechnungszeit gewartet, bis sich die s/it nicht mehr verändert haben.
 Bei den expliziten Lösern ergibt sich ein Unterschied zwischen dem optimierten und langsamen Durchlauf von 2.15 ms/it.
-Auf die Gesamtlaufzeit des Problems ergibt sich dadurch eine verbesserte Laufzeit von 15s bzw. 11.5 \%.
-Bei den expliziten Lösern ergibt sich ein Unterschied von 0.0111 s/it .
-Da die beiden Löser nicht bis zu ende gelaufen sind, muss die Zeit Ersparnisse angenähert werden.
+Auf die Gesamtlaufzeit des Problems ergibt sich dadurch eine verbesserte Laufzeit von 15s bzw. 11,5 \%.
+Bei den expliziten Lösern ergibt sich ein Unterschied von 0.0111 s/it.
+Da die beiden Löser nicht bis zu Ende gelaufen sind, muss die Zeitersparnisse angenähert werden.
 Es ist bekannt, dass nach 17 Stunden etwa 130.000 Schritte durchgeführt wurden und etwa 1/6 der Trajektorie berechnet wurde.
-Deshalb kann die Laufzeit Ersparniss $L$ wie folgt approximiert werden.
+Deshalb kann die Laufzeit-Ersparnis $L$ wie folgt approximiert werden.
 
 $$
-L \approx 130.000 \cdot 6 \cdot 0.0111 \approx 8658s \approx 144 min \approx 2.4 Stunden 
+L \approx 130.000 \cdot 6 \cdot 0.0111 \approx 8658s \approx 144 min \approx 2.4 \text{ Stunden} 
 $$
 
-Das heißt, es kommt zu einer gesamt Ersparnis von 2.4 Stunden auf eine geschätzte Laufzeit von $17 \cdot 6 $ Stunden.
+Das heißt, es kommt zu einer gesamten Ersparnis von 2.4 Stunden auf eine geschätzte Laufzeit von $17 \cdot 6 $ Stunden.
 Dies entspricht einer Verbesserung von 2,4 \%.
 Dies zeigt, dass die expliziten Methoden deutlicher mehr von der Verbesserung profitieren.
 Der Grund für die geringere Effektivität bei den impliziten Verfahren ist, dass diese mehr Berechnungen durchführen, ohne dafür öfters 
-die NeuralODE aufzurufen.
+die \textit{NeuralODE} aufzurufen.
 
-Das Fazit, dass daraus geschlossen werden kann ist, dass sich selbst kleine Verbesserung in der Laufzeit 
-der Auswertung der \textit{NeuralODE} einen großen Einfluss auf die Gesamtlaufzeit haben kann.
+Das Fazit, das daraus geschlossen werden, kann ist, dass sich selbst kleine Verbesserung in der Laufzeit 
+bei der Auswertung der \textit{NeuralODE} einen großen Einfluss auf die Gesamtlaufzeit haben kann.
 
 
 

@@ -1,6 +1,6 @@
 \chapter{Anhang}
 
-\section{Source Code der angepassten Scatter Funktion}
+\section{Source Code der angepassten \textit{scatter}-Funktion}
 
 %%
 %% Julia definition (c) 2014 Jubobs
@@ -26,7 +26,7 @@
     commentstyle     = \color{ForestGreen},
     showstringspaces = false,
 }
-\section{\textit{scatter} Quellcode}
+
 \label{code_subfig}
 \lstset{language=Julia,style=nonumbers}
 \begin{lstlisting}[language=Julia]
@@ -36,29 +36,32 @@ using NNlibCUDA
 using NNlib
 
 _view(X, colons, k) = view(X, colons..., k...)
-_view(X, colons, k::Union{Integer, CartesianIndex}) = view(X, colons..., k)
+_view(X, colons, k::Union{Integer, CartesianIndex}) = 
+    view(X, colons..., k)
  
-maximum_dims(dims::AbstractArray{<:Integer}) = (CUDA.findmax(dims)[1], )
+maximum_dims(dims::AbstractArray{<:Integer}) = 
+    (CUDA.findmax(dims)[1], )
 maximum_dims(dims::AbstractArray{NTuple{N, T}}) where {N,T} = 
-ntuple(i -> CUDA.findmax(x->x[i], dims)[1], N)
+    ntuple(i -> CUDA.findmax(x->x[i], dims)[1], N)
 maximum_dims(dims::AbstractArray{CartesianIndex{N}}) where {N} = 
-ntuple(i -> CUDA.findmax(x->x[i], dims)[1], N)
+    ntuple(i -> CUDA.findmax(x->x[i], dims)[1], N)
  
 scatter_empty(op, T) = Base.reduce_empty(op, T)
 scatter_empty(op::typeof(-), T) = zero(T)
 scatter_empty(op::typeof(/), T) = one(T)
 scatter_empty(op::typeof(min), T) = typemax(T)
 scatter_empty(op::typeof(max), T) = typemin(T)
-# scatter_empty(op::typeof(mean), T) = zero(T)
-# mit dstsize = 21.8ms
-# ohne dstsize = 21.7ms
 
-function NNlib.scatter(op::OP, src::AnyCuArray{Tsrc , Nsrc}, idx::AnyCuArray{Tidx, Nidx}; 
-                         init = nothing, dstsize = nothing) where {Tsrc <: ForwardDiff.Dual{T, V, N},Tidx,Nsrc,Nidx,OP} where {T, V, N}
-    
+
+function NNlib.scatter(op::OP, src::AnyCuArray{Tsrc , Nsrc}, 
+                       idx::AnyCuArray{Tidx, Nidx}; 
+                       init = nothing, dstsize = nothing) 
+                       where {Tsrc <: ForwardDiff.Dual{T, V, N},
+                       Tidx,Nsrc,Nidx,OP} where {T, V, N}
     dims = Nsrc - Nidx 
     dstsz = isnothing(dstsize) ? 
-            (size(src)[1:dims]..., maximum_dims(idx)...) : dstsize 
+            (size(src)[1:dims]..., 
+            maximum_dims(idx)...) : dstsize 
     dst = similar(src, Tsrc, dstsz) 
     xinit = isnothing(init) ? scatter_empty(op, Tsrc) : init  
     fill!(dst, xinit) 
@@ -69,7 +72,8 @@ end
 function my_scatter(op::OP, dst::AnyCuArray{Tdst, Ndst}, 
                             src::AnyCuArray{Tsrc, Nsrc} , 
                             idx::AnyCuArray{Tidx, Nidx}) 
-                            where {Tsrc <: ForwardDiff.Dual{T, V, N}
+                            where {Tsrc <: 
+                            ForwardDiff.Dual{T, V, N}
                             ,Nsrc,Tidx,Nidx, Tdst, Ndst, OP} 
                             where {T, V, N}   
 
@@ -79,12 +83,14 @@ function my_scatter(op::OP, dst::AnyCuArray{Tdst, Ndst},
     
     # Create a tuple similar to Tidx but with one more element 
     if Tidx <: Tuple
-        t = typeof(ntuple(x -> one(Tidx.parameters[1]), length(t.parameters)+1))
+        t = typeof(ntuple(x -> one(Tidx.parameters[1]), 
+                              length(t.parameters)+1))
     else
         t = typeof(ntuple(x -> one(Tidx), 2))
     end
 
-    # Allocate Space for the larger idx array that is need for scatter!
+    # Allocate Space for the larger idx array
+    # that is need for scatter!
     idx_i = CuArray{t}(undef, (size(idx)..., N+1))
     copy_dual_to_matrix(dst_i, dst)
     copy_dual_to_matrix(src_i, src)
@@ -92,22 +98,28 @@ function my_scatter(op::OP, dst::AnyCuArray{Tdst, Ndst},
 
     NNlib.scatter!(op, dst_i, src_i, idx_i) 
     
-    # Create an array that contains tuples for the partials of a Dual Number
+    # Create an array that contains tuples 
+    # for the partials of a Dual Number
     function f(x...)
         return x
     end
     tuples = f.([view(dst_i, 
-             repeat([:], ndims(dst_i)-1)..., i) for i in 2:(N+1)]...)
+             repeat([:], ndims(dst_i)-1)..., i) 
+             for i in 2:(N+1)]...)
 
 
-    # Copy the Result of the Computation into the destination array
-    modify_dual(dst , view(dst_i, repeat([:], ndims(dst_i)-1)..., 1), tuples)
+    # Copy the Result of the Computation 
+    # into the destination array
+    modify_dual(dst , view(dst_i, repeat([:], 
+                ndims(dst_i)-1)..., 1), tuples)
     return dst
 end
 
 function copy_dual_to_matrix(dst_i, dst)
-    kernel = CUDA.@cuda launch=false copy_dual_to_matrix_kernel(dst_i, dst)
-    config = CUDA.launch_configuration(kernel.fun; max_threads=256)
+    kernel = CUDA.@cuda launch=false 
+        copy_dual_to_matrix_kernel(dst_i, dst)
+    config = CUDA.launch_configuration(kernel.fun; 
+                                max_threads=256)
     threads = min(config.threads, length(dst_i))
     blocks = cld(length(dst_i), threads)
     
@@ -115,7 +127,8 @@ function copy_dual_to_matrix(dst_i, dst)
 end
 
 function copy_dual_to_matrix_kernel(src::CuDeviceArray{V}, 
-            dst::CuDeviceArray{<: ForwardDiff.Dual{T, V, N}}) where {T, V, N}
+            dst::CuDeviceArray{<: ForwardDiff.Dual{T, V, N}}) 
+            where {T, V, N}
     index = threadIdx().x + (blockIdx().x - 1) * blockDim().x
    
     if index <= length(src) 
@@ -123,27 +136,31 @@ function copy_dual_to_matrix_kernel(src::CuDeviceArray{V},
         ci = CartesianIndices(src)
         loc = Tuple(ci[index])
         
-        # Copy all values of a dual number into there respectiv location
+        # Copy all values of a dual number 
+        # into there respectiv location
         if loc[end] == 1
             src[loc...] = dst[loc[1:end-1]...].value 
         else 
-            src[loc...] = dst[loc[1:end-1]...].partials[loc[end]-1]
+            src[loc...] = 
+                dst[loc[1:end-1]...].partials[loc[end]-1]
         end
-
     end
     return nothing
 end
 
 function modify_index(src, dst)
-    kernel = CUDA.@cuda launch=false modify_index_kernel(src, dst) 
-    config = CUDA.launch_configuration(kernel.fun; max_threads=256)
+    kernel = CUDA.@cuda launch=false 
+                modify_index_kernel(src, dst) 
+    config = CUDA.launch_configuration(kernel.fun; 
+                                max_threads=256)
     threads = min(length(src), config.threads)
     blocks = cld(length(src), threads)
     
     kernel(src, dst; threads=threads, blocks=blocks)
 end
 
-function modify_index_kernel(src::CuDeviceArray, dst::CuDeviceArray)
+function modify_index_kernel(src::CuDeviceArray, 
+                             dst::CuDeviceArray)
     index = threadIdx().x + (blockIdx().x - 1) * blockDim().x
     
     if index <= length(src)
@@ -151,22 +168,24 @@ function modify_index_kernel(src::CuDeviceArray, dst::CuDeviceArray)
         loc = Tuple(ci[index])
         src[loc...] =  (dst[loc[1:end-1]...]..., loc[end])
     end
-    
     return nothing
 end
 
 function modify_dual(dst, v, src)
     kernel = CUDA.@cuda launch=false dual_kernel(dst, v, src)
-    config = CUDA.launch_configuration(kernel.fun; max_threads=256)
+    config = CUDA.launch_configuration(kernel.fun; 
+                                    max_threads=256)
     threads = min(length(dst), config.threads)
     blocks = cld(length(dst), threads)
     
     kernel(dst, v, src; threads=threads, blocks=blocks)
 end
 
-function dual_kernel(dst::CuDeviceArray{<: ForwardDiff.Dual{T, V, N}}, 
-                      v::CuDeviceArray{V}, src::CuDeviceArray{NTuple{N, V}}) 
-                      where {T, V, N}
+function dual_kernel(dst::CuDeviceArray{<: 
+                ForwardDiff.Dual{T, V, N}}, 
+                v::CuDeviceArray{V}, 
+                src::CuDeviceArray{NTuple{N, V}}) 
+                where {T, V, N}
     index = threadIdx().x + (blockIdx().x - 1) * blockDim().x
    
     if index <= length(src)
@@ -179,9 +198,12 @@ function dual_kernel(dst::CuDeviceArray{<: ForwardDiff.Dual{T, V, N}},
 end
 \end{lstlisting}
 
-\section{Tabllen der Funktionierenden Impliziten Lösungs Algorithmen}
+\newpage
 
-\begin{table}[]
+\section{Tabllen der Funktionierenden Impliziten Lösungs Algorithmen}
+\label{solver_tabels}
+
+\begin{table}[H]
     \centering
     
     \begin{tabular}{p{5cm}|c|p{5cm}}
@@ -208,7 +230,7 @@ end
     \label{tab:my_label}
 \end{table}
 
-\begin{table}[]
+\begin{table}[H]
     \centering
 
     \begin{tabular}{p{5cm}|c|p{5cm}}
@@ -221,7 +243,7 @@ end
     \label{tab:my_label}
 \end{table}
 
-\begin{table}[]
+\begin{table}[H]
     \centering
 
     \begin{tabular}{p{5cm}|c|p{5cm}}
@@ -233,7 +255,7 @@ end
     \label{tab:my_label}
 \end{table}
 
-\begin{table}[]
+\begin{table}[H]
     \centering
 
     \begin{tabular}{p{5cm}|c|p{5cm}}
@@ -257,25 +279,25 @@ end
     \label{tab:my_label}
 \end{table}
 
-\begin{table}[]
+\begin{table}[H]
     \centering
 
     \begin{tabular}{p{5cm}|c|p{5cm}}
-        Name & Funktionale & Fehler \\
+        Name & Funktional & Fehler \\
         \hline\hline
         Rosenbrock23     & true & \\                                                                                                                          ║
         Rosenbrock32     & true & \\                                                                                                                          ║
         RosenbrockW6S4OS & true & \\                                                                                                                      ║
         ROS34PW1a        & true & \\                                                                                                                             ║
         ROS34PW1b        & true & \\                                                                                                                             ║
-        ROS34PW2         & true & \\                                                                                                                              ║
+        ROS34PW2    & true & \\                                                                                                                              ║
         ROS34PW3         & true & \\            
     \end{tabular}
     \caption{Rosenbrock-W Methods}
     \label{tab:my_label}
 \end{table}
 
-\begin{table}[]
+\begin{table}[H]
     \centering
 
     \begin{tabular}{p{10cm}|c|p{1cm}}
@@ -289,7 +311,7 @@ end
     \label{tab:my_label}
 \end{table}
 
-\begin{table}[]
+\begin{table}[H]
     \centering
 
     \begin{tabular}{p{5cm}|c|p{5cm}}
@@ -301,7 +323,7 @@ end
     \label{tab:my_label}
 \end{table}
 
-\begin{table}[]
+\begin{table}[H]
     \centering
 
     \begin{tabular}{p{5cm}|c|p{5cm}}
@@ -319,7 +341,7 @@ end
     \label{tab:my_label}
 \end{table}
 
-\begin{table}[]
+\begin{table}[H]
     \centering
 
     \begin{tabular}{p{5cm}|c|p{5cm}}
@@ -337,7 +359,7 @@ end
     \label{tab:my_label}
 \end{table}
 
-\begin{table}[]
+\begin{table}[H]
     \centering
 
     \begin{tabular}{p{5cm}|c|p{5cm}}
@@ -350,7 +372,7 @@ end
     \label{tab:my_label}
 \end{table}
 
-\begin{table}[]
+\begin{table}[H]
     \centering
 
     \begin{tabular}{p{5cm}|c|p{5cm}}
@@ -370,7 +392,7 @@ end
     \label{tab:my_label}
 \end{table}
 
-\begin{table}[]
+\begin{table}[H]
     \centering
 
     \begin{tabular}{p{5cm}|c|p{5cm}}

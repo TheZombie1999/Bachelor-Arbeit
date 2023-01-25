@@ -1,46 +1,46 @@
 
-\section{Flüssigkeits simulationen} \label{sec:simulationen}
+\section{Flüssigkeitssimulationen} \label{sec:simulationen}
 
 Da MeshGraphNets in der Regel verwendet werden, um reale Probleme zu simulieren, 
-wird im folgendem eine Anwendung dieser genauer betrachtet.
+wird im Folgenden eine Anwendung dieser genauer betrachtet.
 Für die Analyse dieser Arbeit wird eine Flüssigkeitssimulation verwendet.
-Es gibt eine viel Zahl an verfahren, um Flüssigkeiten zu simulieren.
-Viele davon werden allerdings in der Computer-Grafik verwendet, um 
+Es gibt eine Vielzahl an Verfahren, um dies umzusetzen,
+viele davon werden allerdings in der Computer-Grafik verwendet, um 
 effizient den Anschein einer Flüssigkeit zu erwecken.
-Diese verfahren verwenden in der Regel eine vereinfachte Version der physikalischen Gleichungen,
+Diese Verfahren verwenden in der Regel eine vereinfachte Version der physikalischen Gleichungen,
 um diese schneller berechnen zu können.
-Für die Zwecke dieser Arbeit sind vor allem möglichst Realistische verfahren interessant.
-Eines der ersten bekannten Verfahren zur Beschreibung von Flüssigkeiten ist die Euler-Gleichung \cite[Kapitel~1]{navier_stokes}:
+Für die Zwecke dieser Arbeit sind vor allem möglichst physikalisch korrekte Verfahren interessant.
+Eines der ersten bekannten Verfahren für diesen Zweck ist die Euler-Gleichung \cite[Kapitel~1]{navier_stokes}:
 
 $$
 \frac{\partial \vec{u}}{\partial t} + (\vec{u} \cdot \nabla) \vec{u} =  \vec{g} - \frac{1}{\rho} \nabla \cdot p
 $$
 
 Die Euler-Gleichung beschreibt das Verhalten von Flüssigkeiten anhand von zwei Phänomenen.
-Das erste Phänomen beschreibt das verhalten anhand von unterschiedlichen Drücken innerhalb einer Flüssigkeit.
+Das erste Phänomen beschreibt das Verhalten anhand von unterschiedlichen Drücken innerhalb einer Flüssigkeit.
 In der Euler-Gleichung spiegelt sich dieses Phänomen in Gradienten des Druckes $p$ wieder.
 Das zweite Phänomen, das die Euler-Gleichung berücksichtigt ist, dass Flüssigkeiten mit
-einer höhren Dichte nach unten sinken und demnach Flüssigkeiten mit einer geringen Dichte aufsteigen.
-Dafür verantwortlich ist die Gewichtskraft $\vec{g}$ und Dichte. $\rho$.
+einer höheren Dichte nach unten sinken und demnach Flüssigkeiten mit einer geringeren Dichte aufsteigen.
+Dafür verantwortlich ist die Gewichtskraft $\vec{g}$ und Dichte $\rho$.
 Die linke Seite der Gleichung beschreibt, dass sich die Geschwindigkeit $u$ der Flüssigkeit sowohl im Laufe 
 der Zeit als auch abhängig vom Ort ändert.
 Wird die Euler-Gleichung nun leicht umgestellt, 
-kann diesem mit einem der in Kapitel \ref{sec:numerisches_lösen_von_anfangswert_problemen} vorgestellten 
+kann diese mit einem der in Kapitel \ref{sec:numerisches_lösen_von_anfangswert_problemen} vorgestellten 
 numerischen Differenzialgleichungslöser berechnet werden.
 
 $$
 f(u(t), t) = \frac{\partial \vec{u}}{\partial t}  =  \vec{g} - \frac{1}{\rho} \nabla \cdot p -  (\vec{u} \cdot \nabla) \vec{u}
 $$
 
-Bei dem numerischen Lösen der Differenzialgleichung kommt es zu dem Problem, das sich das druck Feld p
+Bei dem numerischen Lösen der Differenzialgleichung kommt es zu dem Problem, dass sich das Druckfeld p
 abhängig von der Geschwindigkeit ebenfalls ändert.
 Dieses Problem kann gelöst werden, indem die Differenzialgleichung in zwei Teile geteilt wird.
-Genauer kann in folgendem Paper nachgelesen werden \cite{num_navier}.
-Die Euler-Gleichung vernachlässigt ein entscheidendes Phänomen.
-Sie vernachlässigt, das es innerhalb der Flüssigkeiten und an grenz Flächen zu einer Reibungskraft kommt.
+An dieser Stelle wird auf \cite{num_navier} verwiesen.
+Die Euler-Gleichung vernachlässigt, dass es innerhalb der Flüssigkeiten und an der Grenzflächen,
+aufgrund der Viskosität zu einer Reibungskraft kommt.
 Soll zum Beispiel der Luftwiderstand und Auftrieb eines Tragflächenelementes bestimmt werden,
-dann sind diese Reibungskraft besonder wichtig, da sie für eine Verlangsamung des Luftstroms nahe an der Oberfläche
-des Flügels sorgt für Phänomene, die dessen auftrieb und Luftwiderstand beeinflussen.
+dann sind diese Reibungskraft besonders wichtig, da sie für eine Verlangsamung des Luftstroms nahe an der Oberfläche
+des Flügels sorgt, für Phänomene, die dessen Auftrieb und Luftwiderstand beeinflussen.
 Dieser Druck unterschied zwischen der ober und unter Seite des Flügels sind verantwortlich für dessen Auftrieb.
 Wird die Euler-Gleichung nun um dieses Phänomen erweitert, 
 ergibt sich die bekannte Navier-Stokes-Gleichung \cite[Kapitel~1.4]{navier_stokes} 
@@ -60,8 +60,10 @@ Für die meisten realen Anwendung reichen diese Annahmen jedoch aus, weshalb die
 
 Die Navier-Stokes-Gleichung ist für uns besonders interessant, da sie die Datengrundlage für das Training unserer \textit{NeuralODE} liefert.
 
-Außerdem demonstriert sie, welche Vereinfachungen das Verwenden der NeuralODE beim Auswerten ermöglicht.
-Diese erlaubt es uns, die Differenzialgleichung nur abhängig von der Geschwindigkeit $v$ auszuwerten.
-Demnach kann die Berechnung des Druckes $p$ vermieden werden.
+Außerdem demonstriert sie, welche Vereinfachung die NeuralODEs bei der Auswertung ermöglicht,
+da die komplexe Navier-Stokes-Gleichung nicht ausgewertet werden muss.
+
+Diese erlaubt es, die Differenzialgleichung nur abhängig von der Geschwindigkeit $v$ auszuwerten,
+wodurch die Berechnung des Druckes $p$ vermieden wird.
 
 % https://www.youtube.com/watch?v=OjbQbPSopu0

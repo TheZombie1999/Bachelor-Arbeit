@@ -1,47 +1,50 @@
 
 
-\section{Automatischer Löser Wechsel}
+\section{Automatisches Wechseln von Differenzialgleichungslösern}
 
-Im Kaptiel \ref{sec:numerisches_lösen_von_anfangswert_problemen} wurde die Vor- und Nachteile der Impliziten und expliziten Differenzialgelichungslöser 
-vorgestellt.
-In diesem Kapitel wird untersuch wie die vorteile beider verfaheren so miteinander verbunden 
-werden können, dass das projekt so wohl mit einer hohen genauichkeit, als auch einer verträglichen laufzeit
+Im Kapitel \ref{sec:numerisches_lösen_von_anfangswert_problemen} wurde das implizite mit dem expliziten Euler-Verfahren miteinander verglichen.
+In diesem Kapitel wird untersuch, wie die Vorteile beider Verfahren so miteinander verbunden 
+werden können, dass das Projekt sowohl mit einer hohen Genauigkeit, als auch einer verträglichen Laufzeit
 ausgeführt werden kann.
-Wie bereits gezeigt wurde, liefern die unterschiedlichen löser zu unterschiedlichen zeitpunkten
-unterschiedlich gute ergebnisse.
-Das \textit{DifferentialEquations.jl} Projekt bietet dafür die möglichkeit automatisch 
-zwischen verschiedenen lösungsverfahren zuwechseln.
+Wie bereits gezeigt wurde, liefern die unterschiedlichen Löser zu unterschiedlichen Zeitpunkten
+unterschiedlich gute Ergebnisse.
+Das \textit{DifferentialEquations.jl} Projekt bietet dafür die Möglichkeit, automatisch 
+zwischen verschiedenen Lösungsverfahren zu wechseln.
 Dies geschieht meist abhängig von aktuellen Fehler, es können aber auch eigene Kriterien entwickelt werden.
-Dabei ist jedoch zu beachten das dies nicht mit allen Verfahren möglich ist.
-So ist es zum beispiel nicht möglich den impliziten mit dem expliziten euler zu verbinden.
+Dabei ist jedoch zu beachten, dass dies nicht mit allen Verfahren möglich ist.
+So ist es zum Beispiel nicht möglich, den impliziten mit dem expliziten Euler zu verbinden.
 Deshalb wird im folgendem der \textit{Tsit5} mit dem \textit{Rosenbrock23} verbunden. Dieser Algorithmus wird im folgendem als AutoTsit5 bezeichnet.
-Dessenlaufzeit kann stark varieren. Je nach problem kann die laufzeit zwischen ein paar sekunden und
-ein paar studen sein.
-In den für dieses Kaptiel berechneten trajectorien, war die geringste laufzeit 19s und die längste 2h.
-Die genaue laufzeit hängt sehr stark von den benötigten fehler toleranzen und der problem größe ab.
-Im folgenden wird das bereits genannte verfahren mit dem expliziten euler verglichen.
+Dessen Laufzeit kann stark variieren. Je nach Problem kann die Laufzeit zwischen ein paar Sekunden und
+ein paar Stunden sein.
+In den für dieses Kapitel berechneten Trajektorien, war die geringste Laufzeit 19 Sekunden und die längste 2 Stunden.
+Die genaue Laufzeit hängt sehr stark von den benötigten Fehlertoleranzen und der Problemgröße ab.
+Im Folgenden wird das bereits genannte Verfahren mit dem expliziten Euler verglichen.
 
-\begin{figure}[h]
+In der Grafik \ref{fig:vergleichexplizit} wird die Differenz zwischen dem expliziten Euler-Verfahren und dem \textit{AutoTsit5} verglichen.
+In den ersten 0,5 Sekunden ist die Differenz positiv, dies bedeutet, dass
+der explizite Euler bessert.
+Danach liefert der \textit{AutoTsit5} dann ein konstant besseres Ergebnis.
+
+In der Graphik \ref{fig:vergleichimplizit} wird beobachtet,
+dass der \textit{AutoTsit5} am Anfang ein besseres Ergebnis liefert.
+Nach etwa 1 Sekunde wird dann der implizite Euler besser.
+Besonders ist vor allem, dass der Unterschiede zwischen beiden Verfahren gegen Ende sich sehr stark null annähert und bei zwei der drei Trajektorien gegen Ende  der \textit{AutoTsit5} wieder ein besseres Ergebnis liefert.
+
+Daraus lässt sich folgern, dass die automatischen Verfahren bei längeren Trajektorien ein leicht besseres Ergebnis liefern.
+
+Dies liegt vermutlich daran, das diese die Vorteile von 
+zwei verschiedenen Lösungsverfahren ausnutzen können.
+
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{Data/03_Ergebnisse/autoswitching/errors_explizit_composit.png}
-    \caption{Vergleich mit Explizit Algorithm}
+    \includegraphics[width=0.8\textwidth]{Data/03_Ergebnisse/autoswitching/errors_explizit_composit.png}
+    \caption{Vergleich mit dem expliziten Algorithmus}
     \label{fig:vergleichexplizit}
 \end{figure}
-
-In der Grafik \ref{fig:vergleichexplizit} wird die differenz zwischen dem Expliziten Euler und dem AutoTsit5 verglichen.
-In den ersten 0.5 sekunden ist die differenz positiv, dies bedeutet, dass
-der Explizite euler bessert.
-Danach liefert der AutoTsit dann ein konstant besseres ergebniss.
-
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{Data/03_Ergebnisse/autoswitching/errors_implizit_composit.png}
-    \caption{Vergleich mit Implizit Algorithm}
+    \includegraphics[width=0.8\textwidth]{Data/03_Ergebnisse/autoswitching/errors_implizit_composit.png}
+    \caption{Vergleich mit dem impliziten Algorithmus}
     \label{fig:vergleichimplizit}
 \end{figure}
 
-In der Graphik \ref{fig:vergleichimplizit} wird beobachtet,
-dass der AutoTsit5 am Anfang einbessers ergebniss liefert.
-Nach etwa 1 sekunde wird dann der Implizite Euler besser.
-Besonders ist vorallem das der Unterschiede zwischen beiden verfahren gegen ende sich sehr stark null annähert und bei zwei der drei trajektorien gegen ende wieder ein bessers ergebniss liefert.
-Dies lässt vermuten das der AutoTsit bei längeren trajektorien, ein sehr gutes ergebniss liefert.
