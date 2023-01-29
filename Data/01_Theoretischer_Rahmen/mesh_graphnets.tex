@@ -17,21 +17,21 @@ Der Grund für diese Vorgehensweise ist, dass dadurch die Berechnung der Simulat
 ohne die Genauigkeit der Berechnung zu stark zu verringern.
 
 Die Lösung der Differentialgleichungen liefert den Zustand der Meshpunkte im Laufe der Zeit.
-Diese ist nun die Grundlage für die Trainingsdaten 
+Diese ist nun die Grundlage für die Trainingsdaten.
 
-Normaler Weiß werden nun die dem physikalischen Problem zugrunde liegenden Differenzialgleichungen mit einem numerischen Verfahren gelöst 
+Normalerweise werden nun die dem physikalischen Problem zugrunde liegenden Differenzialgleichungen mit einem numerischen Verfahren gelöst 
 und damit die Attribute der Mesh-Punkte im Laufe der Zeit vorhergesagt.
 Die Differenzialgleichungen für Flüssigkeits-Simulationen wird in Kapitel \ref{sec:simulationen} genauer eingegangen.
 
 
 Wie diese numerisch berechnet werden, wird außerdem in Kapitel \ref{sec:numerisches_lösen_von_anfangswert_problemen} erläutert.
-MeshGraphNets veränder nun eine entscheidende Komponente.
-Sie ersetzten die klassischen Differenzialgleichungen durch eine \textit{NeuralODE},
+Mesh\-Graph\-Nets veränder nun eine entscheidende Komponente.
+Sie ersetzten die klassischen Differenzialgleichungen durch ein Verfahren basierend auf neuronalen Netzen,
 welche anhand von Beispieldaten, die mit den klassischen Differenzialgleichungen erzeugt werden, trainiert wird.
 Da das \textit{Mesh} für jedes Problem unterschiedlich ist, muss dieses in ein einheitliches Format gebracht werden, dazu wird es in einen
 Multigraphen umgewandelt.
 Dieser setzt sich grundsätzlich aus drei Komponenten zusammen.
-Die erste Komponente sind alle Knoten der Simulation, diese sind analog zu den Punkten des \textit{Mesh}.
+Die erste Komponente des Graphen sind alle Knoten der Simulation, diese sind analog zu den Punkten des \textit{Mesh}.
 Die Kanten des MultiGraphen setzt sich aus den Welt- und Mesh-Kanten zusammen.
 
 Welt-Kanten werden verwendet, um externe Kräfte zu modellieren und werden erzeugt, 

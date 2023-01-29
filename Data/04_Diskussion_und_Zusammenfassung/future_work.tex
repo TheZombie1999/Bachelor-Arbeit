@@ -1,15 +1,17 @@
 
 \section{Zukünftige Arbeiten} \label{sec:future_work}
 
+In diesem Kapitel werden mehre Ideen zur Verbesserung und alternativen Nutzung von \textit{MeshGraphNets} vorgestellt.
+
 \subsection{Mehr-Schritt-Methoden für ein besseres Gedächtnis} \label{sec:better_memory}
 
-In dem Paper von \cite{neuralode} wurde der Vergleich zwischen NeuralODEs und RNN angesprochen.
-Wird eine der Runge-Kutta-Methoden verwendet, um die NeuralODE zu lösen, hat grundsätzlich nur Kenntnis
+In \cite{neuralode} wurde der Vergleich zwischen NeuralODEs und RNN angesprochen.
+Wird eine der Runge-Kutta-Methoden verwendet, um die NeuralODE zu lösen, diese hat grundsätzlich nur Kenntnis
 über den aktuellen Zeitschritt.
 Das heißt, das neuronale Netz hat prinzipiell nur ein extrem kurzes Gedächtnis.
 RNN haben das gleiche Problem, mit dem großen Unterschied, dass diese weiter in die Zukunft schauen können, 
 die Sichtbarkeit der vergangenen Informationen, aber exponentiell abnimmt.
-Es gibt mehrere Ansätze diesen exponentiellen vergessen Prozess von \textit{RNNs} zu umgehen, 
+Es gibt mehrere Ansätze dieses Problem von \textit{RNNs} zu umgehen, 
 diese sind aber um ein Vielfaches teurer zu berechnen.
 Die Idee ist nun, dass die Mehr-Schritt-Methoden es dem Löser der NeuralODE ermöglichen, Informationen 
 aus vergangenen und zukünftigen Zeitschritten zu verbinden und dadurch der NeuralODE ein besseres 
@@ -19,8 +21,8 @@ Ob dies funktioniert, ist eine offene Frage, die noch untersucht werden kann.
 \subsection{Laufzeitverbesserung}
 
 Wie in Kapitel \ref{sec:isolation_of_the_scatter_funktion}
-angesprochen wurde, benötigt die Speicherallokierung und 
-das Hinein- und Herauskopieren der Dual-Zahlen in ein für die \textit{scatter!}-Funktion verarbeitbares Format sehr viel Zeit.
+angesprochen, benötigt die Speicherallokierung und 
+das Transferieren der \textit{Dual}-Zahlen in ein für die \textit{scatter!}-Funktion verarbeitbares Format sehr viel Zeit.
 Dies ist notwendig aufgrund der Art und Weise wie das \textit{Dual}-Struct definiert ist.
 
 \begin{lstlisting}
@@ -34,25 +36,51 @@ Dies ist notwendig aufgrund der Art und Weise wie das \textit{Dual}-Struct defin
     end
 \end{lstlisting}
 
-Da der Datentype von \textit{Partials.values} ein \textit{NTupel} ist und es sich um zwei geschachtelte 
-\textit{Struct} handelt, kann auf diese mit einer \textit{view} nicht richtig zugegriffen werden.
-Eine \textit{view} ist dringen notwendig, da es sonst innerhalb der \textit{scatter}-Funktion 
-zu Skalaren Indizierung kommt.
-Würde man die Definition der \textit{Dual}-Zahl abänder, könnte dies auf der 
+Da der Datentyp von \textit{Partials.values} ein \textit{NTupel} ist und es sich um zwei geschachtelte 
+\textit{Structs} handelt, kann auf diese mit einer \textit{view} nicht zugegriffen werden.
+Eine \textit{view} ist dringend notwendig, da es sonst innerhalb der \textit{scatter}-Funktion 
+zu skalarer Indizierung kommt.
+Würde die Definition der \textit{Dual}-Zahl abändernd werden, könnte dies auf der 
 GPU zu einer deutlich besseren Laufzeit führen.
 Der Grund, warum die \textit{Dual}-Zahlen aktuell so definiert sind ist,
-dass die CPU Version ausnutzt, das \textiti{NTupel} immutable (unveränderlich) sind und deshalb
+dass die CPU Version ausnutzt, das \textiti{NTupel} \textit{immutable} (unveränderlich) sind und deshalb
 nicht auf dem Heap, sondern auf dem Stack gespeichert werden können.
 Dies führt auf der CPU zu einer bessern Performance, da weniger Speicher allokiert
 werden muss.
 Auf der Grafikkarte gibt es das Konzept von Stack und Heap nicht, wodurch dessen Implementierung
 davon auch keinen Vorteil hat.
-Das Problem dabei ist, dass wenn die Definition der \textit{Dual}-Zahl veränder wird
+Das Problem dabei ist, dass wenn die Definition der \textit{Dual}-Zahl veränderd wird
 muss das gesamte \textit{ForwardDiff.jl} Paket und alle Bibliotheken, die diese verwenden
-um geschrieben werden.
+umgeschrieben werden.
 Die Laufzeit der MeshGraphNets könnte aber einen sehr großen Vorteil, daraus ziehen, weshalb 
 es sich lohnen könnte sich über eine für die Grafikkarte besser geeignete Version des 
 \textit{ForwardDiff.jl} Paketes Gedanken zu machen.
+
+
+
+\subsection{Ungewöhnlich gute Genauigkeit des expliziten Eulers}
+
+In der Grafik \ref{fig:eulervergleich} wurde der explizite Euler mit dem impliziten Euler-Verfahren verglichen.
+
+Dabei ist aufgefallen, dass am Anfang das explizite Verfahren 
+ein genaueres Ergebnis liefert als das implizite Verfahren.
+
+Dies ist jedoch ungewöhnlich, da normalerweise erwartet wird, das im schlimmsten Fall die beiden Verfahren gleich gute Ergebnisse liefern,
+und im Normalfall das implizite Verfahren besser ist.
+
+Der Grund für dieses Verhalten ist noch nicht bekannt, es 
+wird aber vermutet, dass das expliziten Verfahren so gut abschließt, 
+da die Genauigkeit des trainierten Netzes an den Stellen, an denen der 
+explizite Euler die NeuralODE auswertet, die höchste Genauigkeit hat,
+da deren Schrittweite dem der Trainingsdaten entspricht.
+
+Die impliziten Verfahren passen dagegen ihre Schrittweite dynamisch 
+an, um die angegebene Genauigkeit zu erreichen, dadurch werten sie 
+die NeuralODE zum Teil an Zeitpunkten aus, an denen die NeuralODE
+die Werte nur errät bzw. „interpoliert“.
+
+Die offene Frage ist, wie gute diese „Interpolation“ erlernt wurde.
+
 
 
 

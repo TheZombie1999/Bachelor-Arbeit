@@ -43,12 +43,12 @@ Dieses Verfahren hat das Problem, dass häufig verwendete Ableitungsregeln wie z
 mit jeder Anwendung die Ergebnisgröße verdoppelt, wodurch es zu einem exponentiellen Wachstum 
 der symbolischen Repräsentation kommt.
 Dies macht dieses Verfahren unbrauchbar, um die Ableitung eines neuronalen Netzes zu berechnen.
-Die dritte Methode nutzt aus, dass Operationen in einer Programmiersprache überladen werden können.
+Die nächste Methode nutzt aus, dass Operationen in einer Programmiersprache überladen werden können.
 Es wird dazu angenommen, dass die Funktion, dessen Ableitung berechnet werden soll, aus primitiven Operationen aufgebaut ist, dessen Ableitung bekannt ist.
 Nun kann die Kettenregel ausgenutzt werden, um Schritt für Schritt die Ableitung zu berechnen.
 Da dieses Verfahren für diese Arbeit sehr relevant ist, wird auf die Umsetzung in Kapitel \ref{sec:ketten_regel} noch einmal eingegangen.
 
-Die vierte und letzte Möglichkeit, die Automatischedifferenzierung umzusetzen, ist den Source-Code direkt zu manipulieren.
+Die letzte Möglichkeit, die automatische Differenzierung umzusetzen, ist den Source-Code direkt zu manipulieren.
 Konzeptionell ist dieses Verfahren sehr ähnlich zu der zuvor vorgestellten Methode. 
 Der große Unterschied bei dieser Methode ist, dass der Code der Funktion so umgeschrieben wird, 
 dass diese sowohl ihre eigentliche Ausgabe als auch ihre Ableitung selbst mit berechnet.
@@ -170,7 +170,7 @@ Dann wird auf Grundlage dieser die Ableitung berechnet.
 Das heißt, anstatt die Ableitung in jeden Berechnungsschritt mit zuziehen, wird diese erst am Ende für alle freien Variablen berechnet.
 Dies hat den großen Vorteil, dass die Laufzeit des Algorithmus von der Berechnungszeit der Funktion $f$ abhängt und nicht von der Anzahl der Parameter.
 Der Nachteil dieser Methoden ist, dass dafür wesentlich mehr Speicherplatz verbraucht wird.
-Welcher dieser beiden Verfahren besser geeignet ist, hängt stark vom Problem ab.
+Welches dieser beiden Verfahren besser geeignet ist, hängt stark vom Problem ab.
 Bei einem neuronalen Netz gibt es eine große Anzahl an freien Parametern, was die Rückwärtsmodus-Differenzierung bevorzugt.
 Die meisten Differenzialgleichungen bestehen aus drei Raum- und einer Zeit-Dimension.
 Dies führt dazu, dass die Vorwärtsmodus-Differenzierung bei Differenzialgleichungen meist besser geeignet ist.

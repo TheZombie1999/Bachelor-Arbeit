@@ -5,17 +5,16 @@
 
 \section{Ziel der Arbeit} \label{sec:ziel_der_arbeit}
 
-Der Zweck dieser Arbeit ist es, Nutzern von \textit{NeuralODEs} \cite{neuralode} es zu ermöglichen, 
-verschiedene numerische Lösungsverfahren von Differenzialgleichungen zu nutzen.
+Der Zweck dieser Arbeit ist es, in Julia MeshGraphNets als NeuralODE mit zusätzlichen Lösungsverfahren auswerten zu können.
 Da explizite Lösungsverfahren ohne zusätzliche Arbeit nutzbar sind,
 konzentriert sich diese Arbeit auf implizite Methoden.
 Die größte Herausforderung dabei ist, 
 diese auf der Grafikkarte und nicht auf der CPU zu berechnen.
 Der Grund ist die lange Berechnungsdauer der impliziten Methoden.
-Das Hauptproblem beim Berechnen von \textit{NeuralODEs} ist, dass diese der Differenzialgleichung nicht immer reelle Zahlen als Argument übergeben.
-Stattdessen wird oft eine \textit{Dual}-Zahl verwendet.
+Das Problem dabei ist, dass diese der Differenzialgleichung nicht immer reelle Zahlen als Argument übergeben.
+Stattdessen wird oft \textit{Dual}-Zahlen verwendet.
 Diese sind Voraussetzung dafür, 
-automatische Differenzierungsalgorithmen berechnen zu können.
+automatische Differenzierungsalgorithmen durchführen zu können.
 Dies setzt voraus, dass alle Komponenten der \textit{NeuralODE}\cite{neuralode} diese verarbeiten können.
 Die meisten Komponenten sind dazu bereits in der Lage, 
 da die Implementierung der \textit{Dual}-Zahlen

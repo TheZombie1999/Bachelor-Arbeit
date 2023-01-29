@@ -1,17 +1,17 @@
 \subsection{Eine funktionierende Implementierung} \label{sec:funktional_implementaion}
 
 In diesem Kapitel geht es darum, wie die \textit{scatter}-Funktion umgesetzt werden kann.
-Dazu werden die Argumente der \textit{scatter}-Funktion aus Kapitel \ref{sec:vorstellung} so
+Dazu werden deren Argumente aus Kapitel \ref{sec:vorstellung} so
 umgeformt, 
 dass die bereits vorhandenen Implementierungen der \textit{scatter!}-Funktion der \textit{NNlibCUDA.jl} \cite{nnlibcuda} Bibliothek 
 diese richtig verarbeiten kann.
-Dafür wird zuerst \textit{Global Memory} \ref{sec:memory} reserviert. Dann werden Kernels \ref{sec:gpu} verwenden, 
+Dafür wird zuerst \textit{Global Memory} \ref{sec:memory} reserviert. Dann werden Kernels \ref{sec:gpu} verwendent, 
 um die Werte schnell und im richtigen Format in den neuen Speicherbereich zu kopieren.
 Die ursprünglichen Arrays \textit{src} und \textit{dst} haben die Dimension N.
 Das Array \textit{idx} hat entweder Dimension N und enthält Tupel von gleicher Größe
-oder Dimension eins und enthält \textit{Interger} Zahlen.
+oder Dimension eins und enthält \textit{Integer} Zahlen.
 Falls die Dimension von \textit{idx} eins ist und die Dimension von \textit{src}
-und \textit{dst} größer, dann wird \textit{idx} Zeilen weiße angewendet.
+und \textit{dst} größer, dann wird \textit{idx} Zeilenweise angewendet.
 Es wird nun eine Kopie dieser drei Arrays erstellt, mit Dimension N+1.
 In der zusätzlichen Dimension werden die einzelnen Komponenten der \textit{Dual}-Zahl gespeichert.
 Ein Beispiel mit $N = 1$ für \textit{src} und \textit{dst} sieht wie folgt aus:
@@ -33,8 +33,8 @@ Partial & Partial & Partial \\
 \end{bmatrix}
 \end{equation}
 
-Das \textit{idx}-Array ist in dieser Hinsicht besonders.
-Da die einzelnen \textit{Integer}-Zahlen zu Tupel um gewandelt werden müssen.
+Das \textit{idx}-Array ist in dieser Hinsicht besonders,
+da die einzelnen \textit{Integer}-Zahlen zu Tupel um gewandelt werden müssen.
 
 \begin{equation}
 \text{idx}= 
@@ -51,18 +51,17 @@ Da die einzelnen \textit{Integer}-Zahlen zu Tupel um gewandelt werden müssen.
 \end{bmatrix}
 \end{equation}
 
-Das Erweitern des \textit{idx} Arrays sorgt dafür, dass die richtigen Komponenten miteinander verrechnet werden.
-Die Anzahl der Zeilen in beiden Beispielen ist abhängig von der Anzahl der Freien Variablen  
-der Multidimensionalen \textit{Dual}-Zahlen. In diesem Beispiel ist $k = 3$.
-Wird nun \textit{dst\_m}, \textit{src\_m} und \textit{idx\_m} an die \textit{scatter!} Funktion über
-geben, wird das erwünschte Ergebnis berechnet. 
+Das Erweitern des \textit{idx}-Arrays sorgt dafür, dass die richtigen Komponenten miteinander verrechnet werden.
+Die Anzahl der Zeilen in beiden Beispielen ist abhängig von der Anzahl der freien Variablen  
+der multidimensionalen \textit{Dual}-Zahlen. In diesem Beispiel ist $k = 3$.
+Wird nun \textit{dst\_m}, \textit{src\_m} und \textit{idx\_m} an die \textit{scatter!} Funktion übergeben, wird das erwünschte Ergebnis berechnet. 
 Im letzten Schritt muss nun der Inhalt von \textit{dst\_m} nach \textit{dst} zurückkopiert werden.
 Dabei tritt das Problem auf, dass die partiellen Komponenten innerhalb der \textit{Dual}-Zahl
 als Tupel gespeichert werden.
 Tupel in Julia sind unveränderlich, nachdem sie erstellt wurden.
-Das Problem dabei ist, dass alle partiellen Komponenten der \textit{Dual}-Zahl gleichzeitig zugegriffen werden muss.
+Das Problem dabei ist, dass auf alle partiellen Komponenten der \textit{Dual}-Zahl gleichzeitig zugegriffen werden muss.
 Dazu muss jede einzelne Komponente skalar indiziert werden.
-Dabei kommt es innerhalb der Julia Implementierung zu inkonsistenten Verhalten.
+Dabei kommt es innerhalb der Julia Implementierung zu inkonsistentem Verhalten.
 Folgender Speicherzugriff eines bestimmten Kernels funktioniert problemlos:
 
 
@@ -70,7 +69,7 @@ Folgender Speicherzugriff eines bestimmten Kernels funktioniert problemlos:
     dst_m[3, 4, 5, 1]
 \end{verbatim}
 Wird dieser Aufruf leicht modifiziert, um alle partiellen Komponenten zu einem Tupel zusammenzufassen, 
-kommt es zu einem Compiler Fehler.
+kommt es zu einem Compilerfehler.
 \begin{verbatim}
     ( [dst_m[3, 4, 5, i] for i in 2:k+1]... )
 \end{verbatim}
@@ -80,23 +79,23 @@ Das Verwenden von \textit{views} löst das Problem von skalarer Indizierung inne
 Eine \textit{view} erlaubt es, die Art und Weise, wie auf einen Speicherbereich zugegriffen wird, zu verändern.
 Diese werden auf der CPU erstellt und dann dem Kernel als Argument übergeben.
 Um zum Beispiel ein Array von Tupeln mit den \textit{Partials} als Inhalt zu erhalten, wird folgender Code ausgeführt:
-\begin{verbatim}
+\begin{lstlisting}[language=Julia]
 	function f(x...)
 		return x
 	end
 	
 	tuples = f.([view(dst_m, repeat([:], 
 	        ndims(dst_m) - 1)..., i) for i in 2:(N+1)]...)
-\end{verbatim}
+\end{lstlisting}
 In diesem Beispiel wird ein Broadcast Kernel mit der Funktion f aufgerufen.
-Broadcasting bedeutet, dass diese auf jeder Speicherzellen der Argumente angewandt wird.
+Broadcasting bedeutet, dass diese auf jeder Speicherzelle der Argumente angewandt wird.
 Diese Operation läuft auf der Grafikkarte.
-Für mehr Details zur genauen Umsetzung kann der Code im Anhang eingesehen werden.
+Für mehr Details zur genauen Umsetzung kann der Code im Anhang \ref{scatter_source} eingesehen werden.
 
 
 Der letzte Schritt ist nun die Korrektheit der beschriebenen Funktion zu 
 überprüfen. Dazu wird ausgenutzt, dass die CPU Implementierung mit \textit{Dual}-Zahlen korrekt funktioniert.
-Es wurde also ein \textit{Unit-Test} umgesetzt, der einmal die Berechnung 
+Es wurde ein \textit{Unit-Test} umgesetzt, der einmal die Berechnung 
 auf der CPU und einmal auf der GPU berechnet und dann das Ergebnis
 auf Gleichheit überprüft.
 Um die Robustheit des Testes zu vergrößern, werden bei jedem Testdurchlauf zufällige Dimensionen und Werte gewählt.

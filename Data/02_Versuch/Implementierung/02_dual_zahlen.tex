@@ -2,24 +2,23 @@
 
 Um zu verstehen, was auf der Grafikkarte zu Problemen führt, 
 wird zunächst die Definition von \textit{Dual}-Zahlen betrachtet.
-\textit{Dual}-Zahlen werden von der \textit{ForwardDiff.jl} Bibliothek \cite{juliaForwardDiffPackage}
+Diese werden von der \textit{ForwardDiff.jl} Bibliothek \cite{juliaForwardDiffPackage}
 implementiert. 
 Die Definition dieser Zahlen ist von Imaginären-Zahlen abgeleitet.
 Genauer gesagt handelt es sich um mehrdimensionale \textit{Dual}-Zahlen, 
 da sich hinter diesem Begriff zwei sehr ähnliche Konzepte verbergen, 
-führen wir folgende zwei Begriffe ein.
+werden folgende zwei Begriffe eingeführt.
 Mit einer \textit{Dual}-Zahl wird die konkrete Implementierung in der \textit{ForwardDiff.jl} Bibliothek \cite{juliaForwardDiffPackage} bezeichnet.
-Eine Multidimensionale \textit{Dual}-Zahl bezeichnet die mathematische Definition, 
+Eine multidimensionale \textit{Dual}-Zahl bezeichnet die mathematische Definition, 
 welche von imaginären Zahlen abgeleitet ist.
 
 \begin{equation}
  d = x + \sum_{i = 1}^{k} y_i \epsilon_i 
 \end{equation}
-$$ \text{ d ist eine Multidimensionale \textit{Dual}-Zahl } $$ 
-$$ \text{ x ist die relle komponente } $$ 
-$$ y_i \text{ sind die imaginären komponenten mit } i \in \{1, ..., k\} $$
 
-Bei multidimensionalen \textit{Dual}-Zahlen gilt:
+Dabei ist d eine multidimensionale \textit{Dual}-Zahl mit der reellen Komponente $x$ 
+und den partiellen Komponenten $y_1, ..., y_k$.
+Dabei sind die Variablen $\epsilon_1, ..., \epsilon_k$ ähnlich zu der imaginären Zahl $i$ mit dem Unterschied, dass diese folgende Eigenschaft haben:
 \begin{equation}
  \epsilon_i \cdot \epsilon_j = 0
 \end{equation}
@@ -31,9 +30,8 @@ ist ebenfalls ihr Verhalten auf skalare Operationen wichtig:
  f( x + \sum_{i = 1}^{k} y_i \epsilon_i  ) = f(x) +  f'(x) \sum_{i = 1}^{k} y_i \epsilon_i
 \end{equation}
 
-Das Verhalten auf skalare Operationen ist, entscheidet 
+Das Verhalten auf skalare Operationen ist, entscheidend 
 für die Berechnung von automatischen Differenzierungs-Algorithmen.
-
 Um die \textit{scatter}-Funktion umzusetzen, 
 wird die Definition der Addition von multidimensionalen \textit{Dual}-Zahlen \cite{RecentAdvances} benötigt.
 

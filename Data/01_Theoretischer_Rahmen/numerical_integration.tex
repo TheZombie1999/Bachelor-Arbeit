@@ -64,8 +64,7 @@ $$
 Dies ist wichtig, da alle Verfahren zum numerischen Lösen von Anfangswertproblemen sich darin unterscheiden, wie sie diese Approximation berechnen.
 Das explizite Euler-Verfahren mit einer \textit{NeuralODE} zu berechnen
 ist leicht, da $y_k$, h und $f(t_k, y_k)$ bekannt sind.
-Das nächste Verfahren, das vorgestellt wird, verändert die Approximation.
-Dies führt dazu, dass ein eigenes Verfahren benötigt wird, um diese zu lösen.
+
 
 \subsection{Implizites Euler-Verfahren}
 
@@ -80,7 +79,7 @@ $$
 
 Die restliche Definition ist analog zum expliziten Euler-Verfahren aus Kapitel \ref{sec:explizites_euler_verfahren}.
 Das Besondere dabei ist, dass $y_{k + 1}$ nicht bekannt ist.
-Demnach enthält $f(t_{k + 1}, y_{k + 1})$ auch eine unbekannte.
+Demnach enthält $f(t_{k + 1}, y_{k + 1})$ auch eine Unbekannte.
 Um das Gleichungssystem zu lösen, muss nach $y_{k + 1}$ aufgelöst werden.
 Im Allgemeinen kann allerdings nicht davon ausgegangen werden, dass dies immer effizient möglich ist.
 Deshalb wird für das Lösen des Gleichungssystems das Newton-Verfahren \cite[Kapitel~5.5]{intorduction_to_numerical_analysis} verwendet.
@@ -218,7 +217,7 @@ $$
 $$
 
 Die Intuition hinter der Definition des Lagrange-Polynoms ist, 
-dass das Polynom $l_j(x)$ eine Null-Stelle an jedem Punkt $x_i$ hat, außer für den Punkt beidem gilt $i = j$. 
+dass das Polynom $l_j(x)$ eine Null-Stelle an jedem Punkt $x_i$ hat, außer für den Punkt bei dem gilt $i = j$. 
 An dieser Stelle hat das Polynom $l_j(x)$ den Wert 1, wegen des Quotienten $\frac{1}{x_j - x_m}$.
 Wird nun $l_j(x)$ mit $y_j$ multipliziert, ergibt sich ein Polynom mit dem richtigen y-Wert an der Stelle $x_j$ und den Wert null an jedem anderen Punkt $x_i$.
 Werden nun diese Polynome für jeden Punkt aufaddiert,

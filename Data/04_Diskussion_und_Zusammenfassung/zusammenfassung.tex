@@ -1,17 +1,17 @@
 
 \section{Zusammenfassung}
 
-In dieser Arbeit wurde gezeigt, dass implizit Differenzialgleichungslöser für MeshGraphNets 
-unterstützt werden kann, in dem die \textit{scatter}-Funktion um geschrieben wird.
+In dieser Arbeit wurde gezeigt, dass implizite Differenzialgleichungslöser für Mesh\-Graph\-Nets 
+unterstützt werden können, in dem die \textit{scatter}-Funktion angepasst wird.
 Dabei ist die kritische Komponente, dass die Matrix von \textit{Dual}-Zahlen in eine Matrix von Floats umgewandelt wird.
 Diese kann dann von der normalen \textit{scatter!}-Funktion verarbeitet werden.
-Mit der Hilfe einer \textit{view} ist dann möglich, die Matrix von Floats wieder in eine Matrix von \textit{Dual}-Zahlen
+Mit der Hilfe einer \textit{view} ist es dann möglich, die Matrix von Floats wieder in eine Matrix von \textit{Dual}-Zahlen
 umzuwandeln.
-Nachdem nun die impliziten Methoden nutzbar sind, werden diese im Anschluss untersucht.
+Nachdem die impliziten Methoden nutzbar sind, wurden diese untersucht.
 Das Ergebnis dieser Untersuchung ist, dass die impliziten Methoden, wie erwartet eine höhere Genauigkeit
-wie die expliziten Verfahren erreicht, mit dem Nachteil, dass dessen Laufzeit deutlich länger ist.
+wie die expliziten Verfahren erreichen, mit dem Nachteil, dass dessen Laufzeit deutlich länger ist.
 Außerdem wurde gezeigt, dass ein guter Kompromiss zwischen den beiden Verfahren durch einen Komposit-Algorithmus erreicht werden kann.
-Als Letztes wurde noch die GPU Version der \textit{scatter}-Funktion mit der CPU Version verglichen.
+Als Letztes wurde die GPU Version der \textit{scatter}-Funktion mit der CPU Version verglichen.
 Dabei ist aufgefallen, dass die GPU Version eine ungefähr doppelte Laufzeit hat.
-Dies liegt vor allem an den Speicherreservierung, die für dessen Umsetzung benötigt wird.
+Dies liegt vor allem an den Speicherreservierungen, die für dessen Umsetzung benötigt wird.
 

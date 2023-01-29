@@ -1,23 +1,25 @@
 \section{Funktionierende Löser}
 
 In diesem Abschnitt wird ein Überblick darüber gegeben, welche 
-ODE-Löser nach dem Hinzufügen der in \ref{ch:versuch} vorgestellten 
+ODE-Löser nach dem Hinzufügen der in Kapitel \ref{ch:versuch} vorgestellten 
 Version der \textit{scatter}-Funktion nun möglich sind.
-
+Funktional sind alle SDIRK-Methoden, welche eine Sammlung von
+\textit{singly-diagonal} Runge-Kutta-Verfahren \cite{sdirk} ist.
+Durchgelaufen sind außerdem alle Rosenbrock und Rosenbrock-W Methoden,
+außerdem gehen fünf der acht Mehr-Schritt-Methoden (Multi-Step-Methods).
 Eine detaillierte Auflistung aller impliziten Löser und ihrem 
 funktionalen Stand findet sich im Anhang \ref{solver_tabels}.
-
 Wichtig ist dabei, dass es nicht möglich ist jeden Löser ausführlich zu testen,
 da diese zum Teil eine sehr lange Laufzeit haben.
-Aufgrund dessen wurde jeder, der im folgenden Grafik als funktionierend 
-bezeichnet, so lange laufen gelassen, bis dieser den ersten Zeitschritt erfolgreich berechnet hat.
+Da das Testen der Algorithmen automatisch durchgeführt wurde,
+kann es sein, dass manche Fehler durch eine falsche Konfiguration ausgelöst wurden.
+Die Vorgehensweise beim Testen war, dass jeder im Anhang als funktionierend 
+bezeichneten Löser, so lange ausgeführt wurde, bis dieser den ersten Zeitschritt erfolgreich berechnet hat.
 Der Grund für diese Vorgehensweise ist, dass die Löser an diesem Punkt meistens scheitern,
 wenn dieser Punkt überschritten ist, dann kam es erfahrungsgemäß zu keinen 
 weiteren Problemen, eine 100\%-tige Garantie liefert dies aber nicht.
-Ausführlich getestet wurde alle die Algorithmen, die in Kapitel \ref{ch:versuch} vorgestellt wurden.
-
+Ausführlich getestet wurden alle Algorithmen, die in Kapitel \ref{ch:auswertung} vorgestellt wurden.
 Es sind nicht alle Gründe bekannt, warum manche Löser noch nicht funktionieren.
-
 Bekannte Probleme sind allerdings:
 
 \begin{itemize}
@@ -30,10 +32,9 @@ Bekannte Probleme sind allerdings:
 
 Laut der \textit{CUDA} Dokumentation sollte Multithreading und Asynchrone Ausführung funktionieren.
 In unseren Tests hat sich das jedoch nie bestätigt.
-Die \textit{scatter}-Funktion kann aktuelle nur \textit{Dual}-Zaheln, die reelle Zahlen enthalten verwenden. Theoretisch könnten mache Löser allerdings auch komplexen Zahlen verwenden.
-
-Diese ist aktuell nicht unterstützt.
-Könnte aber relativ leicht mit einem ähnlichen Ansatz wie in Kapitel \ref{ch:versuch} vorgestellt wurde, gelöst werden.
+Die \textit{scatter}-Funktion kann aktuelle nur \textit{Dual}-Zaheln, die reelle Zahlen enthalten verwenden. Theoretisch könnten mache Löser allerdings auch komplexe Zahlen verwenden.
+Dies ist aktuell nicht unterstützt,
+könnte aber relativ leicht mit einem ähnlichen Ansatz wie in Kapitel \ref{ch:versuch} vorgestellt wurde, gelöst werden.
 
 
 

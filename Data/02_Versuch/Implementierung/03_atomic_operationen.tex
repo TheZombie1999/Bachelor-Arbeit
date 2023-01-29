@@ -3,10 +3,12 @@
 Da nun bekannt ist, was eine \textit{Dual}-Zahl ist, 
 kann das eigentliche Problem betrachtet werden.
 Die Implementierung der \textit{scatter!}-Funktion benutzt folgenden Programmcode:
+
 \begin{lstlisting}[language=Julia]
 CUDA.@atomic dst[idx[index]...] = 
-	op(dst[idx[index]...], src[index])
+	op(dst[idx[index]...], src[index])  
 \end{lstlisting}
+
 Dabei ist der Macro \textit{@atomic} ein Wrapper um die C-Implementierung von \textit{CUDA.jl} \cite{besard2018juliagpu}.
 Das Problem, das auftritt ist, dass der Makro nur Floats unterstützt.
 Es ist möglich, die unterstützten Datentypen zu erweitern.
@@ -19,8 +21,8 @@ um \textit{Read-Modify-Write} Operationen zu serialisieren,
 und um \textit{Race-Conditions} zu vermeiden. 
 Deshalb kann dieser auch nicht weggelassen werden.
 Aus der Definition der multidimensionalen \textit{Dual}-Zahlen 
-ist bekannt, dass \textit{Dual}-Zahlen Komponenten weiße addiert werden.
-Da die einzelnen Komponenten reellen Zahlen 
+ist bekannt, dass \textit{Dual}-Zahlen komponentenweise addiert werden.
+Da die einzelnen Komponenten reelle Zahlen 
 bzw. in der Praxis \textit{Floats} sind, liegt folgende Implementierung nahe:
 \begin{lstlisting}{language=Julia}
 function gpu_add!(d0::Dual, d1::Dual, d2::Dual)
@@ -36,7 +38,7 @@ end
 \end{lstlisting}
 
 Wird die \textit{scatter} Funktion nun wie beschrieben implementiert, kommt es zu einem weiteren Problem.
-Der Makro \textit{@atomic} verbietet die Funktions aufrufe \textit{value} und \textit{partial}.
+Der Makro \textit{@atomic} verbietet die Funktionsaufrufe \textit{value} und \textit{partial}.
 Dies liegt daran, dass ein Makro in der Julia Sprache Zugang auf den \textit{Abstract Syntax Tree} des Compilers hat
 und einen direkten Zugriff auf ein \textit{Array} erwartet.
 Der Aufruf der \textit{partial} Funktion führt außerdem skalare Indexierung durch, welche auf der Grafikkarte nicht erlaubt ist.

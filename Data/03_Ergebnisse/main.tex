@@ -1,8 +1,22 @@
 
-\chapter{Auswertung}
+\chapter{Auswertung} \label{ch:auswertung}
 
 In diesem Kapitel werden MeshGraphNets genutzt, um die Effektivität verschiedener numerischer
-Differenzialgleichungslöser auf NeuralODEs zu analysieren.
+Differentialgleichungslöser auf NeuralODEs zu analysieren.
+Dafür wird zunächst die \textit{scatter}-Funktion einzeln betrachtet.
+Dabei ist besonders die Laufzeitunterschiede zwischen der CPU und GPU Version 
+interessant.
+Danach werden mehrere Differentialgleichungslöser verwendet, um die NeuralODE 
+eines MeshGraphNets auszuwerten.
+Die Trainingsdaten und Anfangszustände basieren dabei auf dem von DeepMind 
+veröffentlichten \textit{Cylinderflow}-Datensatz für MeshGraphNets\cite{meshgraphnets}.
+Diese dienen als Grundlage für das Auswerten der MeshGraphNets und ermöglichen es
+den Fehler der verschiedenen Verfahren abzuschätzen.
+
+
+
+
+
 
 % \input{Data/03_Ergebnisse/EulerVergleich}
 

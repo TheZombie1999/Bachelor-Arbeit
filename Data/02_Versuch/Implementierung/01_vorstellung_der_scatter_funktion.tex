@@ -2,41 +2,25 @@
 
 Um die Probleme der \textit{scatter}-Funktion lösen zu können, 
 wird in diesem Kapitel erstmal deren Funktionsweise betrachtet.
-
 Aufgabe dieser Funktion ist es, den Wert aus einer Zelle 
 eines mehrdimensionalen Arrays, in ein anderes Array ähnlicher Größe zu schreiben.
-
 Dabei wird ein Operator auf alle Werte, die in dieselbe Zelle
 geschrieben werden, angewendet.
-
 Dies findet zum Beispiel Anwendung, wenn alle Eingaben in einen Knoten eines Graphen zusammen gezählt werden sollen.
-
 Der Graph besteht dabei aus einem Vektor aus Koten 
 und einer Matrix aus Kanten.
-
 Die Besonderheit der \textit{scatter}-Funktion ist dabei, 
 dass dies nicht nur für eine Zelle geschieht, sondern für alle.
-
 Wird diese auf der Grafikkarte ausgeführt, passiert dies parallel.
-
-%Diese ist wie folgt definiert:
-% Die Definition der \textit{scatter}-Funktion lautet wie folgt:
 Die Definition der \textit{scatter}-Funktion lautet wie folgt:
 
 \begin{lstlisting}{language=Julia}
 	"""
-	op ist die Operation die auf alle Werte, die in die selbe 
-	    Zelle geschrieben werden, angewendet wird.
-		Moegliche Werte sind +, -, *, /, min, max, mean.
-	src ist eine Matrix aus der Werte gelesen 
-	    und wieder an anderer stelle zurueck geschrieben werden.
-	idx ist ebenfalls eine Matrix aus der entnommen wird,
-	    wo der Wert einer Zelle hin geschrieben werde soll.
-	init beschreibt wie das Ziel-Array initialisiert wird.
-	     Dies kann zum Beispiel genutzt werden, 
-		 um den Inhalt des Arrays in das geschrieben wird, 
-		 initial auf null zu setzten.
-	dstsize gibt die Groesse des zurueck gegebenen Arrays an.
+	op: ist die Operation die auf alle Werte die in die selbe Zelle geschrieben werden, angewendet wird. Moegliche Werte sind +, -, *, /, min, max, mean.
+	src: ist eine Matrix aus der Werte gelesen und wieder an anderer stelle zurueck geschrieben werden.
+	idx: ist ebenfalls eine Matrix aus der entnommen wird, wo der Wert einer Zelle hin geschrieben werde soll.
+	init: beschreibt wie das Ziel-Array initialisiert wird. Dies kann zum Beispiel genutzt werden, um den Inhalt des Arrays in das geschrieben wird, initial auf null zu setzten.
+	dstsize: gibt die Groesse des zurueck gegebenen Arrays an.
 	"""
 
 	function scatter(op, src, idx; [init, dstsize])

@@ -1,7 +1,7 @@
 \subsection{Speicherreservierung auf der Grafikkarte} \label{sec:memory}
 
-Wie bereits im Kapitel \ref{sec:atomic} beschrieben, 
-muss die Addition von Dual zahlen Komponenten weiße durchgeführt werden.
+Wie bereits in Kapitel \ref{sec:atomic} beschrieben, 
+muss die Addition von \textit{Dual}-Zahlen komponentenweise durchgeführt werden.
 Da es aber nicht möglich ist, auf die einzelnen Komponenten direkt zuzugreifen,
 müssen diese zwischen gespeichert werden, um direkten Zugriff zu erlauben.
 \textit{CUDA} \cite{besard2018juliagpu} unterstützt die folgenden Arten von Speicher auf der Grafikkarte:
@@ -16,17 +16,17 @@ müssen diese zwischen gespeichert werden, um direkten Zugriff zu erlauben.
 \textit{Constant Memory} ist für die Umsetzung der \textit{scatter!}-Funktion nicht geeignet,
 da dieser nicht verändert werden kann.
 \textit{Local Memory} ist Speicher, 
-der über die Register eines Threads in der Grafikkarte zugegriffen wird.
+auf den über die Register eines Threads in der Grafikkarte zugegriffen wird.
 Die Verwendung von \textit{Local Memory} scheitert daran, 
 dass nur ein Thread auf diese Register zugreifen kann.
-\textit{Shared Memory} ist Speicher, 
-der von allen Threads in einem Thread Block erreichbar ist.
+\textit{Shared Memory} ist ein Speicher, 
+der von allen Threads in einem Threadblock erreichbar ist.
 Da nicht sichergestellt werden kann, dass alle Threads, 
-die in dieselbe Speicherstelle schreiben, auch im selben Thread block sind,
+die in die selbe Speicherstelle schreiben, auch im selben Threadblock sind,
 kann dies nicht verwendet werden.
 Der Speichertype für unser Problem ist \textit{Global Memory}, 
-da dieser von allen Threads erreicht werden kann.
-Mit dem Nachteil, dass die erhöhte Geschwindigkeit der andere Speichersorten, 
+da dieser von allen Threads erreicht werden kann,
+mit dem Nachteil, dass die erhöhte Geschwindigkeit der andere Speichersorten
 nicht genutzt werden kann.
 \textit{Global Memory} muss außerhalb des Kernels allokiert werden, 
 was zu einer Fragmentierung der Umsetzung der Addition von \textit{Dual}-Zahlen führt.

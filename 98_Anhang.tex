@@ -1,6 +1,6 @@
 \chapter{Anhang}
 
-\section{Source Code der angepassten \textit{scatter}-Funktion}
+\section{Source Code der angepassten \textit{scatter}-Funktion} \label{scatter_source}
 
 %%
 %% Julia definition (c) 2014 Jubobs
@@ -329,7 +329,7 @@ end
     \begin{tabular}{p{5cm}|c|p{5cm}}
         Name & Funktionale & Fehler \\
         \hline\hline
-        LawsonEuler  & false & Error: ArgumeError: Caching can only be used with SplitFunction \\
+jlj        LawsonEuler  & false & Error: ArgumeError: Caching can only be used with SplitFunction \\
         NorsettEuler & false & Error: ArgumeError: Caching can only be used with SplitFunction \\
         ETD2         & false & Error: type ODEFunction has no field f1 \\
         ETDRK2       & false & Error: ArgumeError: Caching can only be used with SplitFunction \\
@@ -385,7 +385,7 @@ end
         QBDF2 & true   & \\
         QNDF  & false  & Erros DimensionMissmatch \\
         QBDF  & false  & Erros DimensionMismatch \\
-        MEBDF2& false  & Works but slow \\
+        MEBDF2& true  & Works but slow \\
         FBDF  & false  & Doesn work on gpu because scalar indexing \\
     \end{tabular}
     \caption{Mutlistep Methods}
